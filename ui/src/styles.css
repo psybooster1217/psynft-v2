@@ -154,6 +154,13 @@ textarea:focus {
 .btn.danger {
   background: var(--danger);
 }
+.btn.sm {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+.roles.norole {
+  color: var(--warn);
+}
 
 .dash {
   background: var(--panel);

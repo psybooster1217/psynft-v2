@@ -96,6 +96,33 @@ export default function App() {
     }
   }
 
+  // Forget the wallet locally, and best-effort revoke the site's permission so a page
+  // refresh doesn't silently reconnect the same (possibly wrong) account. Older wallets
+  // don't support wallet_revokePermissions — the local clear still fully disconnects the UI.
+  async function disconnect() {
+    const eth = getEthereum();
+    try {
+      await eth?.request?.({method: "wallet_revokePermissions", params: [{eth_accounts: {}}]});
+    } catch {
+      /* unsupported wallet — soft clear below is enough */
+    }
+    setAccount(null);
+  }
+
+  // Re-open the wallet's account picker so the operator can switch to a different account
+  // (e.g. after realising they connected the wrong one). Cancelling leaves the current one.
+  async function switchWallet() {
+    const eth = getEthereum();
+    if (!eth) return connect();
+    try {
+      await eth.request({method: "wallet_requestPermissions", params: [{eth_accounts: {}}]});
+      const accs: string[] = await eth.request({method: "eth_accounts"});
+      setAccount((accs[0] as Address) ?? null);
+    } catch {
+      /* user dismissed the picker — keep the current account */
+    }
+  }
+
   const refresh = () => setRefreshKey((k) => k + 1);
 
   return (
@@ -112,8 +139,14 @@ export default function App() {
           {account ? (
             <div className="acct">
               <span className="net">{chainName(chainId)}</span>
-              <span className="addr mono">{short(account)}</span>
-              {myRoleLabels.length > 0 && <span className="roles">{myRoleLabels.join(" · ")}</span>}
+              <span className="addr mono" title={account}>{short(account)}</span>
+              {myRoleLabels.length > 0 ? (
+                <span className="roles">{myRoleLabels.join(" · ")}</span>
+              ) : (
+                <span className="roles norole" title="This wallet is not owner/core/treasury — writes will revert. Switch if this is the wrong account.">no admin roles</span>
+              )}
+              <button className="btn ghost sm" onClick={switchWallet} title="Connect a different account">Switch</button>
+              <button className="btn ghost sm" onClick={disconnect} title="Disconnect this wallet from the dApp">Disconnect</button>
             </div>
           ) : (
             <button className="btn" onClick={connect}>
