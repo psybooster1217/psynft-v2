@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: stable
+
+      - name: Build (with sizes)
+        run: forge build --sizes
+
+      - name: Deterministic tests (no RPC)
+        run: forge test --no-match-path "test/Migration.fork.t.sol" -vv
+
+      - name: Live mainnet fork migration test
+        env:
+          MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
+        run: |
+          if [ -n "$MAINNET_RPC_URL" ]; then
+            forge test --match-path "test/Migration.fork.t.sol" -vv
+          else
+            echo "MAINNET_RPC_URL secret not set — skipping fork test"
+          fi
