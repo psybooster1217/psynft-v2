@@ -29,7 +29,7 @@ Fibonacci mint schedule exactly where V1 stopped.
 | [`test/HoldersJson.t.sol`](test/HoldersJson.t.sol) | Replays the committed snapshot deterministically |
 | [`ui/`](ui/README.md) | Admin dApp — control panel for owner/core/treasury (Vite + viem) |
 | [`sandbox/`](sandbox/README.md) | One-command local devnet (anvil + deploy + UI) to test the interface |
-| [`docs/`](docs/) | Design, V1→V2 diff, runbook, [metadata/art ops](docs/METADATA.md), and security audit |
+| [`docs/`](docs/) | Design, V1→V2 diff, runbook, [metadata/art ops](docs/METADATA.md), [governance](docs/GOVERNANCE.md), and security audit |
 
 ## Key decisions (as agreed)
 
