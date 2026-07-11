@@ -1,0 +1,20 @@
+# Foundry
+out/
+cache/
+broadcast/
+docs/book/
+
+# Secrets — never commit
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+
+# Claude Code (local agent config; keep launch.json, drop local permission grants)
+.claude/settings.local.json
+
+# OS
+.DS_Store
+Thumbs.db
