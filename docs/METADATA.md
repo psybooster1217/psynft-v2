@@ -50,19 +50,21 @@ V1's live `baseUri` (block 25,472,875) is:
 https://red-literary-tiglon-645.mypinata.cloud/ipfs/bafybeia5k2sgu3fkeyqodrmg43b7tbhd5fsmdgf7e4b34hiwrbeaybovcy/
 ```
 
-The `bafybe…` segment is the **CID** — the content address of the metadata folder. You have two ways
-to reuse it:
-
-- **Simplest:** set V2's `baseUri` to the same string. Art resolves through the same Pinata gateway.
-- **Recommended for independence:** re-pin that **same CID** on infrastructure PsyDAO controls
-  (Pinata account, web3.storage, your own IPFS node), then set `baseUri` to
-  `https://<your-gateway>/ipfs/bafybeia5k2…/`. Because the CID is content-addressed, a re-pin is
-  **byte-identical** — same images, no dependency on the old pin staying alive.
+> ⚠️ **Update (audit 2026-10, META-1): that host no longer exists.** `red-literary-tiglon-645.mypinata.cloud`
+> returns NXDOMAIN, and every metadata file's `image` field points at the same dead host. The
+> content is intact on IPFS, but the links are not. **Do not reuse V1's URL.**
+> The metadata has been rebuilt with gateway-independent `ipfs://` image links: identical art, a
+> new folder CID **`bafybeib2aqk4vcfbpgs7aoyk6z6pk5zfcli6qjuvuqohdsdriexeji6m3i`**. Pin it as
+> described in [metadata/README.md](../metadata/README.md) and deploy with
+> `BASE_URI=ipfs://bafybeib2aqk4vcfbpgs7aoyk6z6pk5zfcli6qjuvuqohdsdriexeji6m3i/`. Prefer an `ipfs://`
+> base URI over any https gateway URL: marketplaces and wallets resolve `ipfs://` through their own
+> gateways, so no single host can break the art again.
 
 ### How to set it
 
-- **At deploy:** `Deploy.s.sol` reads `BASE_URI` from the env and calls `setBaseUri` if set. Put V1's
-  URI in `.env` as `BASE_URI` so V2 ships with art already wired.
+- **At deploy:** `Deploy.s.sol` reads `BASE_URI` from the env and calls `setBaseUri` if set.
+  `.env.example` already holds the re-pinned `ipfs://` URI. The contract rejects a non-empty URI
+  without the trailing `/`, and emits ERC-4906 `BatchMetadataUpdate` so marketplaces refresh.
   > ⚠️ `BASE_URI` is **optional** in the script. If you leave it blank, `tokenURI` returns a bare id
   > and **no image resolves** until the Safe calls `setBaseUri`. Don't skip it.
 - **After deploy / to change later:** owner (the Safe) calls `setBaseUri` — from the admin UI's
@@ -72,8 +74,10 @@ to reuse it:
 
 - **UI:** open the dashboard → **Art / metadata preview** → enter a few ids (e.g. `5`, `13`, `21`)
   → the kene renders. This reads `tokenURI` on-chain and fetches the image.
-- **cast:** `cast call $PSYNFT_V2 "tokenURI(uint256)(string)" 5 --rpc-url $RPC` — the URL should match
-  V1's for the same id (compare against `cast call 0x6c6Ab7…402d "tokenURI(uint256)(string)" 5`).
+- **cast:** `cast call $PSYNFT_V2 "tokenURI(uint256)(string)" 5 --rpc-url $RPC` should return
+  `ipfs://bafybeib2aqk…/5`.
+- **Byte-for-byte:** `node metadata/verify-pinned.mjs` checks all 34 files and their images through a
+  gateway (run it through two different gateways).
 
 ---
 

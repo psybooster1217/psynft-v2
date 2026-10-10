@@ -5,3 +5,6 @@
 *.mjs text eol=lf
 *.toml text eol=lf
 *.yml text eol=lf
+
+# Pinned metadata must stay byte-identical (its IPFS CID depends on every byte)
+metadata/** -text
