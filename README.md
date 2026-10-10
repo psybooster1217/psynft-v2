@@ -30,6 +30,8 @@ Fibonacci mint schedule exactly where V1 stopped.
 | [`ui/`](ui/README.md) | Admin dApp — control panel for owner/core/treasury (Vite + viem) |
 | [`sandbox/`](sandbox/README.md) | One-command local devnet (anvil + deploy + UI) to test the interface |
 | [`docs/`](docs/) | Design, V1→V2 diff, runbook, [metadata/art ops](docs/METADATA.md), [governance](docs/GOVERNANCE.md), and security audit |
+| [`docs/AUDIT_PLAN_2026-10.md`](docs/AUDIT_PLAN_2026-10.md) | Plan for the next in‑depth audit (scope, workstreams, exit criteria) |
+| [`docs/TESTING_HANDBOOK.md`](docs/TESTING_HANDBOOK.md) | Step‑by‑step manual test of every function in the sandbox UI |
 
 ## Key decisions (as agreed)
 

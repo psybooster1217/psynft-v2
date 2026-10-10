@@ -6,8 +6,9 @@ echo "▶ stopping sandbox…"
 if command -v taskkill >/dev/null 2>&1; then
   # Windows / Git Bash
   taskkill //F //IM anvil.exe >/dev/null 2>&1 && echo "  anvil stopped" || echo "  no anvil running"
-  # vite runs under node; only kill node procs bound to :5173 if possible
-  for pid in $(netstat -ano 2>/dev/null | grep ':5173' | awk '{print $NF}' | sort -u); do
+  # vite runs under node; only kill the process whose LOCAL address is :5173 (the server).
+  # Matching any ':5173' would also hit browser tabs connected to it (foreign address :5173).
+  for pid in $(netstat -ano 2>/dev/null | awk '$2 ~ /:5173$/ {print $NF}' | sort -u); do
     taskkill //F //PID "$pid" >/dev/null 2>&1 && echo "  vite (pid $pid) stopped"
   done
 else
