@@ -1,0 +1,17 @@
+[PASS] test_MigrationParityWithMainnet() (gas: 2739369)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 5.30s (3.30s CPU time)
+[PASS] test_CutoverAndSweep() (gas: 8129633)
+  swept to Main Safe (ETH): 3.110298529411764706
+  left for past exiters (ETH): 0.094251470588235294
+[PASS] test_ExitWindowThenSweep() (gas: 8077369)
+  swept to Main Safe (ETH): 3.016047058823529412
+  left for past exiters (ETH): 0.094251470588235294
+[PASS] test_SafeWithoutHandlerCannotReceiveSeat() (gas: 7841551)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 5.38s (9.95s CPU time)
+[PASS] test_FreezeBatchIsAToggle() (gas: 336433)
+[PASS] test_FullCutoverThroughRealSafe() (gas: 9068753)
+  swept to Main Safe through real multisig (ETH): 3.110298529411764706
+[PASS] test_OffchainSafeTxHashMatches() (gas: 66389)
+[PASS] test_SweepBatchIsAtomic() (gas: 8336089)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 5.95s (11.76s CPU time)
+Ran 3 test suites in 5.96s (16.62s CPU time): 8 tests passed, 0 failed, 0 skipped (8 total tests)

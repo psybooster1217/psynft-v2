@@ -1,5 +1,15 @@
 # In‑depth audit plan — October 2026
 
+> **Status: EXECUTED 2026‑10‑10/11.** Results: **[AUDIT-2026-10.md](AUDIT-2026-10.md)**.
+> - W0–W9 are done.
+> - W10 (external audit) is replaced by the bug bounty ([BUG_BOUNTY.md](BUG_BOUNTY.md)), plus an
+>   optional external review.
+> - Tier 3 (Sepolia) is replaced by a fork rehearsal through the real Main Safe; the Safe-app
+>   click-through stays with the signers.
+> - Exit criteria still open are the human steps: pin the metadata, launch the bounty, the PSYC vote.
+>
+> The text below is the original plan, kept as written.
+
 **Drafted:** 2026‑10‑10 · **Target:** PsyNFT V2 (`src/PsyNFTV2.sol`), its scripts, snapshot tool, admin
 UI, and the new cutover / exit‑pool sweep in [DEPLOYMENT_RUNBOOK.md](DEPLOYMENT_RUNBOOK.md) §0b–§4d ·
 **Companion:** [TESTING_HANDBOOK.md](TESTING_HANDBOOK.md) (how to run every function by hand)

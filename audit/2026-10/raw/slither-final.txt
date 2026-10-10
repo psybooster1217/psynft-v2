@@ -1,0 +1,82 @@
+'forge clean' running (wd: C:\Users\steve\Desktop\SMARTC)
+'forge config --json' running
+'forge build --build-info --deny never --skip ./test/** ./script/** --force' running (wd: C:\Users\steve\Desktop\SMARTC)
+INFO:Detectors:
+Detector: timestamp
+PsyNFTV2.approveTransfer(uint256,address,uint256) (src/PsyNFTV2.sol#275-289) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(block.timestamp > approvedTransfers[_tokenId].transferExpiryDate,PsyNFT: Transfer Request Currently Active) (src/PsyNFTV2.sol#280-283)
+PsyNFTV2.revokeTransfer(uint256) (src/PsyNFTV2.sol#296-300) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(approvedTransfers[_tokenId].transferExpiryDate != 0,PsyNFT: No Approval To Revoke) (src/PsyNFTV2.sol#297)
+PsyNFTV2.transferFrom(address,address,uint256) (src/PsyNFTV2.sol#309-316) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(_to == approvedTransfers[_tokenId].to,PsyNFT: Incorrect Receiver) (src/PsyNFTV2.sol#311)
+	- require(bool,string)(block.timestamp <= approvedTransfers[_tokenId].transferExpiryDate,PsyNFT: Approval Expired) (src/PsyNFTV2.sol#312)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp
+INFO:Detectors:
+Detector: costly-loop
+PsyNFTV2._update(address,uint256,address) (src/PsyNFTV2.sol#432-437) has costly operations inside a loop:
+	- delete approvedTransfers[tokenId_] (src/PsyNFTV2.sol#435)
+	Calls stack containing the loop:
+		PsyNFTV2.migrateBatch(address[],uint256[])
+		ERC721._mint(address,uint256)
+PsyNFTV2.migrateBatch(address[],uint256[]) (src/PsyNFTV2.sol#148-173) has costly operations inside a loop:
+	- migratedCount ++ (src/PsyNFTV2.sol#166)
+PsyNFTV2.migrateBatch(address[],uint256[]) (src/PsyNFTV2.sol#148-173) has costly operations inside a loop:
+	- _migrationCeiling = id + 1 (src/PsyNFTV2.sol#169)
+PsyNFTV2._update(address,uint256,address) (src/PsyNFTV2.sol#432-437) has costly operations inside a loop:
+	- delete approvedTransfers[tokenId_] (src/PsyNFTV2.sol#435)
+	Calls stack containing the loop:
+		PsyNFTV2.initialMint()
+		ERC721._safeMint(address,uint256)
+		ERC721._safeMint(address,uint256,bytes)
+		ERC721._mint(address,uint256)
+PsyNFTV2._update(address,uint256,address) (src/PsyNFTV2.sol#432-437) has costly operations inside a loop:
+	- delete approvedTransfers[tokenId_] (src/PsyNFTV2.sol#435)
+	Calls stack containing the loop:
+		PsyNFTV2.batchMintInFibonacci()
+		ERC721._safeMint(address,uint256)
+		ERC721._safeMint(address,uint256,bytes)
+		ERC721._mint(address,uint256)
+PsyNFTV2.batchMintInFibonacci() (src/PsyNFTV2.sol#241-252) has costly operations inside a loop:
+	- tokenId ++ (src/PsyNFTV2.sol#249)
+PsyNFTV2._update(address,uint256,address) (src/PsyNFTV2.sol#432-437) has costly operations inside a loop:
+	- delete approvedTransfers[tokenId_] (src/PsyNFTV2.sol#435)
+	Calls stack containing the loop:
+		PsyNFTV2.transferNFTs(uint256[],address)
+		ERC721._safeTransfer(address,address,uint256)
+		ERC721._safeTransfer(address,address,uint256,bytes)
+		ERC721._transfer(address,address,uint256)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#costly-operations-inside-a-loop
+INFO:Detectors:
+Detector: solc-version
+Version constraint 0.8.20 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- VerbatimInvalidDeduplication
+	- FullInlinerNonExpressionSplitArgumentEvaluationOrder
+	- MissingSideEffectsOnSelectorAccess.
+It is used by:
+	- 0.8.20 (src/PsyNFTV2.sol#2)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+INFO:Detectors:
+Detector: low-level-calls
+Low level call in PsyNFTV2.rescueETH(address,uint256) (src/PsyNFTV2.sol#404-409):
+	- (ok,None) = to.call{value: amount}() (src/PsyNFTV2.sol#406)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+INFO:Detectors:
+Detector: naming-convention
+Parameter PsyNFTV2.transferNFTs(uint256[],address)._tokenIds (src/PsyNFTV2.sol#262) is not in mixedCase
+Parameter PsyNFTV2.transferNFTs(uint256[],address)._recipient (src/PsyNFTV2.sol#262) is not in mixedCase
+Parameter PsyNFTV2.approveTransfer(uint256,address,uint256)._tokenId (src/PsyNFTV2.sol#275) is not in mixedCase
+Parameter PsyNFTV2.approveTransfer(uint256,address,uint256)._to (src/PsyNFTV2.sol#275) is not in mixedCase
+Parameter PsyNFTV2.approveTransfer(uint256,address,uint256)._allowedTransferTimeInSeconds (src/PsyNFTV2.sol#275) is not in mixedCase
+Parameter PsyNFTV2.revokeTransfer(uint256)._tokenId (src/PsyNFTV2.sol#296) is not in mixedCase
+Parameter PsyNFTV2.transferFrom(address,address,uint256)._from (src/PsyNFTV2.sol#309) is not in mixedCase
+Parameter PsyNFTV2.transferFrom(address,address,uint256)._to (src/PsyNFTV2.sol#309) is not in mixedCase
+Parameter PsyNFTV2.transferFrom(address,address,uint256)._tokenId (src/PsyNFTV2.sol#309) is not in mixedCase
+Parameter PsyNFTV2.burn(uint256)._tokenId (src/PsyNFTV2.sol#321) is not in mixedCase
+Parameter PsyNFTV2.setCoreContract(address)._core (src/PsyNFTV2.sol#334) is not in mixedCase
+Parameter PsyNFTV2.setTreasury(address)._treasury (src/PsyNFTV2.sol#341) is not in mixedCase
+Parameter PsyNFTV2.setBaseUri(string)._uri (src/PsyNFTV2.sol#366) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
+INFO:Slither:. analyzed (22 contracts with 102 detectors), 25 result(s) found
