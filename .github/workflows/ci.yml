@@ -4,29 +4,79 @@ on:
   push:
   pull_request:
 
+# Actions are pinned to full commit SHAs (audit 2026-10, CI-1): a moved tag can't change what runs.
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
 
       - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
+        uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
         with:
-          version: stable
+          version: v1.7.1
 
       - name: Build (with sizes)
         run: forge build --sizes
 
-      - name: Deterministic tests (no RPC)
+      - name: Deterministic tests (unit, fuzz, invariants; no RPC)
         run: forge test --no-match-path "test/*.fork.t.sol" -vv
 
-      - name: Live mainnet fork migration test
+      - name: Live mainnet fork tests (migration, sweep, real-Safe rehearsal)
         env:
           MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
         run: |
           if [ -n "$MAINNET_RPC_URL" ]; then
             forge test --match-path "test/*.fork.t.sol" -vv
           else
-            echo "MAINNET_RPC_URL secret not set — skipping fork test"
+            echo "MAINNET_RPC_URL secret not set — skipping fork tests (needs an archive-capable RPC)"
           fi
+
+  static-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09 # v1
+        with:
+          version: v1.7.1
+
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+
+      - name: Slither
+        run: |
+          pip install slither-analyzer==0.11.6
+          slither . --filter-paths "lib|test|script" --exclude-dependencies --fail-high
+
+      - name: Aderyn
+        run: |
+          npm install -g @cyfrin/aderyn@0.6.8
+          aderyn . --src src --output aderyn-report.md
+          cat aderyn-report.md
+
+      - name: forge lint
+        run: forge lint src/
+
+  ui:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ui
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npm audit --audit-level=high
+      - run: npm run build
