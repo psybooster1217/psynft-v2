@@ -11,7 +11,7 @@ evm_version = "paris"
 optimizer = true
 optimizer_runs = 1_000_000
 # Scripts/tests read the holder snapshot from ./snapshot.
-fs_permissions = [{ access = "read", path = "./snapshot" }]
+fs_permissions = [{ access = "read", path = "./snapshot" }, { access = "read-write", path = "./safe-batches" }]
 
 [profile.ci]
 verbosity = 3
@@ -30,3 +30,9 @@ sepolia = "${SEPOLIA_RPC_URL}"
 [etherscan]
 mainnet = {key = "${ETHERSCAN_API_KEY}"}
 sepolia = {key = "${ETHERSCAN_API_KEY}"}
+
+# Invariant suite (test/invariant/): random sequences of role actions.
+[invariant]
+runs = 256
+depth = 100
+fail_on_revert = true
