@@ -29,15 +29,38 @@ Addresses used below (mainnet):
 - [ ] The **Gnosis Safe** that will own V2 (create at <https://app.safe.global> if needed). Put its
       address in `SAFE_OWNER`.
 - [ ] The **core** and **treasury** addresses you control for V2 (`NEW_CORE`, `NEW_TREASURY`).
-- [ ] `BASE_URI` set in `.env` to the metadata folder (carry V1's art over by using V1's CID). Must
-      end with a trailing `/`. If left blank, tokens have **no image** until the Safe calls
-      `setBaseUri`. See [docs/METADATA.md](METADATA.md).
+- [ ] **Metadata re-pinned (audit 2026-10, META-1).** V1's metadata host no longer exists. Follow
+      [metadata/README.md](../metadata/README.md): pin `metadata/psyc-metadata-v2.car` and the six image
+      folders on two services, then `node metadata/verify-pinned.mjs` must print `ALL 34 OK` via two
+      gateways. `BASE_URI` = `ipfs://<that CID>/` (already in `.env.example`). The contract rejects a
+      URI without the trailing `/`.
 
-✅ Gate: `forge test --no-match-path "test/*.fork.t.sol"` is green, and
-`MAINNET_RPC_URL=… forge test --match-path "test/*.fork.t.sol" -vv` passes. The second covers both
-the migration (`Migration.fork.t.sol`) and the full cutover + exit-pool sweep
-(`CutoverSweep.fork.t.sol`). The RPC must serve historical state (an archive-capable endpoint);
-`ethereum-rpc.publicnode.com` refuses forks without a token, `eth.drpc.org` works.
+✅ Gate: `forge test --no-match-path "test/*.fork.t.sol"` is green (unit, fuzz, invariants), and
+`MAINNET_RPC_URL=… forge test --match-path "test/*.fork.t.sol" -vv` passes. The second covers:
+- the migration (`Migration.fork.t.sol`);
+- the cutover + exit-pool sweep (`CutoverSweep.fork.t.sol`);
+- **the whole cutover executed through the real Main Safe**, with its real owners and threshold, via
+  MultiSendCallOnly and the exact batch bytes signers will import (`SafeRehearsal.fork.t.sol`).
+
+The RPC must serve historical state (an archive-capable endpoint); `eth.drpc.org` works.
+
+### Generating the Safe batches (every Safe step below)
+
+Every Main Safe transaction in this runbook is generated, not hand-typed:
+
+```bash
+forge script script/SafeBatches.s.sol --rpc-url mainnet                     # §0b + §1
+PSYNFT_V2=0x… forge script script/SafeBatches.s.sol --rpc-url mainnet       # + §4c + §4d
+```
+
+This writes two kinds of file:
+- `safe-batches/*.json`: load these in Safe → Apps → Transaction Builder.
+- `safe-batches/CHECKLIST.md`: lists every call and the **expected safeTxHash** at the current Safe
+  nonce. Before signing, each signer checks that the hash on their hardware wallet equals the one
+  in the checklist.
+
+The bytes come from `script/lib/CutoverCalls.sol`, the same library the real-Safe rehearsal executes.
+Re-run the script if the Safe executes anything else in between, because the nonce changes.
 
 ---
 
@@ -49,15 +72,15 @@ Two changes that close gaps found while testing the cutover. Neither touches hol
    the Treasury's core can move the whole exit pool (see §4d). That key must not sit with one person.
    ```
    from 0x00c1…6061:  CoreLogic.transferOwnership(0xB253a1Ab24B612C2AF37f8fC935b40c7304650e5)
-   from Main Safe:    CoreLogic.acceptOwnership()
    ```
-2. **Safe fallback handler.** The Main Safe has no fallback handler (slot
-   `keccak256("fallback_manager.handler.address")` reads 0), so it cannot receive an ERC‑721 through
-   `safeTransfer`. `transferNFTs` uses `_safeTransfer`, so §4d would revert. From the Safe UI
-   (Settings → Advanced, or a Transaction Builder call to the Safe itself):
-   ```
-   Safe.setFallbackHandler(0xf48f2B2d2a534e402487b3ee7C18c33Aec0Fe5e4)   // canonical v1.3.0 CompatibilityFallbackHandler
-   ```
+2. **One Safe batch, `safe-batches/0b-setup.json`,** with two calls:
+   - `CoreLogic.acceptOwnership()`;
+   - `Safe.setFallbackHandler(0xf48f2B2d2a534e402487b3ee7C18c33Aec0Fe5e4)`: the canonical v1.3.0
+     CompatibilityFallbackHandler, verified against the safe-deployments registry.
+
+   The Main Safe has no fallback handler today, so it cannot receive an ERC‑721 through
+   `safeTransfer`. `transferNFTs` uses `_safeTransfer`, so §4d would revert without it. That revert is
+   atomic, so nothing changes (proven by `test_SweepBatchIsAtomic`).
 
 ✅ Gate:
 - [ ] `cast call 0xDAAA…d4F6 "owner()(address)"` returns the Main Safe.
@@ -80,8 +103,12 @@ The holder set can change until V1 is truly inactive. First close the exit windo
 so the snapshot is reproducible.
 
 ```
-from Main Safe:  CoreLogic.switchRageQuit()        // rageQuitAllowed -> false
+Safe batch safe-batches/1-freeze.json:  CoreLogic.switchRageQuit()        // rageQuitAllowed -> false
 ```
+
+> ⚠️ `switchRageQuit` is a **toggle** (audit 2026-10, OPS-03). Check `rageQuitAllowed() == true`
+> before signing and execute it **exactly once**. A second execution re-opens ego death (pinned by
+> `test_FreezeBatchIsAToggle`).
 
 Use `switchRageQuit`, **not** `Treasury.pause()`: pausing would also block `withdrawUserFunds`, so
 holders who exited in the window (and the token‑0 exiter, owed 0.0943 ETH) could not collect.
@@ -144,11 +171,14 @@ Tear down mentally, fix anything, and only then proceed.
 
 ---
 
-## 3. Independent audit ✅ (before mainnet value)
+## 3. Audit and bug bounty ✅ (before mainnet value)
 
-- [ ] Run `docs/SECURITY_REVIEW.md` findings to closure (this repo ships an adversarial internal
-      review; an **external audit** is still strongly recommended before real value moves).
-- [ ] `forge test` fully green, including the live fork test.
+- [x] Internal in-depth audit 2026-10 complete; all findings fixed or accepted:
+      [AUDIT-2026-10.md](AUDIT-2026-10.md).
+- [ ] Bug bounty live ([BUG_BOUNTY.md](BUG_BOUNTY.md), [SECURITY.md](../SECURITY.md)) for at least
+      the window the DAO sets before the §4d sweep. An external firm review is optional; the scope is
+      small (about 450 lines plus the §4d batch).
+- [ ] `forge test` fully green, including all fork tests.
 - [ ] Confirm compiler/settings: `solc 0.8.20`, `paris`, optimizer 1,000,000 runs (matches V1).
 
 ---
@@ -182,7 +212,8 @@ is fixed — if it's wrong, redeploy fresh (the migration is idempotent from a n
 # 4c. Point the ecosystem at V2, then hand off ownership
 #     (set core/treasury now if not done in Deploy)
 forge script script/Handoff.s.sol --rpc-url $RPC --broadcast
-#     → Safe executes acceptOwnership() on PSYNFT_V2
+PSYNFT_V2=$PSYNFT_V2 forge script script/SafeBatches.s.sol --rpc-url $RPC   # writes 4c + 4d
+#     → Safe executes safe-batches/4c-accept-v2.json (acceptOwnership on PSYNFT_V2)
 ```
 
 ✅ Final gate:
@@ -200,7 +231,8 @@ the pool, so `exit()` is the only way out. The Safe owns the Treasury, makes its
 Treasury at V2, holds one fresh V2 seat and exits it with `n − burnt = 1`, which releases the whole
 pool to the Safe. Balances already owed to past exiters (`pendingBalances`) are not affected.
 
-Execute as **one** Transaction Builder batch from the Main Safe, in this order:
+Execute as **one** Transaction Builder batch from the Main Safe (`safe-batches/4d-cutover-sweep.json`),
+in this order:
 
 ```
 1. V1Treasury.updatePsyNftContract(PSYNFT_V2)
@@ -210,7 +242,15 @@ Execute as **one** Transaction Builder batch from the Main Safe, in this order:
 5. V1Treasury.exit(34, 1, MainSafe)                         // n = V2.totalTokensBurnt() + 1 = 1
 6. V1Treasury.withdrawUserFunds()                           // pool -> Main Safe
 7. PsyNFTV2.setTreasury(MainSafe)                           // Safe burns directly from now on
+8. CoreLogic.updatePsyNftAddress(PSYNFT_V2)                 // V1 can no longer be minted (OPS-02)
 ```
+
+**Why step 8 (audit 2026-10, OPS-02).** CoreLogic is V1 PsyNFT's only minter, and V1's core can never
+be changed because its owner key is lost. Without step 8, the Safe (as CoreLogic owner) could still
+call `mintNextBatch` and `createSaleBatchPsycSale`, creating new V1 seats after V2 is canonical.
+Pointing CoreLogic at V2 sends every CoreLogic mint/approve/kick call to V2, where CoreLogic has no
+role, so they all revert. The Safe could re-point it later; that would be a deliberate governance
+decision, not an accident.
 
 Seat #34 is burned by step 5, so batch 7 has 20 seats to allocate (ids 35–54).
 
@@ -220,10 +260,17 @@ Seat #34 is burned by step 5, so batch 7 has 20 seats to allocate (ids 35–54).
 - [ ] `PsyNFTV2.ownerOf(34)` reverts; `totalTokensBurnt() == 1`; `treasury()` is the Main Safe.
 - [ ] `cast call 0xDAAA…d4F6 "rageQuit(uint256)" <any id> --from <holder>` reverts
       (`Rage Quit Disabled`; and if ever switched back on, `Only callable by CoreLogic.sol`).
+- [ ] `cast call 0xDAAA…d4F6 "psyNFT()(address)"` returns `PSYNFT_V2` (V1 minting off).
 
-Rehearsed by `test/CutoverSweep.fork.t.sol` against live mainnet state: at block 26,039,436 the Safe
-receives 3.110298529411764706 ETH and 0.094251470588235294 ETH stays claimable by the token‑0 exiter.
-A second test runs one legacy exit during the window first and confirms the sweep takes only the rest.
+Rehearsed against live mainnet state by two tests:
+- `test/CutoverSweep.fork.t.sol`: direct calls;
+- `test/SafeRehearsal.fork.t.sol`: through the real Main Safe, with 2 of its 4 real owners, via
+  MultiSendCallOnly.
+
+On 2026-10-11 the Safe receives 3.110298529411764706 ETH and 0.094251470588235294 ETH stays
+claimable by the token‑0 exiter. A second test runs one legacy exit during the window first and
+confirms the sweep takes only what is left. **Re-run both within 24 h before executing §4d**,
+because exits during the window change the numbers.
 
 > Governance: the sweep ends the exit right of the legacy seats. Execute only on a passed PSYC
 > proposal that names the exit window and the sweep.
@@ -280,4 +327,5 @@ cast call $V1T "core()(address)"                       --rpc-url $RPC
 cast call $V1T "psyNFT()(address)"                     --rpc-url $RPC
 cast call 0xDAAAC6a81fE6a230B880b96a2B5ca903d0c1d4F6 "rageQuitAllowed()(bool)" --rpc-url $RPC
 cast call 0xDAAAC6a81fE6a230B880b96a2B5ca903d0c1d4F6 "owner()(address)"        --rpc-url $RPC
+cast call 0xDAAAC6a81fE6a230B880b96a2B5ca903d0c1d4F6 "psyNFT()(address)"       --rpc-url $RPC
 ```
