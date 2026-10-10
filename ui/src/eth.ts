@@ -35,8 +35,47 @@ export function publicClientFor(chainId: number, rpcUrl?: string): PublicClient 
 export function walletClientFor(chainId: number): WalletClient {
   const chain = SUPPORTED_CHAINS[chainId] ?? mainnet;
   const eth = getEthereum();
-  if (!eth) throw new Error("No injected wallet found (install MetaMask/Rabby or use WalletConnect via your Safe).");
+  if (!eth) throw new Error("No injected wallet found (install MetaMask/Rabby, or use the sandbox accounts).");
   return createWalletClient({chain, transport: custom(eth)});
+}
+
+/**
+ * Sandbox wallet (local anvil only). anvil keeps its dev accounts unlocked and can impersonate
+ * any address, so the node signs `eth_sendTransaction` itself: no private key ever lives in this
+ * app. Only offered when the read RPC reports chainId 31337.
+ */
+export function sandboxWalletClient(rpcUrl: string): WalletClient {
+  return createWalletClient({chain: foundry, transport: http(rpcUrl)});
+}
+
+export async function sandboxAccounts(pub: PublicClient): Promise<Address[]> {
+  return (await pub.request({method: "eth_accounts"} as any)) as Address[];
+}
+
+/** Lets the sandbox act as any address (e.g. the real Main Safe or a real holder on a fork). */
+export async function sandboxImpersonate(pub: PublicClient, who: Address): Promise<void> {
+  await pub.request({method: "anvil_impersonateAccount", params: [who]} as any);
+  // give it gas money on the local chain
+  await pub.request({method: "anvil_setBalance", params: [who, "0x56BC75E2D63100000"]} as any);
+}
+
+/** Safe Transaction Builder file for one or more calls (import via Safe -> Apps -> Transaction Builder). */
+export function safeBuilderJson(chainId: number, safe: Address | undefined, txs: {to: Address; data: `0x${string}`; label: string}[]): string {
+  return JSON.stringify(
+    {
+      version: "1.0",
+      chainId: String(chainId),
+      createdAt: Date.now(),
+      meta: {
+        name: `PsyNFT V2: ${txs.map((t) => t.label).join(", ")}`.slice(0, 120),
+        description: "Exported from the PsyNFT V2 admin panel. Check the decoded calls in the Safe UI before signing.",
+        ...(safe ? {createdFromSafeAddress: safe} : {}),
+      },
+      transactions: txs.map((t) => ({to: t.to, value: "0", data: t.data, contractMethod: null, contractInputsValues: null})),
+    },
+    null,
+    2
+  );
 }
 
 export interface ContractState {
@@ -128,7 +167,34 @@ export async function readTokenURI(pub: PublicClient, address: Address, id: bigi
  */
 export function gatewayFromBaseUri(baseUri?: string): string {
   const m = baseUri?.match(/^(https?:\/\/[^/]+\/ipfs\/)/i);
-  return m ? m[1] : "https://ipfs.io/ipfs/";
+  return m ? m[1] : PUBLIC_GATEWAYS[0];
+}
+
+/**
+ * Public gateways tried in order when the collection's own gateway fails (audit 2026-10, UI-9:
+ * V1's dedicated Pinata host stopped resolving, which silently broke every preview).
+ */
+export const PUBLIC_GATEWAYS = ["https://gateway.pinata.cloud/ipfs/", "https://ipfs.io/ipfs/", "https://dweb.link/ipfs/"];
+
+/** "CID/path" for `ipfs://CID/path` or `https://any-host/ipfs/CID/path`; null otherwise. */
+export function ipfsPath(uri: string): string | null {
+  if (!uri) return null;
+  if (uri.startsWith("ipfs://")) return uri.slice("ipfs://".length).replace(/^ipfs\//, "") || null;
+  const m = uri.match(/^https?:\/\/[^/]+\/ipfs\/(.+)$/i);
+  return m ? m[1] : null;
+}
+
+/**
+ * Every http(s) URL worth trying for an on-chain/metadata URI, best first: the collection's own
+ * gateway, then the public ones. Non-IPFS http(s) URLs are returned as-is; anything else
+ * (javascript:, data:, relative …) yields [] because these values are untrusted.
+ */
+export function gatewayCandidates(uri: string, baseUri?: string): string[] {
+  const path = ipfsPath(uri);
+  if (!path) return /^https?:\/\//i.test(uri) ? [uri] : [];
+  const own = baseUri?.match(/^(https?:\/\/[^/]+\/ipfs\/)/i)?.[1];
+  const gws = own ? [own, ...PUBLIC_GATEWAYS] : PUBLIC_GATEWAYS;
+  return Array.from(new Set(gws.map((g) => g + path)));
 }
 
 /**
@@ -193,4 +259,14 @@ export function isZero(addr?: string): boolean {
 export function short(addr?: string): string {
   if (!addr) return "—";
   return addr.length > 12 ? `${addr.slice(0, 6)}…${addr.slice(-4)}` : addr;
+}
+
+/** Save a text file in the browser (used for Safe Transaction Builder exports). */
+export function downloadText(filename: string, text: string): void {
+  const url = URL.createObjectURL(new Blob([text], {type: "application/json"}));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }

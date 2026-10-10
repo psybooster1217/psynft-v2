@@ -1,7 +1,14 @@
 import {useState} from "react";
-import type {Address, PublicClient, WalletClient} from "viem";
+import {encodeFunctionData, type Address, type PublicClient, type WalletClient} from "viem";
+import {PSYNFT_V2_ABI} from "../abi";
 import {type ActionDef, parseArg} from "../actions";
-import {sendTx} from "../eth";
+import {downloadText, safeBuilderJson, sendTx, short} from "../eth";
+
+export interface SafeTx {
+  to: Address;
+  data: `0x${string}`;
+  label: string;
+}
 
 export interface MyRoles {
   owner: boolean;
@@ -19,6 +26,10 @@ interface Props {
   myRoles: MyRoles;
   explorer?: string;
   onDone: () => void;
+  /** Address currently holding this card's role (owner/core/treasury/pendingOwner), e.g. the Safe. */
+  roleAddress?: Address;
+  chainId: number;
+  onAddToBatch?: (tx: SafeTx) => void;
 }
 
 type Status = "idle" | "busy" | "ok" | "err";
@@ -27,7 +38,7 @@ function prettyError(e: any): string {
   return e?.shortMessage || e?.details || e?.message || String(e);
 }
 
-export function ActionCard({def, pub, wallet, account, address, myRoles, explorer, onDone}: Props) {
+export function ActionCard({def, pub, wallet, account, address, myRoles, explorer, onDone, roleAddress, chainId, onAddToBatch}: Props) {
   const [values, setValues] = useState<Record<string, string>>({});
   const [status, setStatus] = useState<Status>("idle");
   const [msg, setMsg] = useState<string>("");
@@ -111,6 +122,38 @@ export function ActionCard({def, pub, wallet, account, address, myRoles, explore
     }
   }
 
+  /**
+   * Build the call for a multisig instead of sending it (audit 2026-10, UI-7): simulate it AS the
+   * role holder (e.g. the Safe) so a revert shows here, then either download a Transaction Builder
+   * file or add it to the batch at the bottom of the page.
+   */
+  async function forSafe(addToBatch: boolean) {
+    try {
+      const args = def.fields.map((f) => parseArg(f.type, values[f.name] ?? ""));
+      const data = encodeFunctionData({abi: PSYNFT_V2_ABI, functionName: def.fn as any, args: args as any});
+      if (roleAddress) {
+        setStatus("busy");
+        setMsg(`Simulating as the ${def.role} (${short(roleAddress)})…`);
+        await pub.simulateContract({address, abi: PSYNFT_V2_ABI, functionName: def.fn as any, args: args as any, account: roleAddress});
+      }
+      const shown = args.map((a) => (Array.isArray(a) ? `[${a.join(",")}]` : String(a))).join(", ");
+      const tx: SafeTx = {to: address, data, label: `${def.fn}(${shown})`.slice(0, 90)};
+      if (addToBatch && onAddToBatch) {
+        onAddToBatch(tx);
+        setMsg("Added to the Safe batch (bar at the bottom of the page).");
+      } else {
+        downloadText(`psynft-${def.fn}.json`, safeBuilderJson(chainId, roleAddress, [tx]));
+        setMsg("Downloaded. Import it in Safe → Apps → Transaction Builder and check the decoded call before signing.");
+      }
+      setStatus("ok");
+    } catch (e: any) {
+      setStatus("err");
+      setMsg(prettyError(e));
+    }
+  }
+
+  const safeExportable = def.role !== "any";
+
   return (
     <div className={`card ${def.danger ? "card-danger" : ""}`}>
       <div className="card-head">
@@ -146,6 +189,16 @@ export function ActionCard({def, pub, wallet, account, address, myRoles, explore
         <button className={def.danger ? "btn danger" : "btn"} disabled={busy || !account} onClick={submit}>
           {busy ? "Working…" : "Execute"}
         </button>
+        {safeExportable && (
+          <>
+            <button className="btn ghost sm" disabled={busy} onClick={() => forSafe(false)} title="Simulate as the role holder and download a Safe Transaction Builder file">
+              Export for Safe
+            </button>
+            <button className="btn ghost sm" disabled={busy} onClick={() => forSafe(true)} title="Simulate as the role holder and add to the multi-call Safe batch">
+              + Safe batch
+            </button>
+          </>
+        )}
         {msg && <span className={`status status-${status}`}>{msg}</span>}
         {hash && explorer && (
           <a className="txlink" href={`${explorer}/tx/${hash}`} target="_blank" rel="noreferrer">

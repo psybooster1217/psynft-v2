@@ -1,10 +1,11 @@
 import {useState} from "react";
 import type {Address, PublicClient} from "viem";
-import {gatewayFromBaseUri, ipfsToHttp, readTokenURI} from "../eth";
+import {gatewayCandidates, readTokenURI} from "../eth";
 
 /**
- * Reads `tokenURI(id)` on-chain, resolves it through the collection's own IPFS gateway, fetches
- * the metadata JSON, and renders the token's art. This is the fastest way to confirm that the
+ * Reads `tokenURI(id)` on-chain, resolves it through the collection's own IPFS gateway (falling
+ * back to public gateways when that host is down), fetches the metadata JSON, and renders the
+ * token's art. This is the fastest way to confirm that the
  * kene (unique image) for a given id actually resolves — use it after migration to verify the V1
  * art carried over, and after a new Fibonacci batch to verify the new ids render.
  */
@@ -13,44 +14,63 @@ export function MetadataPanel({pub, address, baseUri}: {pub: PublicClient; addre
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("");
   const [uri, setUri] = useState("");
-  const [imgUrl, setImgUrl] = useState("");
+  const [imgCands, setImgCands] = useState<string[]>([]);
+  const [imgIdx, setImgIdx] = useState(0);
+  const [metaUrl, setMetaUrl] = useState("");
   const [meta, setMeta] = useState<Record<string, any> | null>(null);
 
-  const gateway = gatewayFromBaseUri(baseUri);
+  const imgUrl = imgCands[imgIdx] ?? "";
   const slashOk = !baseUri || baseUri.endsWith("/");
 
   async function preview() {
     setBusy(true);
     setStatus("reading tokenURI…");
     setUri("");
-    setImgUrl("");
+    setImgCands([]);
+    setImgIdx(0);
+    setMetaUrl("");
     setMeta(null);
     try {
       const raw = await readTokenURI(pub, address, BigInt(id));
       setUri(raw);
-      const metaUrl = ipfsToHttp(raw, gateway);
-      if (!metaUrl) {
+      const cands = gatewayCandidates(raw, baseUri);
+      if (cands.length === 0) {
         // tokenURI isn't a resolvable http(s)/ipfs URL — typically baseUri is unset
         // (bare id), or it carries a scheme we refuse to follow.
         setStatus(`tokenURI is not a resolvable URL ("${raw}") — is baseUri set with a trailing "/"?`);
         return;
       }
-      setStatus("fetching metadata…");
       let json: any = null;
-      try {
-        const res = await fetch(metaUrl);
-        if (res.ok) json = await res.json();
-      } catch {
-        /* CORS or non-JSON body — fall through to treating the URI as an image */
+      let used = "";
+      for (const c of cands) {
+        setStatus(`fetching metadata via ${new URL(c).host}…`);
+        try {
+          // a dead gateway can hang for a long time; give each one 8 s
+          const res = await fetch(c, {signal: AbortSignal.timeout(8000)});
+          if (res.ok) {
+            json = await res.json();
+            used = c;
+            break;
+          }
+        } catch {
+          /* gateway down, CORS, or non-JSON body — try the next one */
+        }
       }
+      setMetaUrl(used || cands[0]);
       if (json && typeof json === "object") {
         setMeta(json);
         const image = json.image || json.image_url || json.imageUrl || json.animation_url;
-        if (image) setImgUrl(ipfsToHttp(String(image), gateway));
-        setStatus(image ? "ok" : "metadata loaded, but it has no image field");
+        if (image) {
+          // try the gateway that just worked for the metadata first
+          const worked = used ? new URL(used).origin : "";
+          const imgs = gatewayCandidates(String(image), baseUri);
+          setImgCands([...imgs.filter((u) => worked && u.startsWith(worked)), ...imgs.filter((u) => !worked || !u.startsWith(worked))]);
+        }
+        const fellBack = used && used !== cands[0] ? ` (collection gateway down — loaded via ${new URL(used).host})` : "";
+        setStatus((image ? "ok" : "metadata loaded, but it has no image field") + fellBack);
       } else {
         // tokenURI may point straight at an image rather than a JSON document.
-        setImgUrl(metaUrl);
+        setImgCands(cands);
         setStatus("no JSON metadata — treating the URI as an image");
       }
     } catch (e: any) {
@@ -77,14 +97,22 @@ export function MetadataPanel({pub, address, baseUri}: {pub: PublicClient; addre
         <div className="art-body">
           {imgUrl && (
             <a className="art-thumb" href={imgUrl} target="_blank" rel="noreferrer">
-              <img src={imgUrl} alt={`token ${id}`} onError={() => setStatus("image URL did not load (gateway/CORS) — open it directly ↗")} />
+              <img
+                src={imgUrl}
+                alt={`token ${id}`}
+                onError={() =>
+                  imgIdx + 1 < imgCands.length
+                    ? setImgIdx(imgIdx + 1)
+                    : setStatus("image did not load from any gateway — the file may no longer be pinned")
+                }
+              />
             </a>
           )}
           <div className="art-meta">
-            {uri && ipfsToHttp(uri, gateway) && (
+            {uri && metaUrl && (
               <div className="art-kv">
                 <span>tokenURI</span>
-                <a className="mono wrap" href={ipfsToHttp(uri, gateway)} target="_blank" rel="noreferrer">{uri}</a>
+                <a className="mono wrap" href={metaUrl} target="_blank" rel="noreferrer">{uri}</a>
               </div>
             )}
             {meta?.name && (
