@@ -67,16 +67,21 @@ assessed on actual impact to PsyDAO and holders. Duplicates: the first valid rep
 good faith, and will work with you to understand and fix the issue quickly.
 
 ## How to report
-- **GitHub:** Security → "Report a vulnerability" on the repository (private advisory).
-- **Email:** `[SECURITY CONTACT TO BE SET BEFORE LAUNCH]`
+Use GitHub: **Security → "Report a vulnerability"** on the repository. This opens a private
+advisory visible only to the maintainers. It is the only reporting channel; there is no security
+email.
 
 We aim to acknowledge within 72 hours and give a severity assessment within 7 days.
 
 ## Before launch (checklist for PsyDAO)
-- [ ] Main Safe signers (or a PSYC vote) approve the reward table and budget.
-- [ ] Make the repository public, or publish the audited commit.
-- [ ] Enable GitHub private vulnerability reporting on the repository.
-- [ ] Set the security contact email above, and in [SECURITY.md](../SECURITY.md).
+- [ ] Main Safe signers (or a PSYC vote) approve the reward table and budget, then remove
+      "(proposal)" from the Rewards heading.
+- [ ] Make the repository public. Settings → General → Danger Zone → Change visibility. The audited
+      commit is tag `audit-2026-10`.
+- [ ] Enable GitHub private vulnerability reporting: Settings → Security → "Private vulnerability
+      reporting" → Enable. This is only available once the repository is public, and it is the sole
+      reporting channel.
+- [x] Reporting channel decided: GitHub private reports only, no email (2026-10-11).
 - [ ] Publish this page (GitHub + a short page or link on psydao.world) and announce it in Discord.
 - [ ] Decide the bounty window before the §4d sweep (recommended: at least 2 weeks of bounty on
       the final deployed V2 before signing §4d).

@@ -2,8 +2,9 @@
 
 Please **do not** open public issues for security problems.
 
-- Report privately via GitHub: **Security → Report a vulnerability** on this repository.
-- Or email: `[SECURITY CONTACT TO BE SET BEFORE LAUNCH]`
+Report privately through GitHub: **Security → Report a vulnerability** on this repository. This
+opens a private advisory that only the maintainers can see. It is the only reporting channel; there
+is no security email.
 
 Scope, rules, safe harbor and rewards: [docs/BUG_BOUNTY.md](docs/BUG_BOUNTY.md).
 Audit history: [docs/AUDIT-2026-10.md](docs/AUDIT-2026-10.md) (latest), [docs/AUDIT.md](docs/AUDIT.md),
