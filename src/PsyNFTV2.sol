@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/interfaces/IERC4906.sol";
 import "@openzeppelin/contracts/access/Ownable2Step.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
@@ -16,15 +17,23 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
  *         key is no longer reachable, which permanently blocked all administrative
  *         controls (`setCoreContract`, `setTreasury`, `setBaseUri`, transfer toggles).
  *
- *         Behaviour is preserved 1:1 versus V1. The only functional additions are:
+ *         Behaviour is preserved versus V1 except for these additions (see
+ *         docs/CHANGES_FROM_V1.md for the full list and rationale):
  *           1. A parameterised `initialOwner` so a Gnosis Safe can own the contract from
  *              block 0 (V1 hard-coded `Ownable(msg.sender)`).
  *           2. An owner-gated, one-shot **migration** path (`migrateBatch` +
  *              `finalizeMigration`) that re-mints the 33 existing V1 tokens to their
  *              current holders, preserving token IDs, and then resumes the exact
  *              Fibonacci mint schedule where V1 left off.
- *           3. Events on every state-changing admin action (V1 emitted none).
+ *           3. Events on every state-changing admin action (V1 emitted none), plus ERC-4906
+ *              metadata-refresh events so marketplaces pick up a new `baseUri`.
  *           4. Owner `rescue*` helpers for assets accidentally sent to the contract.
+ *           5. `renounceOwnership` is disabled (the V1 failure mode, made impossible).
+ *           6. Transfer approvals are single-use (cleared whenever the token moves or burns)
+ *              and `core` can revoke one early (audit 2026-10, PNFT-01/02).
+ *           7. Input guards on irreversible/owner-typed values: `finalizeMigration` only accepts
+ *              consecutive Fibonacci counters and `setBaseUri` requires a trailing "/"
+ *              (audit 2026-10, PNFT-03/04).
  *
  *         The distribution model is unchanged: new tokens are minted to the contract
  *         itself and handed out by the `core` contract; `treasury` may burn; member-held
@@ -33,8 +42,11 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
  *
  * @dev    Compiler/settings match V1 for parity: solc 0.8.20, EVM `paris`, OZ v5.
  */
-contract PsyNFTV2 is ERC721, Ownable2Step, ReentrancyGuard {
+contract PsyNFTV2 is IERC4906, ERC721, Ownable2Step, ReentrancyGuard {
     using SafeERC20 for IERC20;
+
+    /// @dev ERC-4906 interface id (metadata update events).
+    bytes4 private constant ERC4906_INTERFACE_ID = bytes4(0x49064906);
 
     struct ApprovedTransfers {
         uint256 tokenId;
@@ -91,6 +103,7 @@ contract PsyNFTV2 is ERC721, Ownable2Step, ReentrancyGuard {
     event BaseUriUpdated(string newBaseUri);
     event ControlledTransfersSet(bool enabled);
     event TransferApproved(uint256 indexed tokenId, address indexed to, uint256 expiry);
+    event TransferApprovalRevoked(uint256 indexed tokenId);
     event TokenBurnt(uint256 indexed tokenId, address indexed from);
     event Migrated(uint256 indexed tokenId, address indexed to);
     event MigrationFinalized(uint256 nextTokenId, uint256 previousFibonacci, bool controlledTransfers);
@@ -170,6 +183,8 @@ contract PsyNFTV2 is ERC721, Ownable2Step, ReentrancyGuard {
      * @param nextTokenId        The V1 `tokenId` counter to resume from (V1 value: 34).
      *                           Must be >= the highest migrated id + 1.
      * @param previousFibonacci_ The V1 `previousFibonacci` to resume from (V1 value: 21).
+     *                           Must be the Fibonacci term directly before `nextTokenId`
+     *                           (the schedule only ever produces such pairs: 2/3, 3/5 … 21/34).
      * @param controlledTransfers_ Whether member transfers stay restricted (V1 value: true).
      * @param expectedCount      Authoritative live-token count (V1 `tokenId - totalTokensBurnt`,
      *                           i.e. 33). Must equal `migratedCount` or the call reverts.
@@ -183,6 +198,7 @@ contract PsyNFTV2 is ERC721, Ownable2Step, ReentrancyGuard {
         require(migrationStarted, "PsyNFT: Migration Not Started");
         require(migratedCount == expectedCount, "PsyNFT: Incomplete Migration");
         require(nextTokenId >= _migrationCeiling, "PsyNFT: nextTokenId Too Low");
+        require(_isFibonacciPair(previousFibonacci_, nextTokenId), "PsyNFT: Counters Not On Schedule");
 
         tokenId = nextTokenId;
         previousFibonacci = previousFibonacci_;
@@ -273,13 +289,24 @@ contract PsyNFTV2 is ERC721, Ownable2Step, ReentrancyGuard {
     }
 
     /**
+     * @notice Cancels a transfer approval before it expires (e.g. one granted to a wrong address).
+     * @dev Only `core` may call. V1 had no way to withdraw a live grant: a mistaken approval
+     *      stayed usable, and blocked any corrected one, until it expired.
+     */
+    function revokeTransfer(uint256 _tokenId) external onlyCoreContract {
+        require(approvedTransfers[_tokenId].transferExpiryDate != 0, "PsyNFT: No Approval To Revoke");
+        delete approvedTransfers[_tokenId];
+        emit TransferApprovalRevoked(_tokenId);
+    }
+
+    /**
      * @notice ERC721 transfer with the controlled-transfer gate.
      * @dev When `controlledTransfers` is on and the token is not held by the contract, the
      *      destination must match a live `approveTransfer` grant. Contract-held tokens
      *      (distributed by `core`) are never gated. Also governs `safeTransferFrom`, which
      *      routes through this function in OZ v5.
      */
-    function transferFrom(address _from, address _to, uint256 _tokenId) public override {
+    function transferFrom(address _from, address _to, uint256 _tokenId) public override(ERC721, IERC721) {
         if (controlledTransfers && ownerOf(_tokenId) != address(this)) {
             require(_to == approvedTransfers[_tokenId].to, "PsyNFT: Incorrect Receiver");
             require(block.timestamp <= approvedTransfers[_tokenId].transferExpiryDate, "PsyNFT: Approval Expired");
@@ -331,10 +358,17 @@ contract PsyNFTV2 is ERC721, Ownable2Step, ReentrancyGuard {
         emit ControlledTransfersSet(true);
     }
 
-    /// @notice Sets the metadata base URI. Owner-only.
+    /**
+     * @notice Sets the metadata base URI. Owner-only.
+     * @dev `tokenURI` is `baseUri + id`, so a non-empty URI must end with "/" or every token's
+     *      metadata link breaks. Emits ERC-4906 `BatchMetadataUpdate` so marketplaces refresh art.
+     */
     function setBaseUri(string memory _uri) external onlyOwner {
+        bytes memory b = bytes(_uri);
+        require(b.length == 0 || b[b.length - 1] == "/", "PsyNFT: Base URI Must End With Slash");
         baseUri = _uri;
         emit BaseUriUpdated(_uri);
+        emit BatchMetadataUpdate(0, type(uint256).max);
     }
 
     /**
@@ -383,8 +417,38 @@ contract PsyNFTV2 is ERC721, Ownable2Step, ReentrancyGuard {
         return IERC721Receiver.onERC721Received.selector;
     }
 
+    /// @notice ERC-165: ERC-721 (+ metadata) and ERC-4906.
+    function supportsInterface(bytes4 interfaceId) public view override(ERC721, IERC165) returns (bool) {
+        return interfaceId == ERC4906_INTERFACE_ID || super.supportsInterface(interfaceId);
+    }
+
+    /**
+     * @dev Clears a token's transfer approval whenever the token changes hands or is burnt, so an
+     *      approval is single-use and never carries over to a later owner (PNFT-01). Mints are
+     *      skipped (no approval can exist for an unminted id) to keep batch-mint gas unchanged.
+     *      Runs after the controlled-transfer check in `transferFrom` and before any
+     *      `onERC721Received` callback.
+     */
+    function _update(address to, uint256 tokenId_, address auth) internal override returns (address from) {
+        from = super._update(to, tokenId_, auth);
+        if (from != address(0) && approvedTransfers[tokenId_].transferExpiryDate != 0) {
+            delete approvedTransfers[tokenId_];
+        }
+    }
+
     function _baseURI() internal view override returns (string memory) {
         return baseUri;
+    }
+
+    /// @dev True iff (prev, next) are consecutive terms of the schedule's Fibonacci sequence
+    ///      2, 3, 5, 8, 13, 21, 34, 55, … The loop is bounded by `next` (≤ ~370 steps for any uint).
+    function _isFibonacciPair(uint256 prev, uint256 next) private pure returns (bool) {
+        uint256 a = 2;
+        uint256 b = 3;
+        while (b < next) {
+            (a, b) = (b, a + b);
+        }
+        return a == prev && b == next;
     }
 
     modifier onlyCoreContract() {

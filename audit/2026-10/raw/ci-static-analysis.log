@@ -1,0 +1,896 @@
+﻿2026-10-10T22:44:25.9019164Z Current runner version: '2.337.0'
+##[group]Runner Image Provisioner
+Hosted Compute Agent
+Version: 20261002.596
+Commit: c3d12f3313a95f25162a1503be624f3b0617f8c0
+Build Date: 2026-10-02T22:28:27Z
+Worker ID: {15fc308a-d3ec-4b3f-b31e-0c3b7ccf892a}
+Region: mexicocentral
+Cloud: Azure
+##[endgroup]
+##[group]Operating System
+Ubuntu
+24.04.5
+LTS
+##[endgroup]
+##[group]Runner Image
+Image: ubuntu-24.04
+Version: 20261004.327.1
+Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261004.327/images/ubuntu/Ubuntu2404-Readme.md
+Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261004.327
+##[endgroup]
+##[group]GITHUB_TOKEN Permissions
+Contents: read
+Metadata: read
+##[endgroup]
+Secret source: Actions
+Cache mode: write
+Prepare workflow directory
+Prepare all required actions
+Getting action download info
+Download action repository 'actions/checkout@11d5960a326750d5838078e36cf38b85af677262' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Download action repository 'foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09' (SHA:908c540300062bd5a7e473851cdb4282204cee09)
+Download action repository 'actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065' (SHA:a26af69be951a213d495a4c3e4e4022e16d87065)
+Download action repository 'actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+Complete job name: static-analysis
+﻿2026-10-10T22:44:27.7734103Z ##[group]Run actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+with:
+  repository: psybooster1217/psynft-v2
+  token: ***
+  ssh-strict: true
+  ssh-user: git
+  persist-credentials: true
+  clean: true
+  sparse-checkout-cone-mode: true
+  fetch-depth: 1
+  fetch-tags: false
+  show-progress: true
+  lfs: false
+  submodules: false
+  set-safe-directory: true
+  allow-unsafe-pr-checkout: false
+##[endgroup]
+Syncing repository: psybooster1217/psynft-v2
+##[group]Getting Git version info
+Working directory is '/home/runner/work/psynft-v2/psynft-v2'
+[command]/usr/bin/git version
+git version 2.55.0
+##[endgroup]
+Temporarily overriding HOME='/home/runner/work/_temp/5e40c2c0-c85c-4024-85b5-d8320baf5b38' before making global git config changes
+Adding repository directory to the temporary git global config as a safe directory
+[command]/usr/bin/git config --global --add safe.directory /home/runner/work/psynft-v2/psynft-v2
+Deleting the contents of '/home/runner/work/psynft-v2/psynft-v2'
+##[group]Initializing the repository
+[command]/usr/bin/git init /home/runner/work/psynft-v2/psynft-v2
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: will change to "main" in Git 3.0. To configure the initial branch name
+hint: to use in all of your new repositories, which will suppress this warning,
+hint: call:
+hint:
+hint: 
+hint:
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+hint:
+hint: 
+hint:
+hint: Disable this message with "git config set advice.defaultBranchName false"
+Initialized empty Git repository in /home/runner/work/psynft-v2/psynft-v2/.git/
+[command]/usr/bin/git remote add origin https://github.com/psybooster1217/psynft-v2
+##[endgroup]
+##[group]Disabling automatic garbage collection
+[command]/usr/bin/git config --local gc.auto 0
+##[endgroup]
+##[group]Setting up auth
+[command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+[command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+[command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+##[endgroup]
+##[group]Fetching the repository
+[command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +1c0ab58065fb1fe582c7790468b9b76a3a509166:refs/tags/audit-2026-10
+From https://github.com/psybooster1217/psynft-v2
+ * [new ref]         1c0ab58065fb1fe582c7790468b9b76a3a509166 -> audit-2026-10
+##[endgroup]
+##[group]Determining the checkout info
+##[endgroup]
+[command]/usr/bin/git sparse-checkout disable
+[command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+##[group]Checking out the ref
+[command]/usr/bin/git checkout --progress --force refs/tags/audit-2026-10
+Note: switching to 'refs/tags/audit-2026-10'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 1c0ab58 docs: October 2026 audit report, bug bounty, holder brief, testing handbook
+##[endgroup]
+[command]/usr/bin/git log -1 --format=%H
+1c0ab58065fb1fe582c7790468b9b76a3a509166
+﻿2026-10-10T22:44:29.4531006Z ##[group]Run foundry-rs/foundry-toolchain@908c540300062bd5a7e473851cdb4282204cee09
+with:
+  version: v1.7.1
+  network: ethereum
+  cache: true
+  cache-key: static-analysis-1c0ab58065fb1fe582c7790468b9b76a3a509166
+  cache-restore-keys: static-analysis-
+##[endgroup]
+Installing Foundry (version: v1.7.1)
+Downloading foundryup installer from foundry-rs/foundryup@a27902ef04dcb43061fabf343365cb5afc95fc48...
+Running foundryup installer...
+Running: foundryup --install 1.7.1
+Added /home/runner/.foundry/bin to PATH
+Primary key: linux-foundry-chain-fork-static-analysis-1c0ab58065fb1fe582c7790468b9b76a3a509166
+Restore keys: linux-foundry-chain-fork-static-analysis-
+Cache not found
+Running: forge --version
+forge Version: 1.7.1
+Commit SHA: 4072e48705af9d93e3c0f6e29e93b5e9a40caed8
+Build Timestamp: 2026-05-08T07:50:55.527285345Z (1778226655)
+Build Profile: dist
+Running: cast --version
+cast Version: 1.7.1
+Commit SHA: 4072e48705af9d93e3c0f6e29e93b5e9a40caed8
+Build Timestamp: 2026-05-08T07:50:55.527285345Z (1778226655)
+Build Profile: dist
+Running: anvil --version
+anvil Version: 1.7.1
+Commit SHA: 4072e48705af9d93e3c0f6e29e93b5e9a40caed8
+Build Timestamp: 2026-05-08T07:50:55.527285345Z (1778226655)
+Build Profile: dist
+Running: chisel --version
+chisel Version: 1.7.1
+Commit SHA: 4072e48705af9d93e3c0f6e29e93b5e9a40caed8
+Build Timestamp: 2026-05-08T07:50:55.527285345Z (1778226655)
+Build Profile: dist
+﻿2026-10-10T22:44:33.5741488Z ##[group]Run actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+with:
+  python-version: 3.12
+  check-latest: false
+  token: ***
+  update-environment: true
+  allow-prereleases: false
+  freethreaded: false
+##[endgroup]
+##[group]Installed versions
+(node:2142) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Successfully set up CPython (3.12.15)
+(Use `node --trace-deprecation ...` to show where the warning was created)
+##[endgroup]
+﻿2026-10-10T22:44:33.7535176Z ##[group]Run actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+with:
+  node-version: 22
+  always-auth: false
+  check-latest: false
+  token: ***
+env:
+  pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+  PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+  Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+##[endgroup]
+Found in cache @ /opt/hostedtoolcache/node/22.23.3/x64
+(node:2150) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+##[group]Environment details
+(Use `node --trace-deprecation ...` to show where the warning was created)
+node: v22.23.3
+npm: 10.9.9
+yarn: 1.22.22
+##[endgroup]
+﻿2026-10-10T22:44:34.5737790Z ##[group]Run pip install slither-analyzer==0.11.6
+^[[36;1mpip install slither-analyzer==0.11.6^[[0m
+^[[36;1mslither . --filter-paths "lib|test|script" --exclude-dependencies --fail-high^[[0m
+shell: /usr/bin/bash -e {0}
+env:
+  pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+  PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+  Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+##[endgroup]
+Collecting slither-analyzer==0.11.6
+  Downloading slither_analyzer-0.11.6-py3-none-any.whl.metadata (35 kB)
+Collecting crytic-compile<0.5.0,>=0.4.2 (from slither-analyzer==0.11.6)
+  Downloading crytic_compile-0.4.2-py3-none-any.whl.metadata (3.8 kB)
+Collecting eth-abi>=5.0.1 (from slither-analyzer==0.11.6)
+  Downloading eth_abi-6.0.0-py3-none-any.whl.metadata (2.4 kB)
+Collecting eth-typing>=5.0.0 (from slither-analyzer==0.11.6)
+  Downloading eth_typing-6.0.0-py3-none-any.whl.metadata (3.1 kB)
+Collecting eth-utils>=5.0.0 (from slither-analyzer==0.11.6)
+  Downloading eth_utils-6.0.0-py3-none-any.whl.metadata (5.6 kB)
+Collecting packaging (from slither-analyzer==0.11.6)
+  Downloading packaging-26.3-py3-none-any.whl.metadata (3.5 kB)
+Collecting prettytable>=3.10.2 (from slither-analyzer==0.11.6)
+  Downloading prettytable-3.18.0-py3-none-any.whl.metadata (37 kB)
+Collecting pycryptodome>=3.4.6 (from slither-analyzer==0.11.6)
+  Downloading pycryptodome-3.24.0-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (3.4 kB)
+Collecting web3<8,>=7.10 (from slither-analyzer==0.11.6)
+  Downloading web3-7.16.0-py3-none-any.whl.metadata (5.6 kB)
+Collecting cbor2 (from crytic-compile<0.5.0,>=0.4.2->slither-analyzer==0.11.6)
+  Downloading cbor2-6.1.5-cp312-cp312-manylinux_2_28_x86_64.whl.metadata (5.5 kB)
+Collecting solc-select>=1.0.4 (from crytic-compile<0.5.0,>=0.4.2->slither-analyzer==0.11.6)
+  Downloading solc_select-1.2.0-py3-none-any.whl.metadata (47 kB)
+Collecting eth-account>=0.13.6 (from web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading eth_account-0.14.0-py3-none-any.whl.metadata (2.4 kB)
+Collecting eth-hash>=0.5.1 (from eth-hash[pycryptodome]>=0.5.1->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading eth_hash-0.8.0-py3-none-any.whl.metadata (4.1 kB)
+Collecting hexbytes>=1.2.0 (from web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading hexbytes-2.0.0-py3-none-any.whl.metadata (2.1 kB)
+Collecting aiohttp>=3.7.4.post0 (from web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading aiohttp-3.14.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (8.3 kB)
+Collecting pydantic>=2.4.0 (from web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading pydantic-2.14.0-py3-none-any.whl.metadata (131 kB)
+Collecting requests>=2.23.0 (from web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading requests-2.34.2-py3-none-any.whl.metadata (4.8 kB)
+Collecting typing-extensions>=4.0.1 (from web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting types-requests>=2.0.0 (from web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading types_requests-2.33.0.20261006-py3-none-any.whl.metadata (2.2 kB)
+Collecting websockets<16.0.0,>=10.0.0 (from web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading websockets-15.0.1-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.8 kB)
+Collecting pyunormalize>=15.0.0 (from web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading pyunormalize-18.0.0-py3-none-any.whl.metadata (5.5 kB)
+Collecting aiohappyeyeballs>=2.5.0 (from aiohttp>=3.7.4.post0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading aiohappyeyeballs-2.7.1-py3-none-any.whl.metadata (5.9 kB)
+Collecting aiosignal>=1.4.0 (from aiohttp>=3.7.4.post0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading aiosignal-1.4.0-py3-none-any.whl.metadata (3.7 kB)
+Collecting attrs>=17.3.0 (from aiohttp>=3.7.4.post0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+Collecting frozenlist>=1.1.1 (from aiohttp>=3.7.4.post0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading frozenlist-1.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl.metadata (20 kB)
+Collecting multidict<7.0,>=4.5 (from aiohttp>=3.7.4.post0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading multidict-6.9.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (5.3 kB)
+Collecting propcache>=0.2.0 (from aiohttp>=3.7.4.post0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading propcache-0.5.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (25 kB)
+Collecting yarl<2.0,>=1.25.1 (from aiohttp>=3.7.4.post0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading yarl-1.25.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (111 kB)
+Collecting idna>=2.0 (from yarl<2.0,>=1.25.1->aiohttp>=3.7.4.post0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting parsimonious<0.11.0,>=0.10.0 (from eth-abi>=5.0.1->slither-analyzer==0.11.6)
+  Downloading parsimonious-0.10.0-py3-none-any.whl.metadata (25 kB)
+Collecting regex>=2022.3.15 (from parsimonious<0.11.0,>=0.10.0->eth-abi>=5.0.1->slither-analyzer==0.11.6)
+  Downloading regex-2026.9.29-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (40 kB)
+Collecting bitarray>=2.4 (from eth-account>=0.13.6->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading bitarray-3.12.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (41 kB)
+Collecting eth-keyfile>=0.10 (from eth-account>=0.13.6->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading eth_keyfile-0.10.0-py3-none-any.whl.metadata (9.8 kB)
+Collecting eth-keys>=0.5 (from eth-account>=0.13.6->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading eth_keys-0.8.0-py3-none-any.whl.metadata (12 kB)
+Collecting eth-rlp>=3 (from eth-account>=0.13.6->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading eth_rlp-3.0.0-py3-none-any.whl.metadata (2.2 kB)
+Collecting rlp>=2 (from eth-account>=0.13.6->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading rlp-5.0.0-py3-none-any.whl.metadata (2.1 kB)
+Collecting ckzg>=2 (from eth-account>=0.13.6->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading ckzg-2.1.8-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (887 bytes)
+Collecting py_ecc>=5.2.0 (from eth-keyfile>=0.10->eth-account>=0.13.6->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading py_ecc-8.0.0-py3-none-any.whl.metadata (3.1 kB)
+Collecting cytoolz>=0.10.1 (from eth-utils>=5.0.0->slither-analyzer==0.11.6)
+  Downloading cytoolz-1.2.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (5.3 kB)
+Collecting annotated-types>=0.6.0 (from pydantic>=2.4.0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.50.0 (from pydantic>=2.4.0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading pydantic_core-2.50.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (6.5 kB)
+Collecting typing-inspection>=0.4.4 (from pydantic>=2.4.0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Collecting toolz>=0.8.0 (from cytoolz>=0.10.1->eth-utils>=5.0.0->slither-analyzer==0.11.6)
+  Downloading toolz-1.2.0-py3-none-any.whl.metadata (5.2 kB)
+Collecting wcwidth>=0.3.5 (from prettytable>=3.10.2->slither-analyzer==0.11.6)
+  Downloading wcwidth-0.9.2-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl.metadata (23 kB)
+Collecting charset_normalizer<4,>=2 (from requests>=2.23.0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl.metadata (46 kB)
+Collecting urllib3<3,>=1.26 (from requests>=2.23.0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading urllib3-2.8.0-py3-none-any.whl.metadata (7.4 kB)
+Collecting certifi>=2023.5.7 (from requests>=2.23.0->web3<8,>=7.10->slither-analyzer==0.11.6)
+  Downloading certifi-2026.7.22-py3-none-any.whl.metadata (2.5 kB)
+Downloading slither_analyzer-0.11.6-py3-none-any.whl (765 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 765.0/765.0 kB 108.7 MB/s  0:00:00
+Downloading crytic_compile-0.4.2-py3-none-any.whl (96 kB)
+Downloading web3-7.16.0-py3-none-any.whl (1.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.4/1.4 MB 211.7 MB/s  0:00:00
+Downloading websockets-15.0.1-cp312-cp312-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl (182 kB)
+Downloading aiohttp-3.14.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (1.9 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 1.9/1.9 MB 158.8 MB/s  0:00:00
+Downloading multidict-6.9.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (336 kB)
+Downloading yarl-1.25.1-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (117 kB)
+Downloading aiohappyeyeballs-2.7.1-py3-none-any.whl (15 kB)
+Downloading aiosignal-1.4.0-py3-none-any.whl (7.5 kB)
+Downloading attrs-26.1.0-py3-none-any.whl (67 kB)
+Downloading eth_abi-6.0.0-py3-none-any.whl (53 kB)
+Downloading parsimonious-0.10.0-py3-none-any.whl (48 kB)
+Downloading eth_account-0.14.0-py3-none-any.whl (586 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 586.3/586.3 kB 111.1 MB/s  0:00:00
+Downloading bitarray-3.12.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (398 kB)
+Downloading ckzg-2.1.8-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (176 kB)
+Downloading eth_hash-0.8.0-py3-none-any.whl (8.0 kB)
+Downloading pycryptodome-3.24.0-cp37-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (2.3 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.3/2.3 MB 261.0 MB/s  0:00:00
+Downloading eth_keyfile-0.10.0-py3-none-any.whl (9.5 kB)
+Downloading eth_keys-0.8.0-py3-none-any.whl (20 kB)
+Downloading eth_rlp-3.0.0-py3-none-any.whl (15 kB)
+Downloading eth_typing-6.0.0-py3-none-any.whl (19 kB)
+Downloading eth_utils-6.0.0-py3-none-any.whl (102 kB)
+Downloading pydantic-2.14.0-py3-none-any.whl (487 kB)
+Downloading pydantic_core-2.50.0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (2.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 2.2/2.2 MB 240.8 MB/s  0:00:00
+Downloading annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Downloading cytoolz-1.2.0-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (3.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/3.2 MB 213.7 MB/s  0:00:00
+Downloading frozenlist-1.8.0-cp312-cp312-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl (242 kB)
+Downloading hexbytes-2.0.0-py3-none-any.whl (18 kB)
+Downloading idna-3.20-py3-none-any.whl (69 kB)
+Downloading prettytable-3.18.0-py3-none-any.whl (37 kB)
+Downloading propcache-0.5.4-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (250 kB)
+Downloading py_ecc-8.0.0-py3-none-any.whl (47 kB)
+Downloading pyunormalize-18.0.0-py3-none-any.whl (78 kB)
+Downloading regex-2026.9.29-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (807 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 807.8/807.8 kB 149.6 MB/s  0:00:00
+Downloading requests-2.34.2-py3-none-any.whl (73 kB)
+Downloading charset_normalizer-3.5.2-cp312-cp312-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl (257 kB)
+Downloading urllib3-2.8.0-py3-none-any.whl (135 kB)
+Downloading certifi-2026.7.22-py3-none-any.whl (136 kB)
+Downloading rlp-5.0.0-py3-none-any.whl (19 kB)
+Downloading solc_select-1.2.0-py3-none-any.whl (36 kB)
+Downloading toolz-1.2.0-py3-none-any.whl (60 kB)
+Downloading types_requests-2.33.0.20261006-py3-none-any.whl (21 kB)
+Downloading typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Downloading typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Downloading wcwidth-0.9.2-cp310-abi3-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (769 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 769.8/769.8 kB 166.7 MB/s  0:00:00
+Downloading cbor2-6.1.5-cp312-cp312-manylinux_2_28_x86_64.whl (463 kB)
+Downloading packaging-26.3-py3-none-any.whl (129 kB)
+Installing collected packages: ckzg, websockets, wcwidth, urllib3, typing-extensions, toolz, regex, pyunormalize, pycryptodome, propcache, packaging, multidict, idna, hexbytes, frozenlist, eth-hash, charset_normalizer, certifi, cbor2, bitarray, attrs, annotated-types, aiohappyeyeballs, yarl, typing-inspection, types-requests, requests, pydantic-core, prettytable, parsimonious, eth-typing, cytoolz, aiosignal, solc-select, pydantic, aiohttp, eth-utils, crytic-compile, rlp, py_ecc, eth-keys, eth-abi, eth-rlp, eth-keyfile, eth-account, web3, slither-analyzer
+
+Successfully installed aiohappyeyeballs-2.7.1 aiohttp-3.14.4 aiosignal-1.4.0 annotated-types-0.8.0 attrs-26.1.0 bitarray-3.12.0 cbor2-6.1.5 certifi-2026.7.22 charset_normalizer-3.5.2 ckzg-2.1.8 crytic-compile-0.4.2 cytoolz-1.2.0 eth-abi-6.0.0 eth-account-0.14.0 eth-hash-0.8.0 eth-keyfile-0.10.0 eth-keys-0.8.0 eth-rlp-3.0.0 eth-typing-6.0.0 eth-utils-6.0.0 frozenlist-1.8.0 hexbytes-2.0.0 idna-3.20 multidict-6.9.1 packaging-26.3 parsimonious-0.10.0 prettytable-3.18.0 propcache-0.5.4 py_ecc-8.0.0 pycryptodome-3.24.0 pydantic-2.14.0 pydantic-core-2.50.0 pyunormalize-18.0.0 regex-2026.9.29 requests-2.34.2 rlp-5.0.0 slither-analyzer-0.11.6 solc-select-1.2.0 toolz-1.2.0 types-requests-2.33.0.20261006 typing-extensions-4.16.0 typing-inspection-0.4.4 urllib3-2.8.0 wcwidth-0.9.2 web3-7.16.0 websockets-15.0.1 yarl-1.25.1
+'forge clean' running (wd: /home/runner/work/psynft-v2/psynft-v2)
+'forge config --json' running
+'forge build --build-info --deny never --skip ./test/** ./script/** --force' running (wd: /home/runner/work/psynft-v2/psynft-v2)
+INFO:Detectors:
+Detector: timestamp
+PsyNFTV2.approveTransfer(uint256,address,uint256) (src/PsyNFTV2.sol#275-289) uses timestamp for comparisons
+
+
+PsyNFTV2.revokeTransfer(uint256) (src/PsyNFTV2.sol#296-300) uses timestamp for comparisons
+
+
+PsyNFTV2.transferFrom(address,address,uint256) (src/PsyNFTV2.sol#309-316) uses timestamp for comparisons
+
+
+
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp
+INFO:Detectors:
+Detector: costly-loop
+PsyNFTV2._update(address,uint256,address) (src/PsyNFTV2.sol#432-437) has costly operations inside a loop:
+
+
+
+
+PsyNFTV2.migrateBatch(address[],uint256[]) (src/PsyNFTV2.sol#148-173) has costly operations inside a loop:
+
+PsyNFTV2.migrateBatch(address[],uint256[]) (src/PsyNFTV2.sol#148-173) has costly operations inside a loop:
+
+PsyNFTV2._update(address,uint256,address) (src/PsyNFTV2.sol#432-437) has costly operations inside a loop:
+
+
+
+
+
+
+PsyNFTV2._update(address,uint256,address) (src/PsyNFTV2.sol#432-437) has costly operations inside a loop:
+
+
+
+
+
+
+PsyNFTV2.batchMintInFibonacci() (src/PsyNFTV2.sol#241-252) has costly operations inside a loop:
+
+PsyNFTV2._update(address,uint256,address) (src/PsyNFTV2.sol#432-437) has costly operations inside a loop:
+
+
+
+
+
+
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#costly-operations-inside-a-loop
+INFO:Detectors:
+Detector: solc-version
+Version constraint 0.8.20 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+
+
+
+It is used by:
+
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+INFO:Detectors:
+Detector: low-level-calls
+Low level call in PsyNFTV2.rescueETH(address,uint256) (src/PsyNFTV2.sol#404-409):
+
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+INFO:Detectors:
+Detector: naming-convention
+Parameter PsyNFTV2.transferNFTs(uint256[],address)._tokenIds (src/PsyNFTV2.sol#262) is not in mixedCase
+Parameter PsyNFTV2.transferNFTs(uint256[],address)._recipient (src/PsyNFTV2.sol#262) is not in mixedCase
+Parameter PsyNFTV2.approveTransfer(uint256,address,uint256)._tokenId (src/PsyNFTV2.sol#275) is not in mixedCase
+Parameter PsyNFTV2.approveTransfer(uint256,address,uint256)._to (src/PsyNFTV2.sol#275) is not in mixedCase
+Parameter PsyNFTV2.approveTransfer(uint256,address,uint256)._allowedTransferTimeInSeconds (src/PsyNFTV2.sol#275) is not in mixedCase
+Parameter PsyNFTV2.revokeTransfer(uint256)._tokenId (src/PsyNFTV2.sol#296) is not in mixedCase
+Parameter PsyNFTV2.transferFrom(address,address,uint256)._from (src/PsyNFTV2.sol#309) is not in mixedCase
+Parameter PsyNFTV2.transferFrom(address,address,uint256)._to (src/PsyNFTV2.sol#309) is not in mixedCase
+Parameter PsyNFTV2.transferFrom(address,address,uint256)._tokenId (src/PsyNFTV2.sol#309) is not in mixedCase
+Parameter PsyNFTV2.burn(uint256)._tokenId (src/PsyNFTV2.sol#321) is not in mixedCase
+Parameter PsyNFTV2.setCoreContract(address)._core (src/PsyNFTV2.sol#334) is not in mixedCase
+Parameter PsyNFTV2.setTreasury(address)._treasury (src/PsyNFTV2.sol#341) is not in mixedCase
+Parameter PsyNFTV2.setBaseUri(string)._uri (src/PsyNFTV2.sol#366) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
+INFO:Slither:. analyzed (22 contracts with 102 detectors), 25 result(s) found
+﻿2026-10-10T22:44:50.9262326Z ##[group]Run npm install -g @cyfrin/aderyn@0.6.8
+^[[36;1mnpm install -g @cyfrin/aderyn@0.6.8^[[0m
+^[[36;1maderyn . --src src --output aderyn-report.md^[[0m
+^[[36;1mcat aderyn-report.md^[[0m
+shell: /usr/bin/bash -e {0}
+env:
+  pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+  PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+  Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+##[endgroup]
+
+added 41 packages in 3s
+
+11 packages are looking for funding
+  run `npm fund` for details
+
+--------------------------------------------------
+# Configuration
+--------------------------------------------------
+Root - /home/runner/work/psynft-v2/psynft-v2
+Source - /home/runner/work/psynft-v2/psynft-v2/src
+Remappings - [
+    "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/",
+    "forge-std/=lib/forge-std/src/",
+    "openzeppelin-contracts/=lib/openzeppelin-contracts/",
+]
+EVM version - paris
+--------------------------------------------------
+# Source Scope
+--------------------------------------------------
+Include Filepaths Containing - No specific criteria.
+Exclude Filepaths Containing - No specific criteria.
+Auto Excluding - No Files.
+--------------------------------------------------
+# Compiling Abstract Syntax Trees
+--------------------------------------------------
+Ingesting 1 compiled files [solc : v0.8.20]
+--------------------------------------------------
+# Scanning Contracts
+--------------------------------------------------
+Running 88 detectors
+Detectors run, printing report.
+Report printed to aderyn-report.md
+
+🛡️ Together we make Solidity safer.
+✨ Support open-source security — star Aderyn:
+https://github.com/Cyfrin/aderyn
+# Aderyn Analysis Report
+
+This report was generated by [Aderyn](https://github.com/Cyfrin/aderyn), a static analysis tool built by [Cyfrin](https://cyfrin.io), a blockchain security company. This report is not a substitute for manual audit or security review. It should not be relied upon for any purpose other than to assist in the identification of potential security vulnerabilities.
+# Table of Contents
+
+- [Summary](#summary)
+  - [Files Summary](#files-summary)
+  - [Files Details](#files-details)
+  - [Issue Summary](#issue-summary)
+- [High Issues](#high-issues)
+  - [H-1: Arbitrary `from` Passed to `transferFrom`](#h-1-arbitrary-from-passed-to-transferfrom)
+- [Low Issues](#low-issues)
+  - [L-1: Centralization Risk](#l-1-centralization-risk)
+  - [L-2: Costly operations inside loop](#l-2-costly-operations-inside-loop)
+  - [L-3: Literal Instead of Constant](#l-3-literal-instead-of-constant)
+  - [L-4: Local Variable Shadows State Variable](#l-4-local-variable-shadows-state-variable)
+  - [L-5: `nonReentrant` is Not the First Modifier](#l-5-nonreentrant-is-not-the-first-modifier)
+  - [L-6: Loop Contains `require`/`revert`](#l-6-loop-contains-requirerevert)
+  - [L-7: Uninitialized Local Variable](#l-7-uninitialized-local-variable)
+  - [L-8: Unsafe `ERC721::_mint()`](#l-8-unsafe-erc721mint)
+
+
+# Summary
+
+## Files Summary
+
+| Key | Value |
+| --- | --- |
+| .sol Files | 1 |
+| Total nSLOC | 224 |
+
+
+## Files Details
+
+| Filepath | nSLOC |
+| --- | --- |
+| src/PsyNFTV2.sol | 224 |
+| **Total** | **224** |
+
+
+## Issue Summary
+
+| Category | No. of Issues |
+| --- | --- |
+| High | 1 |
+| Low | 8 |
+
+
+# High Issues
+
+## H-1: Arbitrary `from` Passed to `transferFrom`
+
+Passing an arbitrary `from` address to `transferFrom` (or `safeTransferFrom`) can lead to loss of funds, because anyone can transfer tokens from the `from` address if an approval is made.
+
+<details><summary>1 Found Instances</summary>
+
+
+- Found in src/PsyNFTV2.sol [Line: 315](src/PsyNFTV2.sol#L315)
+
+
+
+
+
+</details>
+
+
+
+# Low Issues
+
+## L-1: Centralization Risk
+
+Contracts have owners with privileged rights to perform admin tasks and need to be trusted to not perform malicious updates or drain funds.
+
+<details><summary>12 Found Instances</summary>
+
+
+- Found in src/PsyNFTV2.sol [Line: 45](src/PsyNFTV2.sol#L45)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 150](src/PsyNFTV2.sol#L150)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 197](src/PsyNFTV2.sol#L197)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 334](src/PsyNFTV2.sol#L334)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 341](src/PsyNFTV2.sol#L341)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 348](src/PsyNFTV2.sol#L348)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 355](src/PsyNFTV2.sol#L355)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 366](src/PsyNFTV2.sol#L366)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 380](src/PsyNFTV2.sol#L380)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 389](src/PsyNFTV2.sol#L389)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 396](src/PsyNFTV2.sol#L396)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 404](src/PsyNFTV2.sol#L404)
+
+
+
+
+
+</details>
+
+
+
+## L-2: Costly operations inside loop
+
+Invoking `SSTORE` operations in loops may waste gas. Use a local variable to hold the loop computation result.
+
+<details><summary>4 Found Instances</summary>
+
+
+- Found in src/PsyNFTV2.sol [Line: 160](src/PsyNFTV2.sol#L160)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 229](src/PsyNFTV2.sol#L229)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 247](src/PsyNFTV2.sol#L247)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 265](src/PsyNFTV2.sol#L265)
+
+
+
+
+
+</details>
+
+
+
+## L-3: Literal Instead of Constant
+
+Define and use `constant` variables instead of using literals. If the same constant literal value is used multiple times, create a constant state variable and reference it throughout the contract.
+
+<details><summary>2 Found Instances</summary>
+
+
+- Found in src/PsyNFTV2.sol [Line: 229](src/PsyNFTV2.sol#L229)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 447](src/PsyNFTV2.sol#L447)
+
+
+
+
+
+</details>
+
+
+
+## L-4: Local Variable Shadows State Variable
+
+Rename the local variable that shadows another state variable.
+
+<details><summary>1 Found Instances</summary>
+
+
+- Found in src/PsyNFTV2.sol [Line: 52](src/PsyNFTV2.sol#L52)
+
+
+
+
+
+</details>
+
+
+
+## L-5: `nonReentrant` is Not the First Modifier
+
+To protect against reentrancy in other modifiers, the `nonReentrant` modifier should be the first modifier in the list of modifiers.
+
+<details><summary>6 Found Instances</summary>
+
+
+- Found in src/PsyNFTV2.sol [Line: 152](src/PsyNFTV2.sol#L152)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 221](src/PsyNFTV2.sol#L221)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 241](src/PsyNFTV2.sol#L241)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 389](src/PsyNFTV2.sol#L389)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 396](src/PsyNFTV2.sol#L396)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 404](src/PsyNFTV2.sol#L404)
+
+
+
+
+
+</details>
+
+
+
+## L-6: Loop Contains `require`/`revert`
+
+Avoid `require` / `revert` statements in a loop because a single bad item can cause the whole transaction to fail. It's better to forgive on fail and return failed elements post processing of the loop
+
+<details><summary>4 Found Instances</summary>
+
+
+- Found in src/PsyNFTV2.sol [Line: 160](src/PsyNFTV2.sol#L160)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 229](src/PsyNFTV2.sol#L229)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 247](src/PsyNFTV2.sol#L247)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 265](src/PsyNFTV2.sol#L265)
+
+
+
+
+
+</details>
+
+
+
+## L-7: Uninitialized Local Variable
+
+Initialize all the variables. If a variable is meant to be initialized to zero, explicitly set it to zero to improve code readability.
+
+<details><summary>2 Found Instances</summary>
+
+
+- Found in src/PsyNFTV2.sol [Line: 160](src/PsyNFTV2.sol#L160)
+
+
+
+
+
+- Found in src/PsyNFTV2.sol [Line: 265](src/PsyNFTV2.sol#L265)
+
+
+
+
+
+</details>
+
+
+
+## L-8: Unsafe `ERC721::_mint()`
+
+Using `ERC721::_mint()` can mint ERC721 tokens to addresses which don't support ERC721 tokens. Use `_safeMint()` instead of `_mint()` for ERC721 tokens.
+
+<details><summary>1 Found Instances</summary>
+
+
+- Found in src/PsyNFTV2.sol [Line: 165](src/PsyNFTV2.sol#L165)
+
+
+
+
+
+</details>
+
+
+
+﻿2026-10-10T22:44:54.6473502Z ##[group]Run forge lint src/
+^[[36;1mforge lint src/^[[0m
+shell: /usr/bin/bash -e {0}
+env:
+  pythonLocation: /opt/hostedtoolcache/Python/3.12.15/x64
+  PKG_CONFIG_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib/pkgconfig
+  Python_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  Python2_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  Python3_ROOT_DIR: /opt/hostedtoolcache/Python/3.12.15/x64
+  LD_LIBRARY_PATH: /opt/hostedtoolcache/Python/3.12.15/x64/lib
+##[endgroup]
+No files changed, compilation skipped
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/PsyNFTV2.sol:281:13
+    │
+281 │             block.timestamp > approvedTransfers[_tokenId].transferExpiryDate,
+    │             ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#block-timestamp
+
+warning[block-timestamp]: usage of `block.timestamp` in a comparison may be manipulated by validators
+    ╭▸ src/PsyNFTV2.sol:312:21
+    │
+312 │             require(block.timestamp <= approvedTransfers[_tokenId].transferExpiryDate, "PsyNFT: Approval Expired");
+    │                     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    │
+    ╰ help: https://book.getfoundry.sh/reference/forge/forge-lint#block-timestamp
+
+﻿2026-10-10T22:44:54.7036525Z Post job cleanup.
+(node:2326) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+﻿2026-10-10T22:44:54.8753420Z Post job cleanup.
+(node:2334) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+﻿2026-10-10T22:44:55.1227776Z Post job cleanup.
+[command]/usr/bin/tar --posix -cf cache.tzst --exclude cache.tzst -P -C /home/runner/work/psynft-v2/psynft-v2 --files-from manifest.txt --use-compress-program zstdmt
+Sent 2789 of 2789 (100.0%), 0.0 MBs/sec
+Cache saved with the key: linux-foundry-chain-fork-static-analysis-1c0ab58065fb1fe582c7790468b9b76a3a509166
+﻿2026-10-10T22:44:55.9820232Z Post job cleanup.
+[command]/usr/bin/git version
+git version 2.55.0
+Temporarily overriding HOME='/home/runner/work/_temp/2c25496a-c6ff-46c5-bfa7-0d0e1a0bb59a' before making global git config changes
+Adding repository directory to the temporary git global config as a safe directory
+[command]/usr/bin/git config --global --add safe.directory /home/runner/work/psynft-v2/psynft-v2
+[command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+http.https://github.com/.extraheader
+[command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+[command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+[command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+[command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+﻿2026-10-10T22:44:56.2511868Z Cleaning up orphan processes
+##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11d5960a326750d5838078e36cf38b85af677262, actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020, actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

@@ -507,6 +507,19 @@ export const PSYNFT_V2_ABI = [
   },
   {
     "type": "function",
+    "name": "revokeTransfer",
+    "inputs": [
+      {
+        "name": "_tokenId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
     "name": "safeTransferFrom",
     "inputs": [
       {
@@ -822,6 +835,25 @@ export const PSYNFT_V2_ABI = [
   },
   {
     "type": "event",
+    "name": "BatchMetadataUpdate",
+    "inputs": [
+      {
+        "name": "_fromTokenId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "_toTokenId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
     "name": "ControlledTransfersSet",
     "inputs": [
       {
@@ -914,6 +946,19 @@ export const PSYNFT_V2_ABI = [
       },
       {
         "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "MetadataUpdate",
+    "inputs": [
+      {
+        "name": "_tokenId",
         "type": "uint256",
         "indexed": false,
         "internalType": "uint256"
@@ -1038,6 +1083,19 @@ export const PSYNFT_V2_ABI = [
         "indexed": true,
         "internalType": "address"
       },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "TransferApprovalRevoked",
+    "inputs": [
       {
         "name": "tokenId",
         "type": "uint256",

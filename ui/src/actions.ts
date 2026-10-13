@@ -202,7 +202,32 @@ export const ACTION_GROUPS: ActionGroup[] = [
           {name: "_to", type: "address", placeholder: "0x… allowed recipient"},
           {name: "_allowedTransferTimeInSeconds", type: "uint256", placeholder: "e.g. 86400 (24h)"},
         ],
-        note: "While controlled transfers are on, a member-held token can only move to this recipient before the window expires.",
+        note: "While controlled transfers are on, a member-held token can only move to this recipient before the window expires. Single-use: it is cleared once the token moves.",
+      },
+      {
+        fn: "revokeTransfer",
+        label: "Revoke a transfer approval",
+        role: "core",
+        fields: [{name: "_tokenId", type: "uint256", placeholder: "token id"}],
+        note: "Cancels a live approval early (e.g. one granted to the wrong address) so a corrected one can be issued.",
+      },
+    ],
+  },
+  {
+    title: "Member · Move my seat",
+    role: "any",
+    blurb: "What a holder does after core approved a move. Use it to test the controlled-transfer gate.",
+    items: [
+      {
+        fn: "transferFrom",
+        label: "Transfer a seat",
+        role: "any",
+        fields: [
+          {name: "_from", type: "address", placeholder: "0x… current holder (your address)"},
+          {name: "_to", type: "address", placeholder: "0x… approved recipient"},
+          {name: "_tokenId", type: "uint256", placeholder: "token id"},
+        ],
+        note: "With controlled transfers on, this only succeeds to the approved recipient before the approval expires.",
       },
     ],
   },

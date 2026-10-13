@@ -15,8 +15,8 @@ vendored OpenZeppelin against upstream; GitHub Security Advisory database querie
 dependency; live browser verification of UI fixes. **42/42 Foundry tests pass** (including the
 live‑mainnet fork migration) and the UI builds clean after all changes.
 
-> This is a rigorous internal audit, not a substitute for an independent external firm before
-> real value moves. The runbook's external‑audit gate stands.
+> This is a rigorous internal, AI-assisted audit (the author working with Claude), not a substitute
+> for an independent external firm before real value moves. The runbook's external‑audit gate stands.
 
 ---
 

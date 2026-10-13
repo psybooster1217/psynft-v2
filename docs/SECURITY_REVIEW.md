@@ -1,5 +1,9 @@
 # Internal security & correctness review
 
+> **Internal, AI-assisted review.** The reviewers below were AI agents (Claude) run by the author;
+> this is not a paid external audit. The public bug bounty ([BUG_BOUNTY.md](BUG_BOUNTY.md)) is the
+> independent check.
+
 > **See also:** [AUDIT.md](AUDIT.md) — the later full‑stack security audit (contract re‑pass,
 > scripts, snapshot tool, admin UI, supply chain), which supersedes this document where they
 > overlap.
@@ -13,8 +17,8 @@ actual code. Only findings that survived verification are listed.
 **Result:** 3 confirmed (2 high, 1 low), 2 rejected. Parity, ERC‑721 integration, and access‑control
 lenses returned no defects. **All confirmed findings are fixed** and covered by tests.
 
-> This is an internal review, not a substitute for an independent external audit before real value
-> moves. See the runbook's audit gate.
+> This is an internal, AI-assisted review, not a substitute for an independent external audit before
+> real value moves. See the runbook's audit gate.
 
 ## Confirmed & fixed
 

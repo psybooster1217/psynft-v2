@@ -1,7 +1,9 @@
 # V1 → V2: exact changes
 
-V2 is a **behaviour‑preserving** copy of the original `PsyNFT`. Every V1 function keeps its
-signature, access control, and semantics. The changes below are additive or defensive only.
+V2 is a copy of the original `PsyNFT`. Every V1 function keeps its signature and access control.
+The changes below are additive or defensive. Sections 7–10 were added by the October 2026 audit
+([AUDIT-2026-10.md](AUDIT-2026-10.md)); they change behaviour on purpose, and each is covered by
+tests in `test/AuditOct2026.t.sol`.
 
 Reference original: [`reference/PsyNFT.v1.sol`](../reference/PsyNFT.v1.sol).
 New contract: [`src/PsyNFTV2.sol`](../src/PsyNFTV2.sol).
@@ -64,7 +66,8 @@ grow the trusted surface for a cosmetic number.
 
 V1 emitted **no** events for admin actions. V2 adds:
 `CoreUpdated`, `TreasuryUpdated`, `BaseUriUpdated`, `ControlledTransfersSet`, `TransferApproved`,
-`TokenBurnt`, `Migrated`, `MigrationFinalized`, `ERC20Rescued`, `ERC721Rescued`, `ETHRescued`.
+`TokenBurnt`, `Migrated`, `MigrationFinalized`, `ERC20Rescued`, `ERC721Rescued`, `ETHRescued`, and
+(audit 2026-10) `TransferApprovalRevoked` plus ERC-4906 `BatchMetadataUpdate`.
 (ERC‑721 `Transfer`/`Approval` were and are emitted by OpenZeppelin.)
 
 ## 4. Owner rescue helpers (new)
@@ -91,13 +94,55 @@ recreating the exact lost‑owner disaster this redeploy fixes. V2 blocks it; co
 - `burn` reads the owner before burning and emits `TokenBurnt(tokenId, from)`.
 - `IERC20` rescue uses OpenZeppelin `SafeERC20`.
 
+## 7. Transfer approvals are single-use (audit 2026-10, PNFT-01)
+
+```solidity
+function _update(address to, uint256 tokenId_, address auth) internal override returns (address from) {
+    from = super._update(to, tokenId_, auth);
+    if (from != address(0) && approvedTransfers[tokenId_].transferExpiryDate != 0) {
+        delete approvedTransfers[tokenId_];
+    }
+}
+```
+
+In V1 a `core` approval stayed live until its expiry even after it had been used. Two consequences:
+core could not approve the *next* move of that token until the old window lapsed
+(`"Transfer Request Currently Active"`), and a used approval could come back to life. Example:
+owner disables controls, the token moves on, owner re-enables controls; the old approval then
+authorises a transfer again without any new core decision. V2 clears the approval whenever the
+token changes hands or is burnt. Mints are skipped, so batch-mint gas is unchanged.
+
+## 8. `revokeTransfer(uint256)` (audit 2026-10, PNFT-02)
+
+`onlyCoreContract`. Deletes a live approval and emits `TransferApprovalRevoked(tokenId)`. V1 had
+no way to withdraw a mistaken approval (e.g. a 1-year window to the wrong address): it stayed
+usable, and blocked a corrected one, until it expired.
+
+## 9. Guards on irreversible / owner-typed inputs (audit 2026-10, PNFT-03, PNFT-04)
+
+- `finalizeMigration` requires `(previousFibonacci_, nextTokenId)` to be **consecutive terms of the
+  schedule's Fibonacci sequence** (2/3, 3/5 … 21/34 …), reverting `"PsyNFT: Counters Not On
+  Schedule"`. V1's history only ever produces such pairs. A typo (210/34, 20/34, swapped values)
+  would otherwise be locked in forever by the one-shot finalize.
+- `setBaseUri` requires a non-empty URI to end with `/` (`"PsyNFT: Base URI Must End With
+  Slash"`), because `tokenURI = baseUri + id` and one missing character breaks every token's art.
+  An empty string is still accepted (to clear).
+
+## 10. ERC-4906 metadata refresh (audit 2026-10)
+
+V2 implements ERC-4906: `supportsInterface(0x49064906)` returns true, and `setBaseUri` emits
+`BatchMetadataUpdate(0, type(uint256).max)`, so marketplaces re-fetch art for all tokens after a
+metadata change (relevant for the META-1 re-pin and for every future Fibonacci batch).
+
 ## What did NOT change
 
 - The Fibonacci mint schedule (`initialMint` → 3 tokens; `batchMintInFibonacci`).
 - `onlyCoreContract` gating on mint/distribute/approve.
-- The controlled‑transfer rule in the `transferFrom` override (and therefore `safeTransferFrom`).
+- The controlled‑transfer rule in the `transferFrom` override (and therefore `safeTransferFrom`):
+  a member-held token moves only to the approved recipient before expiry (§7 only makes the
+  approval single-use).
 - `transferNFTs`, `approveTransfer`, `setCoreContract`, `setTreasury`, enable/disable toggles,
-  `setBaseUri`, `burn` (treasury‑only), `_baseURI`.
+  `burn` (treasury‑only), `_baseURI`. (`setBaseUri` gained the slash guard, §9.)
 - Storage layout of all V1 fields is preserved and kept in the same order (V2 appends new fields
   after them). Layout parity is not required for a fresh deploy, but it keeps the diff auditable.
 

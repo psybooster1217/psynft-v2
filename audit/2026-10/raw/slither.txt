@@ -1,0 +1,52 @@
+'forge clean' running (wd: C:\Users\steve\Desktop\SMARTC)
+'forge config --json' running
+'forge build --build-info --deny never --skip ./test/** ./script/** --force' running (wd: C:\Users\steve\Desktop\SMARTC)
+INFO:Detectors:
+Detector: timestamp
+PsyNFTV2.approveTransfer(uint256,address,uint256) (src/PsyNFTV2.sol#259-273) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(block.timestamp > approvedTransfers[_tokenId].transferExpiryDate,PsyNFT: Transfer Request Currently Active) (src/PsyNFTV2.sol#264-267)
+PsyNFTV2.transferFrom(address,address,uint256) (src/PsyNFTV2.sol#282-289) uses timestamp for comparisons
+	Dangerous comparisons:
+	- require(bool,string)(_to == approvedTransfers[_tokenId].to,PsyNFT: Incorrect Receiver) (src/PsyNFTV2.sol#284)
+	- require(bool,string)(block.timestamp <= approvedTransfers[_tokenId].transferExpiryDate,PsyNFT: Approval Expired) (src/PsyNFTV2.sol#285)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#block-timestamp
+INFO:Detectors:
+Detector: costly-loop
+PsyNFTV2.migrateBatch(address[],uint256[]) (src/PsyNFTV2.sol#135-160) has costly operations inside a loop:
+	- migratedCount ++ (src/PsyNFTV2.sol#153)
+PsyNFTV2.migrateBatch(address[],uint256[]) (src/PsyNFTV2.sol#135-160) has costly operations inside a loop:
+	- _migrationCeiling = id + 1 (src/PsyNFTV2.sol#156)
+PsyNFTV2.batchMintInFibonacci() (src/PsyNFTV2.sol#225-236) has costly operations inside a loop:
+	- tokenId ++ (src/PsyNFTV2.sol#233)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#costly-operations-inside-a-loop
+INFO:Detectors:
+Detector: solc-version
+Version constraint 0.8.20 contains known severe issues (https://solidity.readthedocs.io/en/latest/bugs.html)
+	- VerbatimInvalidDeduplication
+	- FullInlinerNonExpressionSplitArgumentEvaluationOrder
+	- MissingSideEffectsOnSelectorAccess.
+It is used by:
+	- 0.8.20 (src/PsyNFTV2.sol#2)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#incorrect-versions-of-solidity
+INFO:Detectors:
+Detector: low-level-calls
+Low level call in PsyNFTV2.rescueETH(address,uint256) (src/PsyNFTV2.sol#370-375):
+	- (ok,None) = to.call{value: amount}() (src/PsyNFTV2.sol#372)
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#low-level-calls
+INFO:Detectors:
+Detector: naming-convention
+Parameter PsyNFTV2.transferNFTs(uint256[],address)._tokenIds (src/PsyNFTV2.sol#246) is not in mixedCase
+Parameter PsyNFTV2.transferNFTs(uint256[],address)._recipient (src/PsyNFTV2.sol#246) is not in mixedCase
+Parameter PsyNFTV2.approveTransfer(uint256,address,uint256)._tokenId (src/PsyNFTV2.sol#259) is not in mixedCase
+Parameter PsyNFTV2.approveTransfer(uint256,address,uint256)._to (src/PsyNFTV2.sol#259) is not in mixedCase
+Parameter PsyNFTV2.approveTransfer(uint256,address,uint256)._allowedTransferTimeInSeconds (src/PsyNFTV2.sol#259) is not in mixedCase
+Parameter PsyNFTV2.transferFrom(address,address,uint256)._from (src/PsyNFTV2.sol#282) is not in mixedCase
+Parameter PsyNFTV2.transferFrom(address,address,uint256)._to (src/PsyNFTV2.sol#282) is not in mixedCase
+Parameter PsyNFTV2.transferFrom(address,address,uint256)._tokenId (src/PsyNFTV2.sol#282) is not in mixedCase
+Parameter PsyNFTV2.burn(uint256)._tokenId (src/PsyNFTV2.sol#294) is not in mixedCase
+Parameter PsyNFTV2.setCoreContract(address)._core (src/PsyNFTV2.sol#307) is not in mixedCase
+Parameter PsyNFTV2.setTreasury(address)._treasury (src/PsyNFTV2.sol#314) is not in mixedCase
+Parameter PsyNFTV2.setBaseUri(string)._uri (src/PsyNFTV2.sol#335) is not in mixedCase
+Reference: https://github.com/crytic/slither/wiki/Detector-Documentation#conformance-to-solidity-naming-conventions
+INFO:Slither:. analyzed (21 contracts with 102 detectors), 19 result(s) found
