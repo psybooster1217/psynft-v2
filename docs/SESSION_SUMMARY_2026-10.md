@@ -43,7 +43,7 @@ where everything is, and what is still open.
 
 | # | Phase | Outcome |
 |---|---|---|
-| 1 | Find the contract | Located in `Desktop\SMARTC`. Last audit 2026‑07‑06 (`AUDIT.md`, `SECURITY_REVIEW.md`), internal only |
+| 1 | Find the contract | Located the repository. Last audit 2026‑07‑06 (`AUDIT.md`, `SECURITY_REVIEW.md`), internal only |
 | 2 | Plan + handbook | `docs/AUDIT_PLAN_2026-10.md`, `docs/TESTING_HANDBOOK.md`. Every function exercised on the local sandbox; dead metadata gateway discovered |
 | 3 | Decisions (asked up front) | Fix issues in code; self-hosted bounty; I prepare the metadata, you pin it; fork rehearsal instead of Sepolia |
 | 4 | W0 freeze + baseline | Branch `audit-2026-10`, tag `audit-2026-10-base`, hashes, coverage, ABI parity |
@@ -77,7 +77,7 @@ where everything is, and what is still open.
 | When | Decision |
 |---|---|
 | Before the audit | Fix weaknesses in code (strict V1 parity is nice-to-have) · self-hosted bounty · I prep the metadata, you pin · fork rehearsal instead of Sepolia |
-| Publishing | Repo stays private for now (you flip it) · reports via GitHub private reporting only, no email · rewards stay a proposal · PR, not a direct merge |
+| Publishing | Repo stays private for now (you flip it) · reports via GitHub private reporting only, no email (backup email steven@psydao.world added 2026-10-13) · rewards stay a proposal · PR, not a direct merge |
 | CI | Add `MAINNET_RPC_URL=https://eth.drpc.org` as a repo secret (done) |
 
 ## Where everything is
@@ -85,7 +85,7 @@ where everything is, and what is still open.
 | Path | What |
 |---|---|
 | `docs/AUDIT-2026-10.md` | The audit report (findings, cutover review, testing, tooling, residual risks, hashes) |
-| `docs/HOLDER_BRIEF.md` | Plain-language brief for PSYC holders (page version: https://claude.ai/artifact/YUNKtEWFDNHLEhrbfmhHEb, private until shared) |
+| `docs/HOLDER_BRIEF.md` | Plain-language brief for PSYC holders (there is also a presentation-page version) |
 | `docs/BUG_BOUNTY.md`, `SECURITY.md`, `test/templates/BountyPoC.t.sol.example` | Bounty program, reporting policy, PoC template |
 | `docs/TESTING_HANDBOOK.md` | Step-by-step manual test of every function |
 | `docs/DEPLOYMENT_RUNBOOK.md` | Updated deploy + cutover sequence |

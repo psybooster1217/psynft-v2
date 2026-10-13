@@ -74,8 +74,8 @@ good faith, and will work with you to understand and fix the issue quickly.
 
 ## How to report
 Use GitHub: **Security → "Report a vulnerability"** on the repository. This opens a private
-advisory visible only to the maintainers. It is the only reporting channel; there is no security
-email.
+advisory visible only to the maintainers. It is the preferred channel. If you can't use GitHub,
+email **steven@psydao.world** as a backup.
 
 We aim to acknowledge within 72 hours and give a severity assessment within 7 days.
 
@@ -85,8 +85,9 @@ We aim to acknowledge within 72 hours and give a severity assessment within 7 da
 - [ ] Make the repository public. Settings → General → Danger Zone → Change visibility. The audited
       commit is tag `v2.0.0-review`.
 - [ ] Enable GitHub private vulnerability reporting: Settings → Security → "Private vulnerability
-      reporting" → Enable. This is only available once the repository is public, and it is the sole
-      reporting channel.
-- [x] Reporting channel decided: GitHub private reports only, no email (2026-10-11).
+      reporting" → Enable. This is only available once the repository is public, and it is the
+      preferred reporting channel.
+- [x] Reporting channel decided: GitHub private reports, with steven@psydao.world as the backup
+      email (2026-10-13).
 - [ ] Publish this page (GitHub + a short page or link on psydao.world) and announce it in Discord.
 - [x] Bounty window decided: 21 days; go-live only with no open Critical or High (2026-10-13).
