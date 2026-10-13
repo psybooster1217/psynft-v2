@@ -1,6 +1,8 @@
 # PSYC Governance — the PsyNFT V2 instrument
 
-**Status:** Draft for PSYC review · **Author:** Steven Fülle (Operations Lead, PDP-23)
+> **Discussion draft. The PSYC vote decides.**
+
+**Status:** Discussion draft · **Author:** Steven Fülle (Operations Lead, PDP-23)
 **Applies to:** the redeployed PsyNFT V2 contract (this repository)
 **Companion documents:** *PSY-PSYC Governance Amendment v3* (constitutional layer), *PDP-24* (treasury signers), *PDP-25 — Funding & Governance Process* (voting process), [`docs/METADATA.md`](METADATA.md) (kené/art operations), [`docs/DEPLOYMENT_RUNBOOK.md`](DEPLOYMENT_RUNBOOK.md) (migration)
 
@@ -14,8 +16,9 @@ original contract's admin key was lost, freezing membership: nobody could be onb
 or recovered. This document defines how the **redeployed instrument (PsyNFT V2)** is governed so
 that failure class is closed permanently — and so membership becomes a living cycle again.
 
-It covers: who controls the contract, how each governance action maps to a contract call, how new
-members are onboarded, and how membership lapses — the **Renewal cycle**.
+It covers: who controls the contract, how each governance action maps to a contract call, and how
+new members get a seat (the **one-door seat system**, §5). How membership lapses (the **Renewal
+cycle**, §6) is sketched for a later proposal.
 
 ## 2. The instrument, in plain terms
 
@@ -43,7 +46,7 @@ Per the decision adopted with this document, **all three contract roles — `own
 ```
 
 Rationale: PSYC operations are **low-frequency and high-legitimacy** (a handful of transactions
-per Renewal cycle). Routing everything through the treasury signers maximizes multi-party control
+per seat round). Routing everything through the treasury signers maximizes multi-party control
 (Rebirth accountability requirement: *no single contributor holds sole administrative access to
 any infrastructure*) at negligible operational cost.
 
@@ -58,15 +61,16 @@ in the Quarterly Treasury Transparency Report (PDP-24 §6).
 
 ## 4. Governance actions → contract calls
 
-Every membership decision follows the **PDP-25 membership track** (bi-monthly batch; 10-day
-comment phase; 4-day Snapshot; threshold: ≥5 PSYC yes, simple majority), then the Safe executes:
+New seats go through the **seat round** (§5). Every other membership decision follows the
+**PDP-25 membership track** (bi-monthly batch; 10-day comment phase; 4-day Snapshot; threshold:
+≥5 PSYC yes, simple majority). The Safe then executes:
 
 | Governance decision | Decided by | Executed on-chain as |
 |---|---|---|
-| Onboard new member(s) | PSYC membership vote | `transferNFTs([ids], member)` — one contract-held token per new member |
-| Replenish the seat pool | Implicit in an onboarding vote when the pool is empty | `batchMintInFibonacci()` — mints the next Fibonacci batch to the contract |
+| Seat a new member | Seat round (§5) | `transferNFTs([id], member)` — one contract-held token per person |
+| Replenish the seat pool | Automatic when the pool is empty and a new member needs a seat | `batchMintInFibonacci()` — mints the next Fibonacci batch to the contract |
 | Remove / recall a member | PSYC membership vote | `burn(tokenId)` |
-| Lapse for inactivity | Renewal cycle (see §6) | `burn(tokenId)` |
+| Lapse for inactivity | Renewal cycle (§6, a later proposal) | `burn(tokenId)` |
 | Member wallet rotation | Request + Safe verification of both wallets | `approveTransfer(tokenId, newWallet, 259200)` (72h window), member executes the transfer |
 | Lost wallet recovery | PSYC membership vote | `burn(strandedId)` + `transferNFTs([freshId], newWallet)` |
 | Attach kené to new tokens | Operational (owner) | pin superset metadata folder → `setBaseUri(newCid)` — process in [METADATA.md](METADATA.md) |
@@ -77,38 +81,50 @@ Two hard rules carried from the contract design:
 1. **The migration is not a pruning.** All 33 current holders are re-minted 1:1, active or not.
    Legitimacy of the redeploy depends on perfect fidelity; lifecycle management happens *after*
    migration, through the processes below — never during it.
-2. **Burns are governance acts.** The Safe never burns without a passed membership vote or a
-   Renewal cycle outcome (§6). The capability is unrestricted on-chain; its use is restricted by
+2. **Burns are governance acts.** The Safe never burns without a passed membership vote (or, once
+   a later proposal adopts it, a Renewal cycle outcome, §6). The capability is unrestricted on-chain; its use is restricted by
    this document.
 
-## 5. Onboarding: Contribute → Nominate → Vote → Mint
+## 5. New seats: the one-door seat system
 
-The path to a PSYC seat is **earned through work, confirmed by peers**:
+There is one way in, the same for everyone: **apply, gather backing in a round, mint.**
 
-**Stage 1 — Contribute.** The candidate has visible, delivered contribution to PsyDAO: a ratified
-steward/domain role (PDP-25 Stewardship track), or delivered work within a funded initiative,
-sustained for at least one governance cycle. Contribution is the *only* entry currency — there is
-no purchase path to PSYC.
+**Apply.** Apply on psydao.world from a wallet holding **at least 10,420 PSY**.
 
-**Stage 2 — Nominate.** A sitting PSYC member nominates the candidate in the membership channel,
-with a short public rationale: what they built, why they can carry a duty of care. Self-nomination
-is not valid. The nomination includes the candidate's wallet address.
+**The round.** Applications are decided in seat rounds, held **every two months**. Each round runs
+for **14 days**, and support is counted **at the end of the round**. Each person can back **up to 3
+applicants per round**. An objection needs a one-line reason.
 
-**Stage 3 — Vote.** The nomination enters the next bi-monthly membership batch (PDP-25): 10-day
-comment phase, then a 4-day Snapshot vote of PSYC holders (≥5 PSYC participating, simple
-majority). The candidate is expected to be present and answer questions during the comment phase.
+**Who gets in.** At the end of the round, an applicant is in when all three hold:
 
-**Stage 4 — Pledge & mint.** On passage the candidate signs the **Steward Pledge** (duty of care,
-conflict-of-interest disclosure, token-sale disclosure — per the Rebirth accountability
-requirements). The Safe then distributes a contract-held token to their wallet
-(`transferNFTs`). If the pool is empty, the same Safe session first mints the next Fibonacci
-batch. A kené is attached to the token per the metadata process.
+1. at least **3 PSYC backers**;
+2. **more PSYC backers than objectors**;
+3. at least **5 PSY backers**.
+
+**Not in this time.** An applicant who is not in skips one round, then can apply again.
+
+**Mint.** An applicant who is in mints their seat **within 14 days**: **0.1 ETH** for a random seat,
+or **0.2 ETH** for a chosen one.
+
+**One seat per person.** A seat is soulbound (`controlledTransfers`), and each person holds at most
+one.
+
+**Supply cap.** The Fibonacci batches cap supply: **21 seats now** (ids 34–54), **then 34**
+(ids 55–88). A new batch is minted only when the current one is used up (§7).
+
+**On-chain.** The Safe hands the seat over with `transferNFTs([id], member)`; if the contract-held
+pool is empty, the same Safe session first runs `batchMintInFibonacci()`. A kené is attached to the
+token per the metadata process. PsyNFT V2 itself has no payable function, so the mint price is
+collected outside this contract.
 
 The seat is personal and non-transferable. It confers: participation in PSYC votes (membership,
 review-panel duty under PDP-25 guardrail 3), steward eligibility, and the duty of care described
 in the Amendment.
 
 ## 6. The Renewal cycle — death and rebirth in one act
+
+> **Not part of this proposal, a later one.** Burns for inactivity are sketched here for
+> discussion only. Nothing in this section applies until a separate proposal adopts it.
 
 Rather than a standing bureaucratic timer, PSYC renews itself in **batches**: lapses and new
 mints are handled together, in the same governance act, so the council contracts and grows in one
@@ -127,8 +143,8 @@ days** to respond before any burn is proposed. Any genuine sign of life resets t
 the Rebirth principle: positive action first; burning is the last step, never the first.
 
 **The vote.** The Renewal proposal lists, in one document: (a) seats proposed to lapse (with the
-census evidence and outreach record), and (b) candidates proposed to join (each having passed
-Stages 1–2). It runs on the standard membership track. Voters see the full picture — who leaves,
+census evidence and outreach record), and (b) the applicants who got in through the seat round
+(§5). It runs on the standard membership track. Voters see the full picture — who leaves,
 who arrives — as a single act of renewal.
 
 **Execution — one Safe session:**
@@ -148,11 +164,11 @@ and the Safe burns the seat in the next session.
 
 ## 7. Supply discipline
 
-The Fibonacci schedule is generous (next batch alone mints 21 seats). To keep PSYC a working
-council rather than a diluted badge:
+The Fibonacci batches are the supply cap: 21 seats now (ids 34–54), then 34 (ids 55–88). To keep
+PSYC a working council rather than a diluted badge:
 
-- New batches are minted **only when the contract-held pool is empty** and an approved onboarding
-  needs a token — never speculatively.
+- New batches are minted **only when the contract-held pool is empty** and a new member from a
+  seat round needs a token — never speculatively.
 - Undistributed tokens sit in the contract (custody = the contract itself, spendable only by
   `core` = the Safe) and carry no vote: **Snapshot strategies must count only member-held
   tokens**, excluding the contract's own balance and, where feasible, seats flagged in an open

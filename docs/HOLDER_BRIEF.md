@@ -58,6 +58,23 @@ The Safe has the same powers V1's owner had. They are now held by a multisig ins
 None of this can be done by one person: it takes 2 of the 4 Safe signers. The contract cannot be
 left ownerless, and ownership can only move to an address that actively accepts it.
 
+## New seats
+
+One door, the same for everyone (a discussion draft; the PSYC vote decides):
+
+- **Apply** on psydao.world. You need at least **10,420 PSY** in your wallet.
+- **Rounds** happen every two months and last **14 days**. Support is counted when the round ends.
+- **You're in** with at least **3 PSYC backers**, **more PSYC backers than objectors**, and at least
+  **5 PSY backers**. Anyone who objects gives a one-line reason.
+- **Backing:** each person can back up to 3 applicants per round.
+- **Not in this time?** Skip one round, then apply again.
+- **Mint within 14 days:** 0.1 ETH for a random seat, or 0.2 ETH to choose yours.
+- **One seat per person.** Seats are soulbound: they only move with a DAO approval.
+- **Limited supply:** seats come in Fibonacci batches, 21 now, then 34.
+
+Removing seats for inactivity is not part of this proposal; it may come later, as a separate one.
+Full rules: [governance](GOVERNANCE.md) §5.
+
 ## How it was checked
 
 An in-depth audit (October 2026) covered the contract, the migration, the switch-over transaction,
