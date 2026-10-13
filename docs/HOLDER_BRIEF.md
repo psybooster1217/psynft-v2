@@ -75,7 +75,9 @@ the admin panel and the tooling. Its main checks:
   address had died (now re-published), and old V1 could still have been used to create extra
   seats after the switch (now blocked).
 
-A **bug bounty** invites independent security researchers to try to break it before the pool moves.
+A **bug bounty** invites independent security researchers to try to break it before the pool moves:
+21 days, rewards up to $2,500 per issue ($5,000 in total). The switch-over only goes ahead if no
+serious (Critical or High) report is still open.
 
 ## Check it yourself
 

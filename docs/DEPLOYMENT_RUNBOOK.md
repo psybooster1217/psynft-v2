@@ -175,9 +175,10 @@ Tear down mentally, fix anything, and only then proceed.
 
 - [x] Internal in-depth audit 2026-10 complete; all findings fixed or accepted:
       [AUDIT-2026-10.md](AUDIT-2026-10.md).
-- [ ] Bug bounty live ([BUG_BOUNTY.md](BUG_BOUNTY.md), [SECURITY.md](../SECURITY.md)) for at least
-      the window the DAO sets before the §4d sweep. An external firm review is optional; the scope is
-      small (about 450 lines plus the §4d batch).
+- [ ] Bug bounty live ([BUG_BOUNTY.md](BUG_BOUNTY.md), [SECURITY.md](../SECURITY.md)) for its
+      21-day window before the §4d sweep (rewards up to $2,500, $5,000 total, paid in ETH or USDC).
+      Go-live only with no open Critical or High report. An external firm review is optional; the
+      scope is small (about 450 lines plus the §4d batch).
 - [ ] `forge test` fully green, including all fork tests.
 - [ ] Confirm compiler/settings: `solc 0.8.20`, `paris`, optimizer 1,000,000 runs (matches V1).
 

@@ -114,7 +114,7 @@ v5.0.2 (vendored copy verified byte-identical to the npm release).
 
 **Before mainnet:**
 1. Pin the re-pointed metadata ([metadata/README.md](metadata/README.md)).
-2. Run the bug bounty ([docs/BUG_BOUNTY.md](docs/BUG_BOUNTY.md)).
+2. Run the 21-day bug bounty ([docs/BUG_BOUNTY.md](docs/BUG_BOUNTY.md)).
 3. Pass the PSYC vote ([docs/HOLDER_BRIEF.md](docs/HOLDER_BRIEF.md)).
 4. Follow the [runbook](docs/DEPLOYMENT_RUNBOOK.md).
 

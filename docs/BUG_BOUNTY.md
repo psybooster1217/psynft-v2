@@ -45,13 +45,19 @@ legacy exit pool (~3.11 ETH). We want independent eyes on it before and after th
 
 | Severity | Example | Proposed reward |
 |---|---|---|
-| Critical | Take over a role; mint, steal or burn seats without the role; divert the sweep | up to **2 ETH** |
-| High | Bypass the controlled-transfer rule; corrupt or drop a seat during migration; brick a core function permanently | up to **0.75 ETH** |
-| Medium | Make an admin action produce a different result than shown, with a realistic path to harm | up to **0.25 ETH** |
-| Low | Real but limited issues (e.g. misleading UI state with no direct loss) | up to **0.05 ETH** |
+| Critical | Take over a role; mint, steal or burn seats without the role; divert the sweep | up to **$2,500** |
+| High | Bypass the controlled-transfer rule; corrupt or drop a seat during migration; brick a core function permanently | up to **$1,000** |
+| Medium | Make an admin action produce a different result than shown, with a realistic path to harm | up to **$400** |
+| Low | Real but limited issues (e.g. misleading UI state with no direct loss) | up to **$100** |
 
-Paid from the PsyDAO Main Safe after a fix is live (or the issue is otherwise resolved). Severity is
+Total budget: **$5,000**, paid in ETH or USDC at the day's rate. Paid from the PsyDAO Main Safe after a fix is live (or the issue is otherwise resolved). Severity is
 assessed on actual impact to PsyDAO and holders. Duplicates: the first valid report wins.
+
+## Window and go-live
+
+The bounty runs for **21 days** on the audited commit, starting the day it is announced. Go-live
+(the mainnet deployment and the §4d cutover) goes ahead only if **no Critical or High report is
+open** at that point. After launch, the deployed V2 contract stays in scope.
 
 ## Rules
 1. **Never test on mainnet.** Use the local sandbox (`./sandbox/start.sh`, or `migrated` mode for a
@@ -77,11 +83,10 @@ We aim to acknowledge within 72 hours and give a severity assessment within 7 da
 - [ ] Main Safe signers (or a PSYC vote) approve the reward table and budget, then remove
       "(proposal)" from the Rewards heading.
 - [ ] Make the repository public. Settings → General → Danger Zone → Change visibility. The audited
-      commit is tag `audit-2026-10`.
+      commit is tag `v2.0.0-review`.
 - [ ] Enable GitHub private vulnerability reporting: Settings → Security → "Private vulnerability
       reporting" → Enable. This is only available once the repository is public, and it is the sole
       reporting channel.
 - [x] Reporting channel decided: GitHub private reports only, no email (2026-10-11).
 - [ ] Publish this page (GitHub + a short page or link on psydao.world) and announce it in Discord.
-- [ ] Decide the bounty window before the §4d sweep (recommended: at least 2 weeks of bounty on
-      the final deployed V2 before signing §4d).
+- [x] Bounty window decided: 21 days; go-live only with no open Critical or High (2026-10-13).

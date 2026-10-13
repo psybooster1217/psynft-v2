@@ -107,8 +107,8 @@ where everything is, and what is still open.
 2. **Merge PR #1** into `main`.
 3. **Make the repo public**, then enable GitHub private vulnerability reporting (the sole
    reporting channel).
-4. **Get the bounty rewards approved** by the Safe signers or a PSYC vote (proposal: Critical up to
-   2 ETH).
+4. **Get the bounty rewards approved** by the Safe signers or a PSYC vote (proposal, updated
+   2026-10-13: Critical up to $2,500, $5,000 total, paid in ETH or USDC; 21-day window).
 5. **PSYC vote** on the exit window, the sweep and the Safe's powers. Then run the runbook,
    re-running the fork tests within 24 h before the §4d sweep.
 6. Optional: **run Grok Build** in a separate worktree with the prompt from this session, and send
