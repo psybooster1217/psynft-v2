@@ -3,6 +3,11 @@
 **Status:** draft, ready to publish once the items under "Before launch" are done. Reward amounts
 are a **proposal** for the Main Safe signers or a PSYC vote to approve.
 
+**The audited commit:**
+[`c611ac9c58eab92d146822fd8520275ef5ed5d22`](https://github.com/psybooster1217/psynft-v2/commit/c611ac9c58eab92d146822fd8520275ef5ed5d22)
+(tag [`v2.0.0-review`](https://github.com/psybooster1217/psynft-v2/tree/v2.0.0-review)).
+Reports should target this commit.
+
 PsyDAO is replacing its frozen V1 membership NFT with **PsyNFT V2**, controlled by the PsyDAO Main
 Safe. The 33 existing seats migrate one-to-one, and a one-time Safe transaction winds down the
 legacy exit pool (~3.11 ETH). We want independent eyes on it before and after that happens.
@@ -82,11 +87,9 @@ We aim to acknowledge within 72 hours and give a severity assessment within 7 da
 ## Before launch (checklist for PsyDAO)
 - [ ] Main Safe signers (or a PSYC vote) approve the reward table and budget, then remove
       "(proposal)" from the Rewards heading.
-- [ ] Make the repository public. Settings → General → Danger Zone → Change visibility. The audited
-      commit is tag `v2.0.0-review`.
-- [ ] Enable GitHub private vulnerability reporting: Settings → Security → "Private vulnerability
-      reporting" → Enable. This is only available once the repository is public, and it is the
-      preferred reporting channel.
+- [x] Make the repository public (2026-10-13). The audited commit is tag `v2.0.0-review`
+      (`c611ac9`).
+- [x] Enable GitHub private vulnerability reporting, the preferred reporting channel (2026-10-13).
 - [x] Reporting channel decided: GitHub private reports, with steven@psydao.world as the backup
       email (2026-10-13).
 - [ ] Publish this page (GitHub + a short page or link on psydao.world) and announce it in Discord.
