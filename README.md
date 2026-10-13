@@ -1,5 +1,20 @@
 # PsyNFT V2 — controlled redeployment & holder migration
 
+## Start here
+
+| You are | Read |
+|---|---|
+| A PSYC holder (non-technical) | [docs/HOLDER_BRIEF.md](docs/HOLDER_BRIEF.md): what changes and why, in plain language |
+| Reviewing the code | [docs/AUDIT-2026-10.md](docs/AUDIT-2026-10.md): the latest audit report |
+| Looking for bugs | [docs/BUG_BOUNTY.md](docs/BUG_BOUNTY.md): scope, rules and rewards ([SECURITY.md](SECURITY.md) to report) |
+
+Run it ([Foundry](https://book.getfoundry.sh) required):
+
+```bash
+forge test            # all tests; the mainnet fork suites skip unless MAINNET_RPC_URL is set
+./sandbox/start.sh    # local chain + contract + admin UI, with test accounts (no wallet needed)
+```
+
 The original **PsyNFT** (`PSY`, ERC‑721) at
 [`0x6c6Ab7b3215374dE4A65De63eAC9BC7A0c7f402d`](https://etherscan.io/token/0x6c6Ab7b3215374dE4A65De63eAC9BC7A0c7f402d)
 is administratively frozen: its `owner` key is unreachable, so no one can call
@@ -100,7 +115,8 @@ mode you can even "act as" the real Main Safe. Step by step: [docs/TESTING_HANDB
 
 ## Status
 
-**Audited 2026‑10 ([report](docs/AUDIT-2026-10.md)). Ready for the PSYC vote and the bug bounty.**
+**Internally audited 2026‑10 ([report](docs/AUDIT-2026-10.md); internal and AI-assisted, see
+below). Ready for the PSYC vote and the bug bounty.**
 
 - **Tests:** 99 pass (91 deterministic + 8 live-mainnet fork).
 - **Coverage:** 100% of lines and branches.
@@ -119,3 +135,16 @@ v5.0.2 (vendored copy verified byte-identical to the npm release).
 4. Follow the [runbook](docs/DEPLOYMENT_RUNBOOK.md).
 
 Earlier reviews: [SECURITY_REVIEW.md](docs/SECURITY_REVIEW.md), [AUDIT.md](docs/AUDIT.md) (2026‑07‑06).
+
+## How this was built
+
+Written by Steven Fülle with substantial AI assistance (Claude) for the code, the tests, the
+security reviews and the docs. The reviews ([AUDIT-2026-10.md](docs/AUDIT-2026-10.md),
+[AUDIT.md](docs/AUDIT.md), [SECURITY_REVIEW.md](docs/SECURITY_REVIEW.md)) are internal and
+AI-assisted; there has been no paid external audit. The public
+[bug bounty](docs/BUG_BOUNTY.md) is the independent check.
+
+## License
+
+[MIT](LICENSE). Vendored dependencies under `lib/` and the verified V1 sources under `reference/`
+keep their own license headers.
