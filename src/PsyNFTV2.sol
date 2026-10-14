@@ -13,8 +13,8 @@ import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 /**
  * @title  PsyNFTV2
  * @notice Governance / treasury NFT for PsyDAO. This is a hardened redeployment of the
- *         original `PsyNFT` (0x6c6Ab7b3215374dE4A65De63eAC9BC7A0c7f402d) whose `owner`
- *         key is no longer reachable, which permanently blocked all administrative
+ *         original `PsyNFT` (0x6c6Ab7b3215374dE4A65De63eAC9BC7A0c7f402d), whose `owner` is a
+ *         single wallet outside the DAO's control, so the DAO cannot use its administrative
  *         controls (`setCoreContract`, `setTreasury`, `setBaseUri`, transfer toggles).
  *
  *         Behaviour is preserved versus V1 except for these additions (see
@@ -372,10 +372,9 @@ contract PsyNFTV2 is IERC4906, ERC721, Ownable2Step, ReentrancyGuard {
     }
 
     /**
-     * @notice Permanently disabled. V1 was bricked by an unreachable owner key; V2 makes
-     *         ownership indestructible instead. Combined with Ownable2Step, ownership can
-     *         only ever move to an address that actively accepts it — it can never be
-     *         renounced into the void.
+     * @notice Permanently disabled. Combined with Ownable2Step, ownership can only ever
+     *         move to an address that actively accepts it — it can never be renounced into
+     *         the void, so the contract can never be left without an owner.
      */
     function renounceOwnership() public view override onlyOwner {
         revert("PsyNFT: Ownership Cannot Be Renounced");
