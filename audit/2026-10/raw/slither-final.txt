@@ -1,6 +1,6 @@
-'forge clean' running (wd: C:\Users\steve\Desktop\SMARTC)
+'forge clean' running (wd: <repo>)
 'forge config --json' running
-'forge build --build-info --deny never --skip ./test/** ./script/** --force' running (wd: C:\Users\steve\Desktop\SMARTC)
+'forge build --build-info --deny never --skip ./test/** ./script/** --force' running (wd: <repo>)
 INFO:Detectors:
 Detector: timestamp
 PsyNFTV2.approveTransfer(uint256,address,uint256) (src/PsyNFTV2.sol#275-289) uses timestamp for comparisons

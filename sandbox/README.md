@@ -18,8 +18,10 @@ A throwaway local blockchain (**anvil**, chainId 31337) with **PsyNFTV2 deployed
 ```bash
 ./sandbox/start.sh            # fresh chain: owner = core = treasury = account #0
 ./sandbox/start.sh roles      # fresh chain: owner #0, core #1, treasury #2
-MAINNET_RPC_URL=https://eth.drpc.org ./sandbox/start.sh migrated   # mainnet fork + real 33-holder migration
+./sandbox/start.sh migrated   # mainnet fork + real 33-holder migration
 ```
+
+`migrated` forks mainnet through `https://eth.drpc.org` unless `MAINNET_RPC_URL` is set.
 
 The script:
 1. starts anvil;

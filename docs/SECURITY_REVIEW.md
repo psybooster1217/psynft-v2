@@ -1,5 +1,7 @@
 # Internal security & correctness review
 
+> **Note (2026-10-14):** historical review. Its external‑audit gate and its premise about V1's owner key are superseded: there is no external‑audit gate (the public bug bounty is the independent check), and V1 PsyNFT is still owned by a former operator wallet (`0xC3aC…e445`), not by the DAO. See [AUDIT-2026-10.md](AUDIT-2026-10.md).
+
 > **Internal, AI-assisted review.** The reviewers below were AI agents (Claude) run by the author;
 > this is not a paid external audit. The public bug bounty ([BUG_BOUNTY.md](BUG_BOUNTY.md)) is the
 > independent check.
@@ -60,4 +62,5 @@ can set them post‑deploy and neither is required by the migration itself).
 - The `transferFrom` override correctly gates `safeTransferFrom` in OZ v5.0.2 (verified against
   `lib/openzeppelin-contracts/.../ERC721.sol`, and by `test_ControlledTransfer_GatesSafeTransferFrom`).
 - Centralised `owner`/`core`/`treasury` are intentional (trust model); the Safe + `Ownable2Step`
-  handoff addresses the key‑loss failure that motivated the redeploy.
+  handoff puts ownership with the DAO's multisig instead of a single wallet, the problem that
+  motivated the redeploy.

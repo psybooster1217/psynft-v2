@@ -1,5 +1,7 @@
 # Internal security audit — full stack
 
+> **Note (2026-10-14):** historical report. Its external‑audit gate and its premise about V1's owner key are superseded: there is no external‑audit gate (the public bug bounty is the independent check), and V1 PsyNFT is still owned by a former operator wallet (`0xC3aC…e445`), not by the DAO. See [AUDIT-2026-10.md](AUDIT-2026-10.md).
+
 **Date:** 2026‑07‑06 · **Scope:** everything in this repository · **Status:** all findings fixed or accepted‑documented
 
 This audit covers the four layers of the system end‑to‑end:
@@ -41,8 +43,8 @@ live‑mainnet fork migration) and the UI builds clean after all changes.
 ### CON‑1 (Low, high relevance) — `renounceOwnership` was live · **FIXED**
 
 OZ `Ownable` ships a public `renounceOwnership()` that sets the owner to `address(0)` forever.
-This entire project exists because V1's admin surface died with an unreachable owner key —
-and one mistaken Safe transaction could have reproduced exactly that, permanently.
+This entire project exists because V1's admin surface sits with a single wallet outside DAO control —
+and one mistaken Safe transaction could have done worse: left V2 with no owner at all, permanently.
 
 **Fix:** overridden to revert (`"PsyNFT: Ownership Cannot Be Renounced"`). Combined with
 `Ownable2Step`, ownership is now *indestructible by construction*: it can only move to an address

@@ -1,14 +1,20 @@
 # In‑depth audit plan — October 2026
 
 > **Status: EXECUTED 2026‑10‑10/11.** Results: **[AUDIT-2026-10.md](AUDIT-2026-10.md)**.
-> - W0–W9 are done.
+> - W0–W9 are done, except two W6 items deferred to the mainnet deployment (nothing is deployed
+>   yet): the keystore/Ledger flow end to end, and `--verify` to Exact Match. There is no Sepolia run.
 > - W10 (external audit) is replaced by the bug bounty ([BUG_BOUNTY.md](BUG_BOUNTY.md)), plus an
->   optional external review.
+>   optional external review. There is no external-audit gate, so the §8 criterion "External audit
+>   received" no longer applies.
 > - Tier 3 (Sepolia) is replaced by a fork rehearsal through the real Main Safe; the Safe-app
->   click-through stays with the signers.
-> - Exit criteria still open are the human steps: pin the metadata, launch the bounty, the PSYC vote.
+>   click-through stays with the signers. The §8 Sepolia criterion no longer applies.
+> - Exit criteria still open are the human steps: pin the metadata, launch the bounty, the PSYC
+>   vote, and re-run `CutoverSweep.fork.t.sol` at the latest block within 24 h of the §4d execution.
+>   The Step 0 / §0a / §0b handovers to the Main Safe come first (added 2026-10-14; see the
+>   report's [addendum](AUDIT-2026-10.md#addendum-final-review-2026-10-14)).
 >
-> The text below is the original plan, kept as written.
+> The text below is the original plan, kept as written (except a reference to an unpublished
+> internal draft in W4, removed 2026-10-14).
 
 **Drafted:** 2026‑10‑10 · **Target:** PsyNFT V2 (`src/PsyNFTV2.sol`), its scripts, snapshot tool, admin
 UI, and the new cutover / exit‑pool sweep in [DEPLOYMENT_RUNBOOK.md](DEPLOYMENT_RUNBOOK.md) §0b–§4d ·
@@ -186,8 +192,7 @@ Line by line, plus the V1 diff. Each question ends as a finding, or as "verified
   Replay it on a fork with the Safe impersonated, then rehearse the real signing path on Sepolia (W7).
 - Re‑run `CutoverSweep.fork.t.sol` at the latest block **within 24 h before execution**. Exits during
   the window change the numbers.
-- Governance: the PSYC proposal must name the exit‑window dates and the sweep. Cross‑check against
-  `14_PDP-XX_PSYC_Revival_v2.2`.
+- Governance: the PSYC proposal must name the exit‑window dates and the sweep.
 
 ### W5 — Snapshot and migration data (½ day)
 - The committed snapshot is from block 25,473,885 (July). Regenerate it at the freeze block after

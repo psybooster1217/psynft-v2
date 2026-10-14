@@ -3,8 +3,8 @@
 A hands-on guide to testing the contract and the admin panel on a **throwaway local blockchain**.
 No real money, no real keys, no browser wallet needed, and nothing can break.
 
-Every "Expected" below was observed on the sandbox during the October 2026 audit
-([AUDIT-2026-10.md](AUDIT-2026-10.md)).
+Every "Expected" below was observed on the sandbox during the October 2026 internal, AI-assisted
+audit ([AUDIT-2026-10.md](AUDIT-2026-10.md)).
 
 > Time needed: about 5 min setup, about 60 min for Parts B–D. Legend: ✅ should succeed ·
 > ❌ should fail with the quoted reason (that is a pass) · 🖱 in the admin panel · ⌨ in a terminal
@@ -249,7 +249,7 @@ Use #0 throughout.
 | 9 | Finalize | `34` · **`210`** · `true` · `3` | ❌ `PsyNFT: Counters Not On Schedule` (typo guard) |
 | 10 | Finalize (confirm) | `34` · `21` · `true` · `3` | ✅ tokenId **34**, previousFibonacci **21**, migrationFinalized **true** |
 | 11 | Migrate batch | holders #3 · ids `5` | ❌ `PsyNFT: Migration Finalized` |
-| 12 | Core · Mint next batch | — | ✅ tokenId **55** (21 new seats, ids 34–54, like the real batch 7) |
+| 12 | Core · Mint next batch | — | ✅ tokenId **55** (21 new tokens, ids 34–54, like the real batch 7; at the real switch-over #34 is burned, leaving 20 seats) |
 
 **Snapshot loader (don't execute).** On a fresh restart, paste the contents of
 `snapshot/holders.json` into **"Paste holders.json to fill fields"**. Expected: `Loaded 33 entries`.
@@ -288,9 +288,10 @@ Expected: **8 passed**. Look for these lines:
 - `swept to Main Safe through real multisig (ETH): 3.110298529411764706`
 - `left for past exiters (ETH): 0.094251470588235294`
 
-`test_FullCutoverThroughRealSafe` runs runbook §0b → §1 → §4c → §4d with the real Main Safe, 2 of
-its 4 real owners, and the exact batch files signers will import. `test_SweepBatchIsAtomic` shows
-that a failure changes nothing.
+`test_FullCutoverThroughRealSafe` runs runbook Step 0 → §0a → §0b → §1 → §4c → §4d with the real
+Main Safe contract, 2 of its 4 owners' addresses (a simulation with approved-hash signatures; nobody
+signs), and the exact batch files signers will import. After §0a/§0b it checks that the Safe owns
+V1 PsyNFT, CoreLogic and PsycSale. `test_SweepBatchIsAtomic` shows that a failure changes nothing.
 
 To produce the signer files and checklist:
 
@@ -347,6 +348,6 @@ forge script script/SafeBatches.s.sol --rpc-url https://eth.drpc.org
 | "address already in use" | `./sandbox/stop.sh`, then start again |
 | `forge: command not found` | `export PATH="$HOME/.foundry/bin:$PATH"` |
 | No "Sandbox account…" picker | The panel isn't pointed at the local chain: restart with `./sandbox/start.sh` |
-| Art preview slow | The first gateway may time out (8 s) before a working one is used |
-| Fork mode fails | Use `MAINNET_RPC_URL=https://eth.drpc.org` |
+| Art preview slow | The panel tries `gateway.pinata.cloud`, then `ipfs.filebase.io`; a gateway that doesn't answer within 8 s is skipped |
+| Fork mode fails | `start.sh` forks `https://eth.drpc.org` unless `MAINNET_RPC_URL` is set; set it to another mainnet RPC |
 | Want MetaMask instead | Add network RPC `http://127.0.0.1:8545`, chain 31337, and import the test key printed by `start.sh` (test only) |
