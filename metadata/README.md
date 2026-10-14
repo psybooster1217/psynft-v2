@@ -42,15 +42,18 @@ must stay pinned too:
    gateway.
 4. **Verify through two different gateways:**
    ```bash
-   node metadata/verify-pinned.mjs
-   node metadata/verify-pinned.mjs "" https://ipfs.io/ipfs/
+   node metadata/verify-pinned.mjs                                       # default: https://gateway.pinata.cloud/ipfs/
+   node metadata/verify-pinned.mjs "" https://ipfs.filebase.io/ipfs/
    ```
-   Both must end with `ALL 34 OK`.
+   Both must end with `ALL 34 OK`. Do not use `https://ipfs.io/ipfs/` or `https://dweb.link/ipfs/`:
+   they no longer serve path requests (every request gets HTTP 429), so the check can never pass
+   there.
 5. **Deploy** with `BASE_URI=ipfs://<CID>/` (already set in `.env.example`). The contract
    rejects a URI without the trailing `/`.
 
 ## Later: art for new seats (batch 7, ids 34–54)
 
-`tokenURI` is `baseUri + id`, so ids 34–54 have no metadata until a superset folder (0–54) is
+Batch 7 (ids 34–54) is minted at the switch-over, which burns #34, so 20 new seats (ids 35–54)
+need art. `tokenURI` is `baseUri + id`, so they have no metadata until a superset folder (0–54) is
 pinned and the Safe calls `setBaseUri`. The contract emits ERC-4906 `BatchMetadataUpdate` on
 `setBaseUri`, so marketplaces refresh all tokens automatically. See [docs/METADATA.md](../docs/METADATA.md).

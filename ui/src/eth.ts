@@ -174,7 +174,8 @@ export function gatewayFromBaseUri(baseUri?: string): string {
  * Public gateways tried in order when the collection's own gateway fails (audit 2026-10, UI-9:
  * V1's dedicated Pinata host stopped resolving, which silently broke every preview).
  */
-export const PUBLIC_GATEWAYS = ["https://gateway.pinata.cloud/ipfs/", "https://ipfs.io/ipfs/", "https://dweb.link/ipfs/"];
+// ipfs.io and dweb.link stopped serving path requests (HTTP 429 on every request, checked 2026-10-14).
+export const PUBLIC_GATEWAYS = ["https://gateway.pinata.cloud/ipfs/", "https://ipfs.filebase.io/ipfs/"];
 
 /** "CID/path" for `ipfs://CID/path` or `https://any-host/ipfs/CID/path`; null otherwise. */
 export function ipfsPath(uri: string): string | null {

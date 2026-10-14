@@ -2,22 +2,24 @@
 
 V2 is a copy of the original `PsyNFT`. Every V1 function keeps its signature and access control.
 The changes below are additive or defensive. Sections 7–10 were added by the October 2026 audit
-([AUDIT-2026-10.md](AUDIT-2026-10.md)); they change behaviour on purpose, and each is covered by
-tests in `test/AuditOct2026.t.sol`.
+(an internal, AI-assisted review, [AUDIT-2026-10.md](AUDIT-2026-10.md)); they change behaviour on
+purpose, and each is covered by tests in `test/AuditOct2026.t.sol`.
 
 Reference original: [`reference/PsyNFT.v1.sol`](../reference/PsyNFT.v1.sol).
 New contract: [`src/PsyNFTV2.sol`](../src/PsyNFTV2.sol).
 
-## 1. Parameterised owner (the actual fix)
+## 1. Parameterised owner
 
 ```diff
 - constructor() ERC721("PsyNFT", "PSY") Ownable(msg.sender) {
 + constructor(address initialOwner) ERC721("PsyNFT", "PSY") Ownable(initialOwner) {
 ```
 
-V1 hard‑coded the deployer as owner. V2 accepts an `initialOwner`, so ownership can be handed to a
-**Gnosis Safe**. In practice the deploy script passes the *deployer* (so it can run the migration),
-then `Handoff.s.sol` transfers ownership to the Safe via `Ownable2Step`.
+V1 hard‑coded the deployer as owner; it can only move later through `Ownable2Step` (which is how
+Step 0 of the cutover hands V1 to the Main Safe). V2 accepts an `initialOwner`, so it can be
+deployed straight to any owner, including a **Gnosis Safe**. In practice the deploy script passes
+the *deployer* (so it can run the migration), then `Handoff.s.sol` transfers ownership to the Safe
+via `Ownable2Step`.
 
 ## 2. One‑shot migration path (new)
 
@@ -84,8 +86,8 @@ function renounceOwnership() public view override onlyOwner {
 ```
 
 V1 (via OZ `Ownable`) allowed the owner to renounce into `address(0)` — one transaction away from
-recreating the exact lost‑owner disaster this redeploy fixes. V2 blocks it; combined with
-`Ownable2Step`, ownership can only ever move to an address that actively accepts it. This is a
+a contract with no owner at all, whose settings nobody could ever change again. V2 blocks it;
+combined with `Ownable2Step`, ownership can only ever move to an address that actively accepts it. This is a
 **deliberate deviation from V1 parity** (see [AUDIT.md](AUDIT.md)).
 
 ## 6. Minor hardening

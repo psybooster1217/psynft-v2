@@ -15,7 +15,7 @@ interface ISafeNonce {
  *
  *   PSYNFT_V2=<deployed V2> forge script script/SafeBatches.s.sol --rpc-url mainnet
  *
- * Without PSYNFT_V2 only the §0b and §1 batches are written (they don't depend on V2).
+ * Without PSYNFT_V2 only Step 0 and the §0a, §0b and §1 batches are written (they don't depend on V2).
  * The Safe nonce is read from the chain (or SAFE_NONCE). Batches are assumed to execute in order
  * with consecutive nonces; re-run right before signing if any other Safe tx happened meanwhile.
  * Output: safe-batches/*.json (import in Safe -> Apps -> Transaction Builder) + safe-batches/CHECKLIST.md
@@ -51,23 +51,30 @@ contract SafeBatches is Script {
 
         md = string.concat(
             md,
-            "## Step 0 (EOA, not the Safe)\n\nFrom `",
-            vm.toString(CutoverCalls.V1_CORE_OWNER),
-            "` send to CoreLogic `",
-            vm.toString(CutoverCalls.V1_CORE),
-            "`:\n\n- `transferOwnership(",
+            "## Step 0 (individual wallets, not the Safe)\n\n",
+            "Each wallet starts a two-step handover to the Main Safe `",
             vm.toString(CutoverCalls.MAIN_SAFE),
-            ")`  data: `",
+            "`. Nothing changes until the Safe accepts. Calldata for every row: `",
             vm.toString(CutoverCalls.coreLogicHandoverCalldata()),
-            "`\n\n"
+            "` (`transferOwnership(MainSafe)`).\n\n| # | From | To | Call |\n|---|---|---|---|\n"
         );
-
-        md = string.concat(md, _batch("0b-setup", "Section 0b: accept CoreLogic + fallback handler", CutoverCalls.setupBatch(), nonce));
-        md = string.concat(md, _batch("1-freeze", "Section 1: close the exit window", CutoverCalls.freezeBatch(), nonce + 1));
-        if (v2 != address(0)) {
-            md = string.concat(md, _batch("4c-accept-v2", "Section 4c: accept V2 ownership", CutoverCalls.acceptV2Batch(v2), nonce + 2));
+        CutoverCalls.Handover[] memory h = CutoverCalls.eoaHandovers();
+        for (uint256 i; i < h.length; i++) {
             md = string.concat(
-                md, _batch("4d-cutover-sweep", "Section 4d: cutover + exit-pool sweep", CutoverCalls.cutoverBatch(v2, 34), nonce + 3)
+                md, "| ", vm.toString(i + 1), " | `", vm.toString(h[i].from), "` | `", vm.toString(h[i].to), "` | ", h[i].label, " |\n"
+            );
+        }
+        md = string.concat(md, "\n");
+
+        md = string.concat(md, _batch("0a-accept-v1-nft", "Section 0a: accept V1 PsyNFT", CutoverCalls.v1NftOwnerBatch(), nonce));
+        md = string.concat(
+            md, _batch("0b-setup", "Section 0b: accept CoreLogic + PsycSale, fallback handler", CutoverCalls.setupBatch(), nonce + 1)
+        );
+        md = string.concat(md, _batch("1-freeze", "Section 1: close the exit window", CutoverCalls.freezeBatch(), nonce + 2));
+        if (v2 != address(0)) {
+            md = string.concat(md, _batch("4c-accept-v2", "Section 4c: accept V2 ownership", CutoverCalls.acceptV2Batch(v2), nonce + 3));
+            md = string.concat(
+                md, _batch("4d-cutover-sweep", "Section 4d: cutover + exit-pool sweep", CutoverCalls.cutoverBatch(v2, 34), nonce + 4)
             );
         } else {
             md = string.concat(md, "## 4c / 4d\n\nNot generated: set `PSYNFT_V2` to the deployed V2 address and re-run.\n");

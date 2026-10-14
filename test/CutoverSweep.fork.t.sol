@@ -326,7 +326,7 @@ contract CutoverSweepForkTest is Test {
     }
 
     function _v1NumberSold() internal view returns (uint256) {
-        // PsycSale proxy (lost-key owner): numberOfNftsSold is what V1 CoreLogic passes to Treasury.exit.
+        // PsycSale proxy (owned by the 0x00c1 EOA until §0b): numberOfNftsSold is what V1 CoreLogic passes to Treasury.exit.
         (bool ok, bytes memory data) =
             address(0xe94828A923538709c58764159D6CD99C4381d82B).staticcall(abi.encodeWithSignature("numberOfNftsSold()"));
         require(ok, "numberOfNftsSold");

@@ -1,0 +1,180 @@
+178 mutants, 8 workers
+[1/178] killed    L132  require-removed  require(!migrationFinalized, "PsyNFT: Migration Finalized");
+[3/178] killed    L155  require-removed  require(holders.length == tokenIds.length, "PsyNFT: Length Mismatch");
+[4/178] killed    L156  require-removed  require(holders.length != 0, "PsyNFT: Empty Batch");
+[8/178] killed    L200  require-removed  require(nextTokenId >= _migrationCeiling, "PsyNFT: nextTokenId Too Low");
+[7/178] killed    L199  require-removed  require(migratedCount == expectedCount, "PsyNFT: Incomplete Migration");
+[6/178] killed    L198  require-removed  require(migrationStarted, "PsyNFT: Migration Not Started");
+[5/178] killed    L162  require-removed  require(to != address(0), "PsyNFT: Zero Holder");
+[2/178] killed    L154  require-removed  require(!initialMintCalled, "PsyNFT: Initial Mint Done");
+[9/178] killed    L201  require-removed  require(_isFibonacciPair(previousFibonacci_, nextTokenId), "PsyNFT: Counters Not
+[11/178] killed    L223  require-removed  require(!migrationStarted, "PsyNFT: Migration In Progress");
+[13/178] killed    L263  require-removed  require(_recipient != address(0), "PsyNFT: Recipient Cannot Be Zero Address");
+[16/178] killed    L280  require-removed  require( block.timestamp > approvedTransfers[_tokenId].transferExpiryDate, "PsyN
+[12/178] killed    L242  require-removed  require(initialMintCalled, "PsyNFT: Initial Mint Not Completed");
+[15/178] killed    L279  require-removed  require(_tokenId < tokenId, "PsyNFT: Non Existent Token");
+[14/178] killed    L264  require-removed  require(_tokenIds.length != 0, "PsyNFT: Token Array Empty");
+[10/178] killed    L222  require-removed  require(!initialMintCalled, "PsyNFT: Initial Mint Complete");
+[24/178] killed    L356  require-removed  require(!controlledTransfers, "PsyNFT: Controlled Transfers Already Enabled");
+[17/178] killed    L297  require-removed  require(approvedTransfers[_tokenId].transferExpiryDate != 0, "PsyNFT: No Approva
+[19/178] killed    L312  require-removed  require(block.timestamp <= approvedTransfers[_tokenId].transferExpiryDate, "PsyN
+[20/178] killed    L322  require-removed  require(msg.sender == treasury, "PsyNFT: Caller Is Not Treasury");
+[22/178] killed    L342  require-removed  require(_treasury != address(0), "PsyNFT: Treasury Cannot Be Zero Address");
+[18/178] killed    L311  require-removed  require(_to == approvedTransfers[_tokenId].to, "PsyNFT: Incorrect Receiver");
+[21/178] killed    L335  require-removed  require(_core != address(0), "PsyNFT: Core Cannot Be Zero Address");
+[23/178] killed    L349  require-removed  require(controlledTransfers, "PsyNFT: Controlled Transfers Already Disabled");
+[29/178] killed    L404  require-removed  require(to != address(0), "PsyNFT: Rescue To Zero");
+[25/178] killed    L368  require-removed  require(b.length == 0 || b[b.length - 1] == "/", "PsyNFT: Base URI Must End With
+[30/178] killed    L406  require-removed  require(ok, "PsyNFT: ETH Transfer Failed");
+[32/178] killed    L123  bool             true -> false: controlledTransfers = true;
+[27/178] killed    L396  require-removed  require(token != address(this), "PsyNFT: Cannot Rescue Self");
+[28/178] killed    L397  require-removed  require(to != address(0), "PsyNFT: Rescue To Zero");
+[31/178] killed    L454  require-removed  require(msg.sender == core, "PsyNFT: Caller Not Core Contract");
+[26/178] killed    L389  require-removed  require(to != address(0), "PsyNFT: Rescue To Zero");
+[36/178] killed    L124  stmt-deleted     delete: previousFibonacci = 2;
+[40/178] SURVIVED  L152  modifier-removed drop nonReentrant: nonReentrant
+[33/178] killed    L123  stmt-deleted     delete: controlledTransfers = true;
+[37/178] killed    L132  negation         drop '!': require(!migrationFinalized, "PsyNFT: Migration Finalized");
+[38/178] killed    L150  modifier-removed drop onlyOwner: onlyOwner
+[39/178] killed    L151  modifier-removed drop notFinalized: notFinalized
+[35/178] killed    L124  constant         2 -> 3: previousFibonacci = 2;
+[34/178] killed    L124  constant         2 -> 1: previousFibonacci = 2;
+[44/178] killed    L158  bool             true -> false: migrationStarted = true;
+[48/178] killed    L160  arith            ++ -> --: for (uint256 i; i < holders.length; i++) {
+[41/178] killed    L154  negation         drop '!': require(!initialMintCalled, "PsyNFT: Initial Mint Done");
+[46/178] killed    L160  relational       < -> <=: for (uint256 i; i < holders.length; i++) {
+[45/178] killed    L158  stmt-deleted     delete: migrationStarted = true;
+[47/178] killed    L160  relational       < -> >=: for (uint256 i; i < holders.length; i++) {
+[43/178] killed    L156  relational       != -> ==: require(holders.length != 0, "PsyNFT: Empty Batch");
+[42/178] killed    L155  relational       == -> !=: require(holders.length == tokenIds.length, "PsyNFT: Length Mismatch");
+[53/178] killed    L168  relational       > -> <=: if (id + 1 > _migrationCeiling) {
+[52/178] SURVIVED  L168  relational       > -> >=: if (id + 1 > _migrationCeiling) {
+[54/178] killed    L168  arith            + -> -: if (id + 1 > _migrationCeiling) {
+[56/178] killed    L169  arith            + -> -: _migrationCeiling = id + 1;
+[51/178] killed    L166  stmt-deleted     delete: migratedCount++;
+[55/178] killed    L168  arith            +1 -> +0: if (id + 1 > _migrationCeiling) {
+[49/178] killed    L162  relational       != -> ==: require(to != address(0), "PsyNFT: Zero Holder");
+[50/178] killed    L166  arith            ++ -> --: migratedCount++;
+[62/178] killed    L199  relational       == -> !=: require(migratedCount == expectedCount, "PsyNFT: Incomplete Migration"
+[61/178] killed    L197  modifier-removed drop notFinalized: ) external onlyOwner notFinalized {
+[63/178] killed    L200  relational       >= -> >: require(nextTokenId >= _migrationCeiling, "PsyNFT: nextTokenId Too Low"
+[59/178] killed    L171  stmt-deleted     delete: emit Migrated(id, to);
+[60/178] killed    L197  modifier-removed drop onlyOwner: ) external onlyOwner notFinalized {
+[57/178] killed    L169  arith            +1 -> +0: _migrationCeiling = id + 1;
+[64/178] killed    L200  relational       >= -> ==: require(nextTokenId >= _migrationCeiling, "PsyNFT: nextTokenId Too Low
+[58/178] killed    L169  stmt-deleted     delete: _migrationCeiling = id + 1;
+[70/178] killed    L207  bool             true -> false: migrationFinalized = true; // lock migration
+[68/178] killed    L206  bool             true -> false: initialMintCalled = true; // resume schedule, block fresh initial
+[69/178] killed    L206  stmt-deleted     delete: initialMintCalled = true; // resume schedule, block fresh initialMint
+[71/178] killed    L207  stmt-deleted     delete: migrationFinalized = true; // lock migration
+[67/178] killed    L205  stmt-deleted     delete: controlledTransfers = controlledTransfers_;
+[65/178] killed    L203  stmt-deleted     delete: tokenId = nextTokenId;
+[72/178] killed    L209  stmt-deleted     delete: emit MigrationFinalized(nextTokenId, previousFibonacci_, controlledTrans
+[66/178] killed    L204  stmt-deleted     delete: previousFibonacci = previousFibonacci_;
+[78/178] killed    L225  stmt-deleted     delete: initialMintCalled = true;
+[76/178] killed    L223  negation         drop '!': require(!migrationStarted, "PsyNFT: Migration In Progress");
+[77/178] killed    L225  bool             true -> false: initialMintCalled = true;
+[75/178] killed    L222  negation         drop '!': require(!initialMintCalled, "PsyNFT: Initial Mint Complete");
+[73/178] killed    L221  modifier-removed drop onlyCoreContract: function initialMint() external onlyCoreContract nonReent
+[80/178] killed    L229  relational       < -> >=: while (localTokenId < 3) {
+[79/178] killed    L229  relational       < -> <=: while (localTokenId < 3) {
+[74/178] SURVIVED  L221  modifier-removed drop nonReentrant: function initialMint() external onlyCoreContract nonReentrant
+[84/178] killed    L231  stmt-deleted     delete: localTokenId++;
+[83/178] killed    L231  arith            ++ -> --: localTokenId++;
+[85/178] killed    L234  stmt-deleted     delete: tokenId = localTokenId;
+[86/178] killed    L241  modifier-removed drop onlyCoreContract: function batchMintInFibonacci() external onlyCoreContract
+[88/178] killed    L245  stmt-deleted     delete: previousFibonacci = tokenId;
+[81/178] killed    L229  constant         3 -> 2: while (localTokenId < 3) {
+[87/178] SURVIVED  L241  modifier-removed drop nonReentrant: function batchMintInFibonacci() external onlyCoreContract non
+[92/178] killed    L249  stmt-deleted     delete: tokenId++;
+[91/178] killed    L249  arith            ++ -> --: tokenId++;
+[82/178] killed    L229  constant         3 -> 4: while (localTokenId < 3) {
+[96/178] killed    L264  relational       != -> ==: require(_tokenIds.length != 0, "PsyNFT: Token Array Empty");
+[89/178] killed    L247  relational       > -> >=: while (batchAmount > 0) {
+[95/178] killed    L263  relational       != -> ==: require(_recipient != address(0), "PsyNFT: Recipient Cannot Be Zero Ad
+[94/178] killed    L262  modifier-removed drop onlyCoreContract: function transferNFTs(uint256[] memory _tokenIds, address
+[99/178] killed    L265  arith            ++ -> --: for (uint256 x; x < _tokenIds.length; x++) {
+[90/178] killed    L247  relational       > -> <=: while (batchAmount > 0) {
+[93/178] killed    L250  stmt-deleted     delete: batchAmount--;
+[100/178] killed    L277  modifier-removed drop onlyCoreContract: onlyCoreContract
+[97/178] killed    L265  relational       < -> <=: for (uint256 x; x < _tokenIds.length; x++) {
+[104/178] killed    L281  relational       > -> <=: block.timestamp > approvedTransfers[_tokenId].transferExpiryDate,
+[103/178] killed    L281  relational       > -> >=: block.timestamp > approvedTransfers[_tokenId].transferExpiryDate,
+[102/178] killed    L279  relational       < -> >=: require(_tokenId < tokenId, "PsyNFT: Non Existent Token");
+[107/178] killed    L288  stmt-deleted     delete: emit TransferApproved(_tokenId, _to, expiry);
+[101/178] killed    L279  relational       < -> <=: require(_tokenId < tokenId, "PsyNFT: Non Existent Token");
+[108/178] killed    L296  modifier-removed drop onlyCoreContract: function revokeTransfer(uint256 _tokenId) external onlyCo
+[98/178] killed    L265  relational       < -> >=: for (uint256 x; x < _tokenIds.length; x++) {
+[105/178] killed    L285  arith            + -> -: uint256 expiry = block.timestamp + _allowedTransferTimeInSeconds;
+[112/178] killed    L310  relational       != -> ==: if (controlledTransfers && ownerOf(_tokenId) != address(this)) {
+[110/178] killed    L298  stmt-deleted     delete: delete approvedTransfers[_tokenId];
+[111/178] killed    L299  stmt-deleted     delete: emit TransferApprovalRevoked(_tokenId);
+[115/178] killed    L312  relational       <= -> <: require(block.timestamp <= approvedTransfers[_tokenId].transferExpiryDa
+[109/178] killed    L297  relational       != -> ==: require(approvedTransfers[_tokenId].transferExpiryDate != 0, "PsyNFT: 
+[106/178] killed    L286  stmt-deleted     delete: approvedTransfers[_tokenId] = ApprovedTransfers({tokenId: _tokenId, tran
+[113/178] killed    L310  logical          && -> ||: if (controlledTransfers && ownerOf(_tokenId) != address(this)) {
+[118/178] killed    L324  arith            ++ -> --: totalTokensBurnt++;
+[116/178] killed    L312  relational       <= -> ==: require(block.timestamp <= approvedTransfers[_tokenId].transferExpiryD
+[120/178] killed    L326  stmt-deleted     delete: emit TokenBurnt(_tokenId, from);
+[119/178] killed    L324  stmt-deleted     delete: totalTokensBurnt++;
+[123/178] killed    L336  stmt-deleted     delete: emit CoreUpdated(core, _core);
+[114/178] killed    L311  relational       == -> !=: require(_to == approvedTransfers[_tokenId].to, "PsyNFT: Incorrect Rece
+[117/178] killed    L322  relational       == -> !=: require(msg.sender == treasury, "PsyNFT: Caller Is Not Treasury");
+[126/178] killed    L342  relational       != -> ==: require(_treasury != address(0), "PsyNFT: Treasury Cannot Be Zero Addr
+[124/178] killed    L337  stmt-deleted     delete: core = _core;
+[121/178] killed    L334  modifier-removed drop onlyOwner: function setCoreContract(address _core) external onlyOwner {
+[128/178] killed    L344  stmt-deleted     delete: treasury = _treasury;
+[127/178] killed    L343  stmt-deleted     delete: emit TreasuryUpdated(treasury, _treasury);
+[122/178] killed    L335  relational       != -> ==: require(_core != address(0), "PsyNFT: Core Cannot Be Zero Address");
+[131/178] killed    L350  stmt-deleted     delete: controlledTransfers = false;
+[125/178] killed    L341  modifier-removed drop onlyOwner: function setTreasury(address _treasury) external onlyOwner {
+[134/178] killed    L355  modifier-removed drop onlyOwner: function enableControlledTransfers() external onlyOwner {
+[132/178] killed    L351  bool             false -> true: emit ControlledTransfersSet(false);
+[129/178] killed    L348  modifier-removed drop onlyOwner: function disableControlledTransfers() external onlyOwner {
+[136/178] killed    L357  bool             true -> false: controlledTransfers = true;
+[135/178] killed    L356  negation         drop '!': require(!controlledTransfers, "PsyNFT: Controlled Transfers Already En
+[130/178] killed    L350  bool             false -> true: controlledTransfers = false;
+[139/178] killed    L358  stmt-deleted     delete: emit ControlledTransfersSet(true);
+[142/178] killed    L368  relational       == -> !=: require(b.length == 0 || b[b.length - 1] == "/", "PsyNFT: Base URI Mus
+[133/178] killed    L351  stmt-deleted     delete: emit ControlledTransfersSet(false);
+[137/178] killed    L357  stmt-deleted     delete: controlledTransfers = true;
+[140/178] killed    L366  modifier-removed drop onlyOwner: function setBaseUri(string memory _uri) external onlyOwner {
+[144/178] killed    L369  stmt-deleted     delete: baseUri = _uri;
+[143/178] killed    L368  logical          || -> &&: require(b.length == 0 || b[b.length - 1] == "/", "PsyNFT: Base URI Mus
+[138/178] killed    L358  bool             true -> false: emit ControlledTransfersSet(true);
+[150/178] killed    L389  relational       != -> ==: require(to != address(0), "PsyNFT: Rescue To Zero");
+[147/178] killed    L379  modifier-removed drop onlyOwner: function renounceOwnership() public view override onlyOwner {
+[141/178] killed    L368  relational       == -> !=: require(b.length == 0 || b[b.length - 1] == "/", "PsyNFT: Base URI Mus
+[145/178] killed    L370  stmt-deleted     delete: emit BaseUriUpdated(_uri);
+[148/178] killed    L388  modifier-removed drop onlyOwner: function rescueERC20(address token, address to, uint256 amount) 
+[152/178] killed    L395  modifier-removed drop onlyOwner: function rescueERC721(address token, address to, uint256 tokenId
+[151/178] killed    L391  stmt-deleted     delete: emit ERC20Rescued(token, to, amount);
+[146/178] killed    L371  stmt-deleted     delete: emit BatchMetadataUpdate(0, type(uint256).max);
+[155/178] killed    L397  relational       != -> ==: require(to != address(0), "PsyNFT: Rescue To Zero");
+[158/178] SURVIVED  L403  modifier-removed drop nonReentrant: function rescueETH(address payable to, uint256 amount) extern
+[149/178] SURVIVED  L388  modifier-removed drop nonReentrant: function rescueERC20(address token, address to, uint256 amoun
+[153/178] SURVIVED  L395  modifier-removed drop nonReentrant: function rescueERC721(address token, address to, uint256 toke
+[156/178] killed    L399  stmt-deleted     delete: emit ERC721Rescued(token, to, tokenId_);
+[160/178] killed    L407  stmt-deleted     delete: emit ETHRescued(to, amount);
+[159/178] killed    L404  relational       != -> ==: require(to != address(0), "PsyNFT: Rescue To Zero");
+[154/178] killed    L396  relational       != -> ==: require(token != address(this), "PsyNFT: Cannot Rescue Self");
+[163/178] killed    L432  stmt-deleted     delete: from = super._update(to, tokenId_, auth);
+[157/178] killed    L403  modifier-removed drop onlyOwner: function rescueETH(address payable to, uint256 amount) external 
+[166/178] SURVIVED  L433  logical          && -> ||: if (from != address(0) && approvedTransfers[tokenId_].transferExpiryDa
+[161/178] killed    L421  relational       == -> !=: return interfaceId == ERC4906_INTERFACE_ID || super.supportsInterface(
+[168/178] killed    L445  constant         2 -> 1: uint256 a = 2;
+[164/178] killed    L433  relational       != -> ==: if (from != address(0) && approvedTransfers[tokenId_].transferExpiryDa
+[167/178] killed    L434  stmt-deleted     delete: delete approvedTransfers[tokenId_];
+[162/178] killed    L421  logical          || -> &&: return interfaceId == ERC4906_INTERFACE_ID || super.supportsInterface(
+[171/178] killed    L446  constant         3 -> 4: uint256 b = 3;
+[174/178] killed    L448  arith            + -> -: (a, b) = (b, a + b);
+[176/178] killed    L450  relational       == -> !=: return a == prev && b == next;
+[169/178] killed    L445  constant         2 -> 3: uint256 a = 2;
+[165/178] killed    L433  relational       != -> ==: if (from != address(0) && approvedTransfers[tokenId_].transferExpiryDa
+[172/178] killed    L447  relational       < -> <=: while (b < next) {
+[175/178] killed    L450  relational       == -> !=: return a == prev && b == next;
+[170/178] killed    L446  constant         3 -> 2: uint256 b = 3;
+[173/178] killed    L447  relational       < -> >=: while (b < next) {
+[177/178] killed    L450  logical          && -> ||: return a == prev && b == next;
+[178/178] killed    L454  relational       == -> !=: require(msg.sender == core, "PsyNFT: Caller Not Core Contract");
+{"total": 178, "valid": 178, "killed": 170, "survived": 8, "stillborn": 0, "score": 95.5}

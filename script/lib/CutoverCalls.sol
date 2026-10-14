@@ -17,7 +17,12 @@ library CutoverCalls {
     address internal constant MAIN_SAFE = 0xB253a1Ab24B612C2AF37f8fC935b40c7304650e5; // 2-of-4, Safe v1.3.0
     address internal constant V1_TREASURY = 0xB4528213285CD10Fdb6a14847a398d71670b3d61;
     address internal constant V1_CORE = 0xDAAAC6a81fE6a230B880b96a2B5ca903d0c1d4F6; // CoreLogic (UUPS proxy)
-    address internal constant V1_CORE_OWNER = 0x00c15f6db575ef6ef7814d4900507eC4B3276061; // current EOA owner
+    /// Current EOA owner of CoreLogic AND PsycSale (both handed over by V1_NFT_OWNER on 2025-12-12).
+    address internal constant V1_CORE_OWNER = 0x00c15f6db575ef6ef7814d4900507eC4B3276061;
+    address internal constant V1_NFT = 0x6c6Ab7b3215374dE4A65De63eAC9BC7A0c7f402d; // V1 PsyNFT (Ownable2Step)
+    /// Current EOA owner of V1 PsyNFT: a former operator wallet, not the DAO (audit 2026-10 addendum, B1).
+    address internal constant V1_NFT_OWNER = 0xC3aC5Ef1A15c40241233C722FE322D83B010e445;
+    address internal constant PSYC_SALE = 0xe94828A923538709c58764159D6CD99C4381d82B; // V1 PsycSale (UUPS, Ownable2Step)
     /// Canonical Safe v1.3.0 deployments (verified against safe-global/safe-deployments, 2026-10-10).
     address internal constant SAFE_FALLBACK_HANDLER = 0xf48f2B2d2a534e402487b3ee7C18c33Aec0Fe5e4;
     address internal constant MULTISEND_CALL_ONLY = 0x40A2aCCbd92BCA938b02010E17A5b8929b49130D;
@@ -28,23 +33,50 @@ library CutoverCalls {
         string label;
     }
 
+    /// A transaction sent by an individual wallet (not the Safe) before the Safe batches.
+    struct Handover {
+        address from;
+        address to;
+        bytes data;
+        string label;
+    }
+
+    // ---------------------------------------------------------------- step 0 (individual wallets)
+
+    /// Step 0 — the three V1 contracts are owned by two individual wallets. Each starts a two-step
+    /// (Ownable2Step) handover to the Main Safe; nothing changes until the Safe accepts (§0a/§0b).
+    function eoaHandovers() internal pure returns (Handover[] memory h) {
+        bytes memory toSafe = abi.encodeWithSignature("transferOwnership(address)", MAIN_SAFE);
+        h = new Handover[](3);
+        h[0] = Handover(V1_NFT_OWNER, V1_NFT, toSafe, "V1 PsyNFT.transferOwnership(MainSafe)");
+        h[1] = Handover(V1_CORE_OWNER, V1_CORE, toSafe, "CoreLogic.transferOwnership(MainSafe)");
+        h[2] = Handover(V1_CORE_OWNER, PSYC_SALE, toSafe, "PsycSale.transferOwnership(MainSafe)");
+    }
+
+    /// Calldata of every step-0 handover (identical for all three contracts).
+    function coreLogicHandoverCalldata() internal pure returns (bytes memory) {
+        return abi.encodeWithSignature("transferOwnership(address)", MAIN_SAFE);
+    }
+
     // ---------------------------------------------------------------- batches
 
-    /// §0b — run AFTER the current CoreLogic owner EOA has called
-    /// `CoreLogic.transferOwnership(MAIN_SAFE)` (see `coreLogicHandoverCalldata`).
+    /// §0a — the Safe accepts V1 PsyNFT. Separate from §0b because it depends on a different wallet
+    /// (V1_NFT_OWNER) having started its handover; run it as soon as that has happened.
+    function v1NftOwnerBatch() internal pure returns (Call[] memory c) {
+        c = new Call[](1);
+        c[0] = Call(V1_NFT, abi.encodeWithSignature("acceptOwnership()"), "V1 PsyNFT.acceptOwnership()");
+    }
+
+    /// §0b — run AFTER V1_CORE_OWNER has started the CoreLogic and PsycSale handovers.
     function setupBatch() internal pure returns (Call[] memory c) {
-        c = new Call[](2);
+        c = new Call[](3);
         c[0] = Call(V1_CORE, abi.encodeWithSignature("acceptOwnership()"), "CoreLogic.acceptOwnership()");
-        c[1] = Call(
+        c[1] = Call(PSYC_SALE, abi.encodeWithSignature("acceptOwnership()"), "PsycSale.acceptOwnership()");
+        c[2] = Call(
             MAIN_SAFE,
             abi.encodeWithSignature("setFallbackHandler(address)", SAFE_FALLBACK_HANDLER),
             "MainSafe.setFallbackHandler(CompatibilityFallbackHandler v1.3.0)"
         );
-    }
-
-    /// The single EOA transaction that precedes §0b (sent from V1_CORE_OWNER, not the Safe).
-    function coreLogicHandoverCalldata() internal pure returns (bytes memory) {
-        return abi.encodeWithSignature("transferOwnership(address)", MAIN_SAFE);
     }
 
     /// §1 — close the exit window. CAUTION: `switchRageQuit` TOGGLES. Execute exactly once, and only
@@ -66,10 +98,10 @@ library CutoverCalls {
      * V2.totalTokensBurnt == 0, Safe fallback handler set, V1 ego death off.
      *
      * Step 5 passes n = 1, so Treasury pays rageQuitBalance / (1 - 0) = the whole pool.
-     * Step 8 (audit 2026-10, OPS-02) points V1 CoreLogic at V2: CoreLogic is V1 PsyNFT's only
-     * minter and its core can never change (lost owner key), so without this the Safe could still
-     * mint and sell new V1 seats after cutover. Afterwards CoreLogic's mint/approve/kick paths
-     * call V2, where CoreLogic has no role, and revert.
+     * Step 8 (audit 2026-10, OPS-02) points V1 CoreLogic at V2: CoreLogic is V1 PsyNFT's minter,
+     * so without this the Safe could still mint and sell new V1 seats after cutover. Afterwards
+     * CoreLogic's mint/approve/kick paths call V2, where CoreLogic has no role, and revert.
+     * Re-enabling V1 would take a deliberate Safe transaction (the Safe owns V1 after §0a).
      */
     function cutoverBatch(address v2, uint256 sweepId) internal pure returns (Call[] memory c) {
         uint256[] memory one = new uint256[](1);

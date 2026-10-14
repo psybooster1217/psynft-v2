@@ -1,5 +1,9 @@
 # Session summary: October 2026 audit (10–11 Oct 2026)
 
+> **Historical working notes from 10–11 Oct 2026, written to the maintainer; superseded by
+> [docs/AUDIT-2026-10.md](../../docs/AUDIT-2026-10.md) and the [README](../../README.md). Not part
+> of the holder-facing docs.**
+
 What was done in this working session on PsyNFT V2 (the new PSYC contract), the decisions taken,
 where everything is, and what is still open.
 
@@ -17,15 +21,15 @@ where everything is, and what is still open.
 - **Accepted:** 5 informational items, documented.
 - **Results:**
 
-  | Measure | July audit | Now |
+  | Measure | Baseline (10 Oct; the July audit had 42 tests) | Now |
   |---|---|---|
   | Tests | 45 | **99**, all passing locally and in GitHub CI |
   | Line / branch coverage | 98% / 86% | **100% / 100%** |
   | Mutation score | — | **95.5%** (8 survivors, all proven equivalent) |
   | Invariants | — | **7**, each held over 25,600 random actions |
 
-- **Cutover rehearsed through the real Main Safe** on a mainnet fork, with its real owners, 2-of-4
-  threshold and the exact batch bytes. The Safe received exactly **3.110298529411764706 ETH**,
+- **Cutover rehearsed through the real Main Safe** on a mainnet fork, with its owners' addresses
+  (simulated approved-hash signatures; no signer signed), 2-of-4 threshold and the exact batch bytes. The Safe received exactly **3.110298529411764706 ETH**,
   and money owed to past exiters stayed untouched.
 - **Delivered on PR [psybooster1217/psynft-v2#1](https://github.com/psybooster1217/psynft-v2/pull/1)**
   (CI green):
@@ -59,7 +63,7 @@ where everything is, and what is still open.
 | 14 | Publish (your answers) | Branch pushed (repo stays private), PR #1 opened, CI green; Aderyn run in CI and triaged (its one High is a false positive); `MAINNET_RPC_URL` secret added, so CI runs all 99 tests |
 | 15 | Extras | Holder presentation page; `AGENTS.md` brief and paste-in prompt for Grok Build |
 
-## Findings (full detail: [AUDIT-2026-10.md](AUDIT-2026-10.md))
+## Findings (full detail: [AUDIT-2026-10.md](../../docs/AUDIT-2026-10.md))
 
 | ID | Severity | What | Status |
 |---|---|---|---|

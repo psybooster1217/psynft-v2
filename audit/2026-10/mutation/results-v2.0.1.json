@@ -1,0 +1,2335 @@
+{
+ "summary": {
+  "total": 178,
+  "valid": 178,
+  "killed": 170,
+  "survived": 8,
+  "stillborn": 0,
+  "score": 95.5
+ },
+ "results": [
+  {
+   "id": 0,
+   "kind": "require-removed",
+   "line": 132,
+   "desc": "require(!migrationFinalized, \"PsyNFT: Migration Finalized\");",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts"
+   ],
+   "seconds": 10.0
+  },
+  {
+   "id": 1,
+   "kind": "require-removed",
+   "line": 154,
+   "desc": "require(!initialMintCalled, \"PsyNFT: Initial Mint Done\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_MigrateAfterInitialMintReverts"
+   ],
+   "seconds": 14.1
+  },
+  {
+   "id": 2,
+   "kind": "require-removed",
+   "line": 155,
+   "desc": "require(holders.length == tokenIds.length, \"PsyNFT: Length Mismatch\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Migrate_RejectsBadInput"
+   ],
+   "seconds": 12.9
+  },
+  {
+   "id": 3,
+   "kind": "require-removed",
+   "line": 156,
+   "desc": "require(holders.length != 0, \"PsyNFT: Empty Batch\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Migrate_RejectsBadInput"
+   ],
+   "seconds": 13.0
+  },
+  {
+   "id": 4,
+   "kind": "require-removed",
+   "line": 162,
+   "desc": "require(to != address(0), \"PsyNFT: Zero Holder\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Migrate_RejectsBadInput"
+   ],
+   "seconds": 14.1
+  },
+  {
+   "id": 5,
+   "kind": "require-removed",
+   "line": 198,
+   "desc": "require(migrationStarted, \"PsyNFT: Migration Not Started\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RequiresStartedAndCeiling"
+   ],
+   "seconds": 14.0
+  },
+  {
+   "id": 6,
+   "kind": "require-removed",
+   "line": 199,
+   "desc": "require(migratedCount == expectedCount, \"PsyNFT: Incomplete Migration\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration"
+   ],
+   "seconds": 13.9
+  },
+  {
+   "id": 7,
+   "kind": "require-removed",
+   "line": 200,
+   "desc": "require(nextTokenId >= _migrationCeiling, \"PsyNFT: nextTokenId Too Low\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_Kill54_CeilingIncludesHighestId"
+   ],
+   "seconds": 13.5
+  },
+  {
+   "id": 8,
+   "kind": "require-removed",
+   "line": 201,
+   "desc": "require(_isFibonacciPair(previousFibonacci_, nextTokenId), \"PsyNFT: Counters Not On Schedule\");",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT03_RejectsTypos"
+   ],
+   "seconds": 13.8
+  },
+  {
+   "id": 9,
+   "kind": "require-removed",
+   "line": 222,
+   "desc": "require(!initialMintCalled, \"PsyNFT: Initial Mint Complete\");",
+   "status": "killed",
+   "killed_by": [
+    "test_InitialMint_CannotRunTwice"
+   ],
+   "seconds": 13.3
+  },
+  {
+   "id": 10,
+   "kind": "require-removed",
+   "line": 223,
+   "desc": "require(!migrationStarted, \"PsyNFT: Migration In Progress\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Migrate_BlocksInitialMint"
+   ],
+   "seconds": 13.0
+  },
+  {
+   "id": 11,
+   "kind": "require-removed",
+   "line": 242,
+   "desc": "require(initialMintCalled, \"PsyNFT: Initial Mint Not Completed\");",
+   "status": "killed",
+   "killed_by": [
+    "test_BatchMint_RequiresInitialMint"
+   ],
+   "seconds": 13.6
+  },
+  {
+   "id": 12,
+   "kind": "require-removed",
+   "line": 263,
+   "desc": "require(_recipient != address(0), \"PsyNFT: Recipient Cannot Be Zero Address\");",
+   "status": "killed",
+   "killed_by": [
+    "test_TransferNFTs_RejectsZeroAndEmpty"
+   ],
+   "seconds": 12.3
+  },
+  {
+   "id": 13,
+   "kind": "require-removed",
+   "line": 264,
+   "desc": "require(_tokenIds.length != 0, \"PsyNFT: Token Array Empty\");",
+   "status": "killed",
+   "killed_by": [
+    "test_TransferNFTs_RejectsZeroAndEmpty"
+   ],
+   "seconds": 12.9
+  },
+  {
+   "id": 14,
+   "kind": "require-removed",
+   "line": 279,
+   "desc": "require(_tokenId < tokenId, \"PsyNFT: Non Existent Token\");",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_Kill100_ApproveNextUnmintedIdReverts"
+   ],
+   "seconds": 12.9
+  },
+  {
+   "id": 15,
+   "kind": "require-removed",
+   "line": 280,
+   "desc": "require( block.timestamp > approvedTransfers[_tokenId].transferExpiryDate, \"PsyNFT: Transfer Request Currently",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_KillBoundary_ApproveAtExactExpiryReverts"
+   ],
+   "seconds": 13.0
+  },
+  {
+   "id": 16,
+   "kind": "require-removed",
+   "line": 297,
+   "desc": "require(approvedTransfers[_tokenId].transferExpiryDate != 0, \"PsyNFT: No Approval To Revoke\");",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT02_RevokeRequiresApproval"
+   ],
+   "seconds": 16.4
+  },
+  {
+   "id": 17,
+   "kind": "require-removed",
+   "line": 311,
+   "desc": "require(_to == approvedTransfers[_tokenId].to, \"PsyNFT: Incorrect Receiver\");",
+   "status": "killed",
+   "killed_by": [
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_GatesSafeTransferFrom",
+    "test_ControlledTransfer_WrongReceiverReverts",
+    "test_Gap_ReEnableControlledTransfers",
+    "test_PNFT01_DistributionClearsGrant",
+    "test_PNFT01_StaleGrantCannotRevive"
+   ],
+   "seconds": 13.4
+  },
+  {
+   "id": 18,
+   "kind": "require-removed",
+   "line": 312,
+   "desc": "require(block.timestamp <= approvedTransfers[_tokenId].transferExpiryDate, \"PsyNFT: Approval Expired\");",
+   "status": "killed",
+   "killed_by": [
+    "test_ControlledTransfer_ExpiredReverts"
+   ],
+   "seconds": 14.6
+  },
+  {
+   "id": 19,
+   "kind": "require-removed",
+   "line": 322,
+   "desc": "require(msg.sender == treasury, \"PsyNFT: Caller Is Not Treasury\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Burn_OnlyTreasury",
+    "test_ReentrantReceiver_CannotEscalate"
+   ],
+   "seconds": 14.0
+  },
+  {
+   "id": 20,
+   "kind": "require-removed",
+   "line": 335,
+   "desc": "require(_core != address(0), \"PsyNFT: Core Cannot Be Zero Address\");",
+   "status": "killed",
+   "killed_by": [
+    "test_SetCore_EmitsAndRejectsZero"
+   ],
+   "seconds": 14.6
+  },
+  {
+   "id": 21,
+   "kind": "require-removed",
+   "line": 342,
+   "desc": "require(_treasury != address(0), \"PsyNFT: Treasury Cannot Be Zero Address\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_SetTreasuryZeroReverts"
+   ],
+   "seconds": 13.8
+  },
+  {
+   "id": 22,
+   "kind": "require-removed",
+   "line": 349,
+   "desc": "require(controlledTransfers, \"PsyNFT: Controlled Transfers Already Disabled\");",
+   "status": "killed",
+   "killed_by": [
+    "test_ControlledToggle_Guards"
+   ],
+   "seconds": 14.5
+  },
+  {
+   "id": 23,
+   "kind": "require-removed",
+   "line": 356,
+   "desc": "require(!controlledTransfers, \"PsyNFT: Controlled Transfers Already Enabled\");",
+   "status": "killed",
+   "killed_by": [
+    "test_ControlledToggle_Guards"
+   ],
+   "seconds": 13.5
+  },
+  {
+   "id": 24,
+   "kind": "require-removed",
+   "line": 368,
+   "desc": "require(b.length == 0 || b[b.length - 1] == \"/\", \"PsyNFT: Base URI Must End With Slash\");",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT04_BaseUriNeedsTrailingSlash"
+   ],
+   "seconds": 14.8
+  },
+  {
+   "id": 25,
+   "kind": "require-removed",
+   "line": 389,
+   "desc": "require(to != address(0), \"PsyNFT: Rescue To Zero\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_RescueToZeroReverts"
+   ],
+   "seconds": 16.6
+  },
+  {
+   "id": 26,
+   "kind": "require-removed",
+   "line": 396,
+   "desc": "require(token != address(this), \"PsyNFT: Cannot Rescue Self\");",
+   "status": "killed",
+   "killed_by": [
+    "test_RescueERC721_ForeignOnly",
+    "test_Rescue_CannotMovePsyNFTs"
+   ],
+   "seconds": 14.9
+  },
+  {
+   "id": 27,
+   "kind": "require-removed",
+   "line": 397,
+   "desc": "require(to != address(0), \"PsyNFT: Rescue To Zero\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_RescueToZeroReverts"
+   ],
+   "seconds": 15.0
+  },
+  {
+   "id": 28,
+   "kind": "require-removed",
+   "line": 404,
+   "desc": "require(to != address(0), \"PsyNFT: Rescue To Zero\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_RescueToZeroReverts"
+   ],
+   "seconds": 13.9
+  },
+  {
+   "id": 29,
+   "kind": "require-removed",
+   "line": 406,
+   "desc": "require(ok, \"PsyNFT: ETH Transfer Failed\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_RescueEthFailureReverts"
+   ],
+   "seconds": 14.5
+  },
+  {
+   "id": 30,
+   "kind": "require-removed",
+   "line": 454,
+   "desc": "require(msg.sender == core, \"PsyNFT: Caller Not Core Contract\");",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_BatchMint_OnlyCore",
+    "test_InitialMint_OnlyCore",
+    "test_PNFT02_RevokeOnlyCore",
+    "test_ReentrantReceiver_CannotEscalate",
+    "test_TransferNFTs_OnlyCore"
+   ],
+   "seconds": 15.3
+  },
+  {
+   "id": 31,
+   "kind": "bool",
+   "line": 123,
+   "desc": "true -> false: controlledTransfers = true;",
+   "status": "killed",
+   "killed_by": [
+    "test_Construction",
+    "test_ControlledToggle_Guards",
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_GatesSafeTransferFrom",
+    "test_ControlledTransfer_WrongReceiverReverts"
+   ],
+   "seconds": 15.3
+  },
+  {
+   "id": 32,
+   "kind": "stmt-deleted",
+   "line": 123,
+   "desc": "delete: controlledTransfers = true;",
+   "status": "killed",
+   "killed_by": [
+    "test_Construction",
+    "test_ControlledToggle_Guards",
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_GatesSafeTransferFrom",
+    "test_ControlledTransfer_WrongReceiverReverts"
+   ],
+   "seconds": 13.5
+  },
+  {
+   "id": 33,
+   "kind": "constant",
+   "line": 124,
+   "desc": "2 -> 1: previousFibonacci = 2;",
+   "status": "killed",
+   "killed_by": [
+    "invariant_CountersOnSchedule",
+    "test_Construction",
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_Gap_UnmintedAndBurntTokenUri"
+   ],
+   "seconds": 14.4
+  },
+  {
+   "id": 34,
+   "kind": "constant",
+   "line": 124,
+   "desc": "2 -> 3: previousFibonacci = 2;",
+   "status": "killed",
+   "killed_by": [
+    "invariant_CountersOnSchedule",
+    "test_Construction",
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State"
+   ],
+   "seconds": 15.2
+  },
+  {
+   "id": 35,
+   "kind": "stmt-deleted",
+   "line": 124,
+   "desc": "delete: previousFibonacci = 2;",
+   "status": "killed",
+   "killed_by": [
+    "invariant_CountersOnSchedule",
+    "test_Construction",
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_Gap_UnmintedAndBurntTokenUri"
+   ],
+   "seconds": 12.1
+  },
+  {
+   "id": 36,
+   "kind": "negation",
+   "line": 132,
+   "desc": "drop '!': require(!migrationFinalized, \"PsyNFT: Migration Finalized\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Gap_MigrateAfterInitialMintReverts",
+    "test_Kill54_CeilingIncludesHighestId"
+   ],
+   "seconds": 14.6
+  },
+  {
+   "id": 37,
+   "kind": "modifier-removed",
+   "line": 150,
+   "desc": "drop onlyOwner: onlyOwner",
+   "status": "killed",
+   "killed_by": [
+    "test_Migrate_OnlyOwner"
+   ],
+   "seconds": 14.4
+  },
+  {
+   "id": 38,
+   "kind": "modifier-removed",
+   "line": 151,
+   "desc": "drop notFinalized: notFinalized",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts"
+   ],
+   "seconds": 13.6
+  },
+  {
+   "id": 39,
+   "kind": "modifier-removed",
+   "line": 152,
+   "desc": "drop nonReentrant: nonReentrant",
+   "status": "SURVIVED",
+   "killed_by": [],
+   "seconds": 12.7
+  },
+  {
+   "id": 40,
+   "kind": "negation",
+   "line": 154,
+   "desc": "drop '!': require(!initialMintCalled, \"PsyNFT: Initial Mint Done\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Gap_MigrateAfterInitialMintReverts",
+    "test_Kill54_CeilingIncludesHighestId"
+   ],
+   "seconds": 16.6
+  },
+  {
+   "id": 41,
+   "kind": "relational",
+   "line": 155,
+   "desc": "== -> !=: require(holders.length == tokenIds.length, \"PsyNFT: Length Mismatch\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Kill59_FinalizeOnlyOwner"
+   ],
+   "seconds": 18.5
+  },
+  {
+   "id": 42,
+   "kind": "relational",
+   "line": 156,
+   "desc": "!= -> ==: require(holders.length != 0, \"PsyNFT: Empty Batch\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Kill59_FinalizeOnlyOwner"
+   ],
+   "seconds": 17.4
+  },
+  {
+   "id": 43,
+   "kind": "bool",
+   "line": 158,
+   "desc": "true -> false: migrationStarted = true;",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Kill66_FinalizeAppliesControlledFlag"
+   ],
+   "seconds": 14.1
+  },
+  {
+   "id": 44,
+   "kind": "stmt-deleted",
+   "line": 158,
+   "desc": "delete: migrationStarted = true;",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Kill66_FinalizeAppliesControlledFlag"
+   ],
+   "seconds": 16.8
+  },
+  {
+   "id": 45,
+   "kind": "relational",
+   "line": 160,
+   "desc": "< -> <=: for (uint256 i; i < holders.length; i++) {",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Kill59_FinalizeOnlyOwner"
+   ],
+   "seconds": 16.7
+  },
+  {
+   "id": 46,
+   "kind": "relational",
+   "line": 160,
+   "desc": "< -> >=: for (uint256 i; i < holders.length; i++) {",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Kill66_FinalizeAppliesControlledFlag"
+   ],
+   "seconds": 16.2
+  },
+  {
+   "id": 47,
+   "kind": "arith",
+   "line": 160,
+   "desc": "++ -> --: for (uint256 i; i < holders.length; i++) {",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Kill59_FinalizeOnlyOwner"
+   ],
+   "seconds": 16.2
+  },
+  {
+   "id": 48,
+   "kind": "relational",
+   "line": 162,
+   "desc": "!= -> ==: require(to != address(0), \"PsyNFT: Zero Holder\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Kill59_FinalizeOnlyOwner"
+   ],
+   "seconds": 21.2
+  },
+  {
+   "id": 49,
+   "kind": "arith",
+   "line": 166,
+   "desc": "++ -> --: migratedCount++;",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Kill59_FinalizeOnlyOwner"
+   ],
+   "seconds": 21.2
+  },
+  {
+   "id": 50,
+   "kind": "stmt-deleted",
+   "line": 166,
+   "desc": "delete: migratedCount++;",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Kill66_FinalizeAppliesControlledFlag"
+   ],
+   "seconds": 17.3
+  },
+  {
+   "id": 51,
+   "kind": "relational",
+   "line": 168,
+   "desc": "> -> >=: if (id + 1 > _migrationCeiling) {",
+   "status": "SURVIVED",
+   "killed_by": [],
+   "seconds": 22.4
+  },
+  {
+   "id": 52,
+   "kind": "relational",
+   "line": 168,
+   "desc": "> -> <=: if (id + 1 > _migrationCeiling) {",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_Kill54_CeilingIncludesHighestId"
+   ],
+   "seconds": 17.2
+  },
+  {
+   "id": 53,
+   "kind": "arith",
+   "line": 168,
+   "desc": "+ -> -: if (id + 1 > _migrationCeiling) {",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Migrate_BlocksInitialMint"
+   ],
+   "seconds": 18.0
+  },
+  {
+   "id": 54,
+   "kind": "arith",
+   "line": 168,
+   "desc": "+1 -> +0: if (id + 1 > _migrationCeiling) {",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill54_CeilingIncludesHighestId"
+   ],
+   "seconds": 19.6
+  },
+  {
+   "id": 55,
+   "kind": "arith",
+   "line": 169,
+   "desc": "+ -> -: _migrationCeiling = id + 1;",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Migrate_BlocksInitialMint"
+   ],
+   "seconds": 21.2
+  },
+  {
+   "id": 56,
+   "kind": "arith",
+   "line": 169,
+   "desc": "+1 -> +0: _migrationCeiling = id + 1;",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_Kill54_CeilingIncludesHighestId"
+   ],
+   "seconds": 23.5
+  },
+  {
+   "id": 57,
+   "kind": "stmt-deleted",
+   "line": 169,
+   "desc": "delete: _migrationCeiling = id + 1;",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_Kill54_CeilingIncludesHighestId"
+   ],
+   "seconds": 21.6
+  },
+  {
+   "id": 58,
+   "kind": "stmt-deleted",
+   "line": 171,
+   "desc": "delete: emit Migrated(id, to);",
+   "status": "killed",
+   "killed_by": [
+    "test_Migrate_MintsToHoldersPreservingIds"
+   ],
+   "seconds": 23.1
+  },
+  {
+   "id": 59,
+   "kind": "modifier-removed",
+   "line": 197,
+   "desc": "drop onlyOwner: ) external onlyOwner notFinalized {",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill59_FinalizeOnlyOwner"
+   ],
+   "seconds": 24.8
+  },
+  {
+   "id": 60,
+   "kind": "modifier-removed",
+   "line": 197,
+   "desc": "drop notFinalized: ) external onlyOwner notFinalized {",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_MigrateAfterFinalizeReverts"
+   ],
+   "seconds": 22.6
+  },
+  {
+   "id": 61,
+   "kind": "relational",
+   "line": 199,
+   "desc": "== -> !=: require(migratedCount == expectedCount, \"PsyNFT: Incomplete Migration\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Finalize_RejectsIncompleteMigration",
+    "test_Finalize_RequiresStartedAndCeiling",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill54_CeilingIncludesHighestId",
+    "test_Kill66_FinalizeAppliesControlledFlag"
+   ],
+   "seconds": 20.8
+  },
+  {
+   "id": 62,
+   "kind": "relational",
+   "line": 200,
+   "desc": ">= -> >: require(nextTokenId >= _migrationCeiling, \"PsyNFT: nextTokenId Too Low\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill66_FinalizeAppliesControlledFlag",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 22.1
+  },
+  {
+   "id": 63,
+   "kind": "relational",
+   "line": 200,
+   "desc": ">= -> ==: require(nextTokenId >= _migrationCeiling, \"PsyNFT: nextTokenId Too Low\");",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_PNFT03_RejectsTypos"
+   ],
+   "seconds": 27.0
+  },
+  {
+   "id": 64,
+   "kind": "stmt-deleted",
+   "line": 203,
+   "desc": "delete: tokenId = nextTokenId;",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 18.8
+  },
+  {
+   "id": 65,
+   "kind": "stmt-deleted",
+   "line": 204,
+   "desc": "delete: previousFibonacci = previousFibonacci_;",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 17.9
+  },
+  {
+   "id": 66,
+   "kind": "stmt-deleted",
+   "line": 205,
+   "desc": "delete: controlledTransfers = controlledTransfers_;",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill66_FinalizeAppliesControlledFlag"
+   ],
+   "seconds": 19.7
+  },
+  {
+   "id": 67,
+   "kind": "bool",
+   "line": 206,
+   "desc": "true -> false: initialMintCalled = true; // resume schedule, block fresh initialMint",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule"
+   ],
+   "seconds": 18.1
+  },
+  {
+   "id": 68,
+   "kind": "stmt-deleted",
+   "line": 206,
+   "desc": "delete: initialMintCalled = true; // resume schedule, block fresh initialMint",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule"
+   ],
+   "seconds": 20.9
+  },
+  {
+   "id": 69,
+   "kind": "bool",
+   "line": 207,
+   "desc": "true -> false: migrationFinalized = true; // lock migration",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 21.2
+  },
+  {
+   "id": 70,
+   "kind": "stmt-deleted",
+   "line": 207,
+   "desc": "delete: migrationFinalized = true; // lock migration",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 19.7
+  },
+  {
+   "id": 71,
+   "kind": "stmt-deleted",
+   "line": 209,
+   "desc": "delete: emit MigrationFinalized(nextTokenId, previousFibonacci_, controlledTransfers_);",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule"
+   ],
+   "seconds": 16.7
+  },
+  {
+   "id": 72,
+   "kind": "modifier-removed",
+   "line": 221,
+   "desc": "drop onlyCoreContract: function initialMint() external onlyCoreContract nonReentrant {",
+   "status": "killed",
+   "killed_by": [
+    "test_InitialMint_OnlyCore"
+   ],
+   "seconds": 12.0
+  },
+  {
+   "id": 73,
+   "kind": "modifier-removed",
+   "line": 221,
+   "desc": "drop nonReentrant: function initialMint() external onlyCoreContract nonReentrant {",
+   "status": "SURVIVED",
+   "killed_by": [],
+   "seconds": 14.7
+  },
+  {
+   "id": 74,
+   "kind": "negation",
+   "line": 222,
+   "desc": "drop '!': require(!initialMintCalled, \"PsyNFT: Initial Mint Complete\");",
+   "status": "killed",
+   "killed_by": [
+    "setUp",
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_BatchMint_OnlyCore",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury",
+    "test_ControlledTransfer_BlockedWithoutApproval"
+   ],
+   "seconds": 8.8
+  },
+  {
+   "id": 75,
+   "kind": "negation",
+   "line": 223,
+   "desc": "drop '!': require(!migrationStarted, \"PsyNFT: Migration In Progress\");",
+   "status": "killed",
+   "killed_by": [
+    "setUp",
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_BatchMint_OnlyCore",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury",
+    "test_ControlledTransfer_BlockedWithoutApproval"
+   ],
+   "seconds": 9.3
+  },
+  {
+   "id": 76,
+   "kind": "bool",
+   "line": 225,
+   "desc": "true -> false: initialMintCalled = true;",
+   "status": "killed",
+   "killed_by": [
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_Gap_MigrateAfterInitialMintReverts",
+    "test_Gap_ReEnableControlledTransfers",
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_InitialMint_CannotRunTwice"
+   ],
+   "seconds": 9.2
+  },
+  {
+   "id": 77,
+   "kind": "stmt-deleted",
+   "line": 225,
+   "desc": "delete: initialMintCalled = true;",
+   "status": "killed",
+   "killed_by": [
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_Gap_MigrateAfterInitialMintReverts",
+    "test_Gap_ReEnableControlledTransfers",
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_InitialMint_CannotRunTwice"
+   ],
+   "seconds": 10.0
+  },
+  {
+   "id": 78,
+   "kind": "relational",
+   "line": 229,
+   "desc": "< -> <=: while (localTokenId < 3) {",
+   "status": "killed",
+   "killed_by": [
+    "invariant_CountersOnSchedule",
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_InitialMint_MintsThreeToContract",
+    "test_Kill100_ApproveNextUnmintedIdReverts",
+    "test_ReentrantReceiver_CannotEscalate"
+   ],
+   "seconds": 14.0
+  },
+  {
+   "id": 79,
+   "kind": "relational",
+   "line": 229,
+   "desc": "< -> >=: while (localTokenId < 3) {",
+   "status": "killed",
+   "killed_by": [
+    "invariant_CountersOnSchedule",
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury",
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_ExpiredReverts"
+   ],
+   "seconds": 11.8
+  },
+  {
+   "id": 80,
+   "kind": "constant",
+   "line": 229,
+   "desc": "3 -> 2: while (localTokenId < 3) {",
+   "status": "killed",
+   "killed_by": [
+    "invariant_CountersOnSchedule",
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_InitialMint_MintsThreeToContract",
+    "test_Kill100_ApproveNextUnmintedIdReverts"
+   ],
+   "seconds": 14.9
+  },
+  {
+   "id": 81,
+   "kind": "constant",
+   "line": 229,
+   "desc": "3 -> 4: while (localTokenId < 3) {",
+   "status": "killed",
+   "killed_by": [
+    "invariant_CountersOnSchedule",
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_InitialMint_MintsThreeToContract",
+    "test_Kill100_ApproveNextUnmintedIdReverts",
+    "test_ReentrantReceiver_CannotEscalate"
+   ],
+   "seconds": 17.8
+  },
+  {
+   "id": 82,
+   "kind": "arith",
+   "line": 231,
+   "desc": "++ -> --: localTokenId++;",
+   "status": "killed",
+   "killed_by": [
+    "setUp",
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_BatchMint_OnlyCore",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury",
+    "test_ControlledTransfer_BlockedWithoutApproval"
+   ],
+   "seconds": 10.5
+  },
+  {
+   "id": 83,
+   "kind": "stmt-deleted",
+   "line": 231,
+   "desc": "delete: localTokenId++;",
+   "status": "killed",
+   "killed_by": [
+    "setUp",
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_BatchMint_OnlyCore",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury",
+    "test_ControlledTransfer_BlockedWithoutApproval"
+   ],
+   "seconds": 10.7
+  },
+  {
+   "id": 84,
+   "kind": "stmt-deleted",
+   "line": 234,
+   "desc": "delete: tokenId = localTokenId;",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_SucceedsWithApproval",
+    "test_ControlledTransfer_WrongReceiverReverts",
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State"
+   ],
+   "seconds": 13.1
+  },
+  {
+   "id": 85,
+   "kind": "modifier-removed",
+   "line": 241,
+   "desc": "drop onlyCoreContract: function batchMintInFibonacci() external onlyCoreContract nonReentrant {",
+   "status": "killed",
+   "killed_by": [
+    "test_BatchMint_OnlyCore",
+    "test_ReentrantReceiver_CannotEscalate"
+   ],
+   "seconds": 17.3
+  },
+  {
+   "id": 86,
+   "kind": "modifier-removed",
+   "line": 241,
+   "desc": "drop nonReentrant: function batchMintInFibonacci() external onlyCoreContract nonReentrant {",
+   "status": "SURVIVED",
+   "killed_by": [],
+   "seconds": 15.1
+  },
+  {
+   "id": 87,
+   "kind": "stmt-deleted",
+   "line": 245,
+   "desc": "delete: previousFibonacci = tokenId;",
+   "status": "killed",
+   "killed_by": [
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_FullMigration_ResumesSchedule"
+   ],
+   "seconds": 14.0
+  },
+  {
+   "id": 88,
+   "kind": "relational",
+   "line": 247,
+   "desc": "> -> >=: while (batchAmount > 0) {",
+   "status": "killed",
+   "killed_by": [
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_ReEnableControlledTransfers",
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_PNFT01_ApprovalConsumedOnUse"
+   ],
+   "seconds": 15.7
+  },
+  {
+   "id": 89,
+   "kind": "relational",
+   "line": 247,
+   "desc": "> -> <=: while (batchAmount > 0) {",
+   "status": "killed",
+   "killed_by": [
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_UnmintedAndBurntTokenUri"
+   ],
+   "seconds": 18.0
+  },
+  {
+   "id": 90,
+   "kind": "arith",
+   "line": 249,
+   "desc": "++ -> --: tokenId++;",
+   "status": "killed",
+   "killed_by": [
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_ReEnableControlledTransfers",
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_PNFT01_ApprovalConsumedOnUse"
+   ],
+   "seconds": 13.2
+  },
+  {
+   "id": 91,
+   "kind": "stmt-deleted",
+   "line": 249,
+   "desc": "delete: tokenId++;",
+   "status": "killed",
+   "killed_by": [
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_ReEnableControlledTransfers",
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_PNFT01_ApprovalConsumedOnUse"
+   ],
+   "seconds": 13.2
+  },
+  {
+   "id": 92,
+   "kind": "stmt-deleted",
+   "line": 250,
+   "desc": "delete: batchAmount--;",
+   "status": "killed",
+   "killed_by": [
+    "test_FibonacciBatch_GasCeiling",
+    "test_FibonacciSchedule_MatchesV1State",
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_ReEnableControlledTransfers",
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_PNFT01_ApprovalConsumedOnUse"
+   ],
+   "seconds": 32.1
+  },
+  {
+   "id": 93,
+   "kind": "modifier-removed",
+   "line": 262,
+   "desc": "drop onlyCoreContract: function transferNFTs(uint256[] memory _tokenIds, address _recipient) external onlyCoreCon",
+   "status": "killed",
+   "killed_by": [
+    "test_ReentrantReceiver_CannotEscalate",
+    "test_TransferNFTs_OnlyCore"
+   ],
+   "seconds": 21.0
+  },
+  {
+   "id": 94,
+   "kind": "relational",
+   "line": 263,
+   "desc": "!= -> ==: require(_recipient != address(0), \"PsyNFT: Recipient Cannot Be Zero Address\");",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury",
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_GatesSafeTransferFrom"
+   ],
+   "seconds": 16.6
+  },
+  {
+   "id": 95,
+   "kind": "relational",
+   "line": 264,
+   "desc": "!= -> ==: require(_tokenIds.length != 0, \"PsyNFT: Token Array Empty\");",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury",
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_GatesSafeTransferFrom"
+   ],
+   "seconds": 15.7
+  },
+  {
+   "id": 96,
+   "kind": "relational",
+   "line": 265,
+   "desc": "< -> <=: for (uint256 x; x < _tokenIds.length; x++) {",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury",
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_GatesSafeTransferFrom"
+   ],
+   "seconds": 13.1
+  },
+  {
+   "id": 97,
+   "kind": "relational",
+   "line": 265,
+   "desc": "< -> >=: for (uint256 x; x < _tokenIds.length; x++) {",
+   "status": "killed",
+   "killed_by": [
+    "test_Burn_ByTreasury",
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_GatesSafeTransferFrom",
+    "test_ControlledTransfer_SucceedsWithApproval",
+    "test_ControlledTransfer_WrongReceiverReverts"
+   ],
+   "seconds": 21.4
+  },
+  {
+   "id": 98,
+   "kind": "arith",
+   "line": 265,
+   "desc": "++ -> --: for (uint256 x; x < _tokenIds.length; x++) {",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury",
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_GatesSafeTransferFrom"
+   ],
+   "seconds": 17.3
+  },
+  {
+   "id": 99,
+   "kind": "modifier-removed",
+   "line": 277,
+   "desc": "drop onlyCoreContract: onlyCoreContract",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_ReentrantReceiver_CannotEscalate"
+   ],
+   "seconds": 21.5
+  },
+  {
+   "id": 100,
+   "kind": "relational",
+   "line": 279,
+   "desc": "< -> <=: require(_tokenId < tokenId, \"PsyNFT: Non Existent Token\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill100_ApproveNextUnmintedIdReverts"
+   ],
+   "seconds": 20.8
+  },
+  {
+   "id": 101,
+   "kind": "relational",
+   "line": 279,
+   "desc": "< -> >=: require(_tokenId < tokenId, \"PsyNFT: Non Existent Token\");",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_SucceedsWithApproval",
+    "test_ControlledTransfer_WrongReceiverReverts",
+    "test_Kill100_ApproveNextUnmintedIdReverts",
+    "test_Kill106_EmitsTransferApproved"
+   ],
+   "seconds": 17.4
+  },
+  {
+   "id": 102,
+   "kind": "relational",
+   "line": 281,
+   "desc": "> -> >=: block.timestamp > approvedTransfers[_tokenId].transferExpiryDate,",
+   "status": "killed",
+   "killed_by": [
+    "test_KillBoundary_ApproveAtExactExpiryReverts"
+   ],
+   "seconds": 16.9
+  },
+  {
+   "id": 103,
+   "kind": "relational",
+   "line": 281,
+   "desc": "> -> <=: block.timestamp > approvedTransfers[_tokenId].transferExpiryDate,",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_SucceedsWithApproval",
+    "test_ControlledTransfer_WrongReceiverReverts",
+    "test_Kill100_ApproveNextUnmintedIdReverts",
+    "test_Kill106_EmitsTransferApproved"
+   ],
+   "seconds": 18.7
+  },
+  {
+   "id": 104,
+   "kind": "arith",
+   "line": 285,
+   "desc": "+ -> -: uint256 expiry = block.timestamp + _allowedTransferTimeInSeconds;",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_SucceedsWithApproval",
+    "test_ControlledTransfer_WrongReceiverReverts",
+    "test_Kill100_ApproveNextUnmintedIdReverts",
+    "test_Kill106_EmitsTransferApproved"
+   ],
+   "seconds": 21.1
+  },
+  {
+   "id": 105,
+   "kind": "stmt-deleted",
+   "line": 286,
+   "desc": "delete: approvedTransfers[_tokenId] = ApprovedTransfers({tokenId: _tokenId, transferExpiryDate: ex",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_SucceedsWithApproval",
+    "test_KillBoundary_ApproveAtExactExpiryReverts",
+    "test_KillBoundary_TransferAtExactExpirySucceeds",
+    "test_PNFT01_ApprovalConsumedOnUse"
+   ],
+   "seconds": 19.4
+  },
+  {
+   "id": 106,
+   "kind": "stmt-deleted",
+   "line": 288,
+   "desc": "delete: emit TransferApproved(_tokenId, _to, expiry);",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill106_EmitsTransferApproved"
+   ],
+   "seconds": 17.4
+  },
+  {
+   "id": 107,
+   "kind": "modifier-removed",
+   "line": 296,
+   "desc": "drop onlyCoreContract: function revokeTransfer(uint256 _tokenId) external onlyCoreContract {",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT02_RevokeOnlyCore"
+   ],
+   "seconds": 20.9
+  },
+  {
+   "id": 108,
+   "kind": "relational",
+   "line": 297,
+   "desc": "!= -> ==: require(approvedTransfers[_tokenId].transferExpiryDate != 0, \"PsyNFT: No Approval To Revok",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT02_RevokeRequiresApproval",
+    "test_PNFT02_RevokeTransfer"
+   ],
+   "seconds": 19.9
+  },
+  {
+   "id": 109,
+   "kind": "stmt-deleted",
+   "line": 298,
+   "desc": "delete: delete approvedTransfers[_tokenId];",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT02_RevokeTransfer"
+   ],
+   "seconds": 21.7
+  },
+  {
+   "id": 110,
+   "kind": "stmt-deleted",
+   "line": 299,
+   "desc": "delete: emit TransferApprovalRevoked(_tokenId);",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT02_RevokeTransfer"
+   ],
+   "seconds": 23.9
+  },
+  {
+   "id": 111,
+   "kind": "relational",
+   "line": 310,
+   "desc": "!= -> ==: if (controlledTransfers && ownerOf(_tokenId) != address(this)) {",
+   "status": "killed",
+   "killed_by": [
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_GatesSafeTransferFrom",
+    "test_ControlledTransfer_WrongReceiverReverts",
+    "test_Gap_ContractHeldTokensHaveNoOperators",
+    "test_Gap_ReEnableControlledTransfers"
+   ],
+   "seconds": 23.4
+  },
+  {
+   "id": 112,
+   "kind": "logical",
+   "line": 310,
+   "desc": "&& -> ||: if (controlledTransfers && ownerOf(_tokenId) != address(this)) {",
+   "status": "killed",
+   "killed_by": [
+    "test_Disabled_AllowsFreeTransfer",
+    "test_Gap_ContractHeldTokensHaveNoOperators",
+    "test_Kill66_FinalizeAppliesControlledFlag",
+    "test_PNFT01_FreeTransferClearsStaleGrant",
+    "test_PNFT01_StaleGrantCannotRevive"
+   ],
+   "seconds": 21.5
+  },
+  {
+   "id": 113,
+   "kind": "relational",
+   "line": 311,
+   "desc": "== -> !=: require(_to == approvedTransfers[_tokenId].to, \"PsyNFT: Incorrect Receiver\");",
+   "status": "killed",
+   "killed_by": [
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_GatesSafeTransferFrom",
+    "test_ControlledTransfer_SucceedsWithApproval",
+    "test_ControlledTransfer_WrongReceiverReverts",
+    "test_Gap_ReEnableControlledTransfers"
+   ],
+   "seconds": 19.3
+  },
+  {
+   "id": 114,
+   "kind": "relational",
+   "line": 312,
+   "desc": "<= -> <: require(block.timestamp <= approvedTransfers[_tokenId].transferExpiryDate, \"PsyNFT: Approv",
+   "status": "killed",
+   "killed_by": [
+    "test_KillBoundary_TransferAtExactExpirySucceeds"
+   ],
+   "seconds": 20.6
+  },
+  {
+   "id": 115,
+   "kind": "relational",
+   "line": 312,
+   "desc": "<= -> ==: require(block.timestamp <= approvedTransfers[_tokenId].transferExpiryDate, \"PsyNFT: Approv",
+   "status": "killed",
+   "killed_by": [
+    "test_ControlledTransfer_SucceedsWithApproval",
+    "test_PNFT01_ApprovalConsumedOnUse",
+    "test_PNFT01_SafeTransferAlsoConsumes",
+    "test_PNFT01_StaleGrantCannotRevive",
+    "test_PNFT02_RevokeTransfer"
+   ],
+   "seconds": 25.9
+  },
+  {
+   "id": 116,
+   "kind": "relational",
+   "line": 322,
+   "desc": "== -> !=: require(msg.sender == treasury, \"PsyNFT: Caller Is Not Treasury\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury",
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_PNFT01_BurnClearsGrant",
+    "test_ReentrantReceiver_CannotEscalate"
+   ],
+   "seconds": 20.0
+  },
+  {
+   "id": 117,
+   "kind": "arith",
+   "line": 324,
+   "desc": "++ -> --: totalTokensBurnt++;",
+   "status": "killed",
+   "killed_by": [
+    "test_Burn_ByTreasury",
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_PNFT01_BurnClearsGrant"
+   ],
+   "seconds": 14.3
+  },
+  {
+   "id": 118,
+   "kind": "stmt-deleted",
+   "line": 324,
+   "desc": "delete: totalTokensBurnt++;",
+   "status": "killed",
+   "killed_by": [
+    "test_Burn_ByTreasury"
+   ],
+   "seconds": 19.8
+  },
+  {
+   "id": 119,
+   "kind": "stmt-deleted",
+   "line": 326,
+   "desc": "delete: emit TokenBurnt(_tokenId, from);",
+   "status": "killed",
+   "killed_by": [
+    "test_Burn_ByTreasury"
+   ],
+   "seconds": 19.5
+  },
+  {
+   "id": 120,
+   "kind": "modifier-removed",
+   "line": 334,
+   "desc": "drop onlyOwner: function setCoreContract(address _core) external onlyOwner {",
+   "status": "killed",
+   "killed_by": [
+    "test_Setters_OnlyOwner"
+   ],
+   "seconds": 19.0
+  },
+  {
+   "id": 121,
+   "kind": "relational",
+   "line": 335,
+   "desc": "!= -> ==: require(_core != address(0), \"PsyNFT: Core Cannot Be Zero Address\");",
+   "status": "killed",
+   "killed_by": [
+    "setUp"
+   ],
+   "seconds": 14.2
+  },
+  {
+   "id": 122,
+   "kind": "stmt-deleted",
+   "line": 336,
+   "desc": "delete: emit CoreUpdated(core, _core);",
+   "status": "killed",
+   "killed_by": [
+    "test_SetCore_EmitsAndRejectsZero"
+   ],
+   "seconds": 20.3
+  },
+  {
+   "id": 123,
+   "kind": "stmt-deleted",
+   "line": 337,
+   "desc": "delete: core = _core;",
+   "status": "killed",
+   "killed_by": [
+    "setUp",
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_BatchMint_OnlyCore",
+    "test_BatchMint_RequiresInitialMint",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury"
+   ],
+   "seconds": 16.0
+  },
+  {
+   "id": 124,
+   "kind": "modifier-removed",
+   "line": 341,
+   "desc": "drop onlyOwner: function setTreasury(address _treasury) external onlyOwner {",
+   "status": "killed",
+   "killed_by": [
+    "test_OwnershipHandoffToSafe",
+    "test_Setters_OnlyOwner"
+   ],
+   "seconds": 19.9
+  },
+  {
+   "id": 125,
+   "kind": "relational",
+   "line": 342,
+   "desc": "!= -> ==: require(_treasury != address(0), \"PsyNFT: Treasury Cannot Be Zero Address\");",
+   "status": "killed",
+   "killed_by": [
+    "setUp"
+   ],
+   "seconds": 15.9
+  },
+  {
+   "id": 126,
+   "kind": "stmt-deleted",
+   "line": 343,
+   "desc": "delete: emit TreasuryUpdated(treasury, _treasury);",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill126_EmitsTreasuryUpdated"
+   ],
+   "seconds": 20.4
+  },
+  {
+   "id": 127,
+   "kind": "stmt-deleted",
+   "line": 344,
+   "desc": "delete: treasury = _treasury;",
+   "status": "killed",
+   "killed_by": [
+    "test_Burn_ByTreasury",
+    "test_Construction",
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_Kill126_EmitsTreasuryUpdated",
+    "test_PNFT01_BurnClearsGrant"
+   ],
+   "seconds": 15.7
+  },
+  {
+   "id": 128,
+   "kind": "modifier-removed",
+   "line": 348,
+   "desc": "drop onlyOwner: function disableControlledTransfers() external onlyOwner {",
+   "status": "killed",
+   "killed_by": [],
+   "seconds": 20.4
+  },
+  {
+   "id": 129,
+   "kind": "bool",
+   "line": 350,
+   "desc": "false -> true: controlledTransfers = false;",
+   "status": "killed",
+   "killed_by": [
+    "test_ControlledToggle_Guards",
+    "test_Disabled_AllowsFreeTransfer",
+    "test_Gap_ReEnableControlledTransfers",
+    "test_Kill131_137_EmitsControlledTransfersSet",
+    "test_PNFT01_FreeTransferClearsStaleGrant",
+    "test_PNFT01_StaleGrantCannotRevive"
+   ],
+   "seconds": 21.2
+  },
+  {
+   "id": 130,
+   "kind": "stmt-deleted",
+   "line": 350,
+   "desc": "delete: controlledTransfers = false;",
+   "status": "killed",
+   "killed_by": [
+    "test_ControlledToggle_Guards",
+    "test_Disabled_AllowsFreeTransfer",
+    "test_Gap_ReEnableControlledTransfers",
+    "test_Kill131_137_EmitsControlledTransfersSet",
+    "test_PNFT01_FreeTransferClearsStaleGrant",
+    "test_PNFT01_StaleGrantCannotRevive"
+   ],
+   "seconds": 20.9
+  },
+  {
+   "id": 131,
+   "kind": "bool",
+   "line": 351,
+   "desc": "false -> true: emit ControlledTransfersSet(false);",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill131_137_EmitsControlledTransfersSet"
+   ],
+   "seconds": 20.8
+  },
+  {
+   "id": 132,
+   "kind": "stmt-deleted",
+   "line": 351,
+   "desc": "delete: emit ControlledTransfersSet(false);",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill131_137_EmitsControlledTransfersSet"
+   ],
+   "seconds": 22.8
+  },
+  {
+   "id": 133,
+   "kind": "modifier-removed",
+   "line": 355,
+   "desc": "drop onlyOwner: function enableControlledTransfers() external onlyOwner {",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill133_EnableControlledTransfersOnlyOwner"
+   ],
+   "seconds": 20.5
+  },
+  {
+   "id": 134,
+   "kind": "negation",
+   "line": 356,
+   "desc": "drop '!': require(!controlledTransfers, \"PsyNFT: Controlled Transfers Already Enabled\");",
+   "status": "killed",
+   "killed_by": [
+    "test_ControlledToggle_Guards",
+    "test_Gap_ReEnableControlledTransfers",
+    "test_Kill131_137_EmitsControlledTransfersSet",
+    "test_PNFT01_StaleGrantCannotRevive"
+   ],
+   "seconds": 18.8
+  },
+  {
+   "id": 135,
+   "kind": "bool",
+   "line": 357,
+   "desc": "true -> false: controlledTransfers = true;",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_ReEnableControlledTransfers",
+    "test_PNFT01_StaleGrantCannotRevive"
+   ],
+   "seconds": 19.7
+  },
+  {
+   "id": 136,
+   "kind": "stmt-deleted",
+   "line": 357,
+   "desc": "delete: controlledTransfers = true;",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_ReEnableControlledTransfers",
+    "test_PNFT01_StaleGrantCannotRevive"
+   ],
+   "seconds": 21.7
+  },
+  {
+   "id": 137,
+   "kind": "bool",
+   "line": 358,
+   "desc": "true -> false: emit ControlledTransfersSet(true);",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill131_137_EmitsControlledTransfersSet"
+   ],
+   "seconds": 21.2
+  },
+  {
+   "id": 138,
+   "kind": "stmt-deleted",
+   "line": 358,
+   "desc": "delete: emit ControlledTransfersSet(true);",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill131_137_EmitsControlledTransfersSet"
+   ],
+   "seconds": 24.2
+  },
+  {
+   "id": 139,
+   "kind": "modifier-removed",
+   "line": 366,
+   "desc": "drop onlyOwner: function setBaseUri(string memory _uri) external onlyOwner {",
+   "status": "killed",
+   "killed_by": [
+    "test_Setters_OnlyOwner"
+   ],
+   "seconds": 22.8
+  },
+  {
+   "id": 140,
+   "kind": "relational",
+   "line": 368,
+   "desc": "== -> !=: require(b.length == 0 || b[b.length - 1] == \"/\", \"PsyNFT: Base URI Must End With Slash\");",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT04_BaseUriNeedsTrailingSlash"
+   ],
+   "seconds": 24.7
+  },
+  {
+   "id": 141,
+   "kind": "relational",
+   "line": 368,
+   "desc": "== -> !=: require(b.length == 0 || b[b.length - 1] == \"/\", \"PsyNFT: Base URI Must End With Slash\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_Kill144_EmitsBaseUriUpdated",
+    "test_PNFT04_BaseUriNeedsTrailingSlash",
+    "test_PNFT04_EmitsBatchMetadataUpdate",
+    "test_SetBaseUri_AffectsTokenURI"
+   ],
+   "seconds": 20.2
+  },
+  {
+   "id": 142,
+   "kind": "logical",
+   "line": 368,
+   "desc": "|| -> &&: require(b.length == 0 || b[b.length - 1] == \"/\", \"PsyNFT: Base URI Must End With Slash\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_Kill144_EmitsBaseUriUpdated",
+    "test_PNFT04_BaseUriNeedsTrailingSlash",
+    "test_PNFT04_EmitsBatchMetadataUpdate",
+    "test_SetBaseUri_AffectsTokenURI"
+   ],
+   "seconds": 23.6
+  },
+  {
+   "id": 143,
+   "kind": "stmt-deleted",
+   "line": 369,
+   "desc": "delete: baseUri = _uri;",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_UnmintedAndBurntTokenUri",
+    "test_PNFT04_BaseUriNeedsTrailingSlash",
+    "test_SetBaseUri_AffectsTokenURI"
+   ],
+   "seconds": 24.1
+  },
+  {
+   "id": 144,
+   "kind": "stmt-deleted",
+   "line": 370,
+   "desc": "delete: emit BaseUriUpdated(_uri);",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill144_EmitsBaseUriUpdated"
+   ],
+   "seconds": 22.6
+  },
+  {
+   "id": 145,
+   "kind": "stmt-deleted",
+   "line": 371,
+   "desc": "delete: emit BatchMetadataUpdate(0, type(uint256).max);",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT04_EmitsBatchMetadataUpdate"
+   ],
+   "seconds": 22.3
+  },
+  {
+   "id": 146,
+   "kind": "modifier-removed",
+   "line": 379,
+   "desc": "drop onlyOwner: function renounceOwnership() public view override onlyOwner {",
+   "status": "killed",
+   "killed_by": [
+    "test_RenounceOwnership_Blocked"
+   ],
+   "seconds": 25.2
+  },
+  {
+   "id": 147,
+   "kind": "modifier-removed",
+   "line": 388,
+   "desc": "drop onlyOwner: function rescueERC20(address token, address to, uint256 amount) external onlyOwner nonReen",
+   "status": "killed",
+   "killed_by": [
+    "test_RescueERC20",
+    "test_RescueERC20AndEthOnlyOwner"
+   ],
+   "seconds": 24.4
+  },
+  {
+   "id": 148,
+   "kind": "modifier-removed",
+   "line": 388,
+   "desc": "drop nonReentrant: function rescueERC20(address token, address to, uint256 amount) external onlyOwner nonReen",
+   "status": "SURVIVED",
+   "killed_by": [],
+   "seconds": 20.1
+  },
+  {
+   "id": 149,
+   "kind": "relational",
+   "line": 389,
+   "desc": "!= -> ==: require(to != address(0), \"PsyNFT: Rescue To Zero\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_RescueToZeroReverts",
+    "test_Kill150_155_159_EmitsRescueEvents",
+    "test_RescueERC20"
+   ],
+   "seconds": 21.4
+  },
+  {
+   "id": 150,
+   "kind": "stmt-deleted",
+   "line": 391,
+   "desc": "delete: emit ERC20Rescued(token, to, amount);",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill150_155_159_EmitsRescueEvents"
+   ],
+   "seconds": 22.9
+  },
+  {
+   "id": 151,
+   "kind": "modifier-removed",
+   "line": 395,
+   "desc": "drop onlyOwner: function rescueERC721(address token, address to, uint256 tokenId_) external onlyOwner nonR",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill151_RescueERC721OnlyOwner"
+   ],
+   "seconds": 24.8
+  },
+  {
+   "id": 152,
+   "kind": "modifier-removed",
+   "line": 395,
+   "desc": "drop nonReentrant: function rescueERC721(address token, address to, uint256 tokenId_) external onlyOwner nonR",
+   "status": "SURVIVED",
+   "killed_by": [],
+   "seconds": 20.4
+  },
+  {
+   "id": 153,
+   "kind": "relational",
+   "line": 396,
+   "desc": "!= -> ==: require(token != address(this), \"PsyNFT: Cannot Rescue Self\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_RescueToZeroReverts",
+    "test_Kill150_155_159_EmitsRescueEvents",
+    "test_RescueERC721_ForeignOnly",
+    "test_Rescue_CannotMovePsyNFTs"
+   ],
+   "seconds": 20.7
+  },
+  {
+   "id": 154,
+   "kind": "relational",
+   "line": 397,
+   "desc": "!= -> ==: require(to != address(0), \"PsyNFT: Rescue To Zero\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_RescueToZeroReverts",
+    "test_Kill150_155_159_EmitsRescueEvents",
+    "test_RescueERC721_ForeignOnly"
+   ],
+   "seconds": 22.6
+  },
+  {
+   "id": 155,
+   "kind": "stmt-deleted",
+   "line": 399,
+   "desc": "delete: emit ERC721Rescued(token, to, tokenId_);",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill150_155_159_EmitsRescueEvents"
+   ],
+   "seconds": 21.1
+  },
+  {
+   "id": 156,
+   "kind": "modifier-removed",
+   "line": 403,
+   "desc": "drop onlyOwner: function rescueETH(address payable to, uint256 amount) external onlyOwner nonReentrant {",
+   "status": "killed",
+   "killed_by": [
+    "test_RescueERC20AndEthOnlyOwner"
+   ],
+   "seconds": 19.8
+  },
+  {
+   "id": 157,
+   "kind": "modifier-removed",
+   "line": 403,
+   "desc": "drop nonReentrant: function rescueETH(address payable to, uint256 amount) external onlyOwner nonReentrant {",
+   "status": "SURVIVED",
+   "killed_by": [],
+   "seconds": 23.1
+  },
+  {
+   "id": 158,
+   "kind": "relational",
+   "line": 404,
+   "desc": "!= -> ==: require(to != address(0), \"PsyNFT: Rescue To Zero\");",
+   "status": "killed",
+   "killed_by": [
+    "test_Gap_RescueEthFailureReverts",
+    "test_Gap_RescueToZeroReverts",
+    "test_Kill150_155_159_EmitsRescueEvents",
+    "test_RescueETH"
+   ],
+   "seconds": 19.2
+  },
+  {
+   "id": 159,
+   "kind": "stmt-deleted",
+   "line": 407,
+   "desc": "delete: emit ETHRescued(to, amount);",
+   "status": "killed",
+   "killed_by": [
+    "test_Kill150_155_159_EmitsRescueEvents"
+   ],
+   "seconds": 17.9
+  },
+  {
+   "id": 160,
+   "kind": "relational",
+   "line": 421,
+   "desc": "== -> !=: return interfaceId == ERC4906_INTERFACE_ID || super.supportsInterface(interfaceId);",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT04_SupportsInterfaces"
+   ],
+   "seconds": 20.5
+  },
+  {
+   "id": 161,
+   "kind": "logical",
+   "line": 421,
+   "desc": "|| -> &&: return interfaceId == ERC4906_INTERFACE_ID || super.supportsInterface(interfaceId);",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT04_SupportsInterfaces"
+   ],
+   "seconds": 19.6
+  },
+  {
+   "id": 162,
+   "kind": "stmt-deleted",
+   "line": 432,
+   "desc": "delete: from = super._update(to, tokenId_, auth);",
+   "status": "killed",
+   "killed_by": [
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury",
+    "test_ControlledTransfer_BlockedWithoutApproval",
+    "test_ControlledTransfer_ExpiredReverts",
+    "test_ControlledTransfer_GatesSafeTransferFrom"
+   ],
+   "seconds": 17.6
+  },
+  {
+   "id": 163,
+   "kind": "relational",
+   "line": 433,
+   "desc": "!= -> ==: if (from != address(0) && approvedTransfers[tokenId_].transferExpiryDate != 0) {",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT01_ApprovalConsumedOnUse",
+    "test_PNFT01_BurnClearsGrant",
+    "test_PNFT01_DistributionClearsGrant",
+    "test_PNFT01_FreeTransferClearsStaleGrant",
+    "test_PNFT01_SafeTransferAlsoConsumes",
+    "test_PNFT01_StaleGrantCannotRevive"
+   ],
+   "seconds": 20.8
+  },
+  {
+   "id": 164,
+   "kind": "relational",
+   "line": 433,
+   "desc": "!= -> ==: if (from != address(0) && approvedTransfers[tokenId_].transferExpiryDate != 0) {",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT01_ApprovalConsumedOnUse",
+    "test_PNFT01_BurnClearsGrant",
+    "test_PNFT01_DistributionClearsGrant",
+    "test_PNFT01_FreeTransferClearsStaleGrant",
+    "test_PNFT01_SafeTransferAlsoConsumes",
+    "test_PNFT01_StaleGrantCannotRevive"
+   ],
+   "seconds": 20.7
+  },
+  {
+   "id": 165,
+   "kind": "logical",
+   "line": 433,
+   "desc": "&& -> ||: if (from != address(0) && approvedTransfers[tokenId_].transferExpiryDate != 0) {",
+   "status": "SURVIVED",
+   "killed_by": [],
+   "seconds": 20.9
+  },
+  {
+   "id": 166,
+   "kind": "stmt-deleted",
+   "line": 434,
+   "desc": "delete: delete approvedTransfers[tokenId_];",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT01_ApprovalConsumedOnUse",
+    "test_PNFT01_BurnClearsGrant",
+    "test_PNFT01_DistributionClearsGrant",
+    "test_PNFT01_FreeTransferClearsStaleGrant",
+    "test_PNFT01_SafeTransferAlsoConsumes",
+    "test_PNFT01_StaleGrantCannotRevive"
+   ],
+   "seconds": 20.3
+  },
+  {
+   "id": 167,
+   "kind": "constant",
+   "line": 445,
+   "desc": "2 -> 1: uint256 a = 2;",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill66_FinalizeAppliesControlledFlag",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 17.5
+  },
+  {
+   "id": 168,
+   "kind": "constant",
+   "line": 445,
+   "desc": "2 -> 3: uint256 a = 2;",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill66_FinalizeAppliesControlledFlag",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 18.4
+  },
+  {
+   "id": 169,
+   "kind": "constant",
+   "line": 446,
+   "desc": "3 -> 2: uint256 b = 3;",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill66_FinalizeAppliesControlledFlag",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 16.0
+  },
+  {
+   "id": 170,
+   "kind": "constant",
+   "line": 446,
+   "desc": "3 -> 4: uint256 b = 3;",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill66_FinalizeAppliesControlledFlag",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 16.1
+  },
+  {
+   "id": 171,
+   "kind": "relational",
+   "line": 447,
+   "desc": "< -> <=: while (b < next) {",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill66_FinalizeAppliesControlledFlag",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 20.6
+  },
+  {
+   "id": 172,
+   "kind": "relational",
+   "line": 447,
+   "desc": "< -> >=: while (b < next) {",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill66_FinalizeAppliesControlledFlag",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 10.1
+  },
+  {
+   "id": 173,
+   "kind": "arith",
+   "line": 448,
+   "desc": "+ -> -: (a, b) = (b, a + b);",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill66_FinalizeAppliesControlledFlag",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 17.0
+  },
+  {
+   "id": 174,
+   "kind": "relational",
+   "line": 450,
+   "desc": "== -> !=: return a == prev && b == next;",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill66_FinalizeAppliesControlledFlag",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 16.8
+  },
+  {
+   "id": 175,
+   "kind": "relational",
+   "line": 450,
+   "desc": "== -> !=: return a == prev && b == next;",
+   "status": "killed",
+   "killed_by": [
+    "test_FullMigration_ResumesSchedule",
+    "test_Gap_MigrateAfterFinalizeReverts",
+    "test_Kill66_FinalizeAppliesControlledFlag",
+    "test_PNFT03_RejectsTypos",
+    "test_ReplayCommittedSnapshot"
+   ],
+   "seconds": 17.9
+  },
+  {
+   "id": 176,
+   "kind": "logical",
+   "line": 450,
+   "desc": "&& -> ||: return a == prev && b == next;",
+   "status": "killed",
+   "killed_by": [
+    "test_PNFT03_RejectsTypos"
+   ],
+   "seconds": 10.5
+  },
+  {
+   "id": 177,
+   "kind": "relational",
+   "line": 454,
+   "desc": "== -> !=: require(msg.sender == core, \"PsyNFT: Caller Not Core Contract\");",
+   "status": "killed",
+   "killed_by": [
+    "setUp",
+    "test_ApproveTransfer_OnlyCore_NonExistent_Active",
+    "test_BatchMint_OnlyCore",
+    "test_BatchMint_RequiresInitialMint",
+    "test_Burn_ByTreasury",
+    "test_Burn_OnlyTreasury"
+   ],
+   "seconds": 5.4
+  }
+ ]
+}

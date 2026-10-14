@@ -12,9 +12,12 @@
 
 PSYC is PsyDAO's **steward credential**: a non-transferable ERC-721 held by the elected delegates
 who carry a duty of care for the DAO (delegated democracy — PSY ratifies, PSYC stewards). The
-original contract's admin key was lost, freezing membership: nobody could be onboarded, removed,
-or recovered. This document defines how the **redeployed instrument (PsyNFT V2)** is governed so
-that failure class is closed permanently — and so membership becomes a living cycle again.
+original contract (V1 PsyNFT) is still owned by a former operator wallet (0xC3aC…e445), not by
+the DAO. Step 0 of the migration hands it to the Main Safe; until then, V1's admin functions (and
+with them onboarding, removal and recovery of members) are outside DAO control. This document
+defines how the **redeployed instrument (PsyNFT V2)** is governed so that it never depends on one
+key: no single lost key can freeze it; it would take losing 3 of the 4 Safe keys. It also makes
+membership a living cycle again.
 
 It covers: who controls the contract, how each governance action maps to a contract call, and how
 new members get a seat (the **one-door seat system**, §5). How membership lapses (the **Renewal
@@ -26,10 +29,10 @@ cycle**, §6) is sketched for a later proposal.
 |---|---|
 | Identity | ERC-721 `PsyNFT` (`PSY` symbol), one token = one PSYC seat |
 | Uniqueness | Every token carries a unique **kené** (artwork) via `tokenURI` — see [METADATA.md](METADATA.md) |
-| Soulbound by default | `controlledTransfers = true`: a member-held token **cannot move** unless governance grants a time-boxed transfer window (`approveTransfer`) |
-| Supply | Minted in **Fibonacci batches** to the contract itself (next batch: 21 tokens, ids 34–54); distributed one-by-one to new members |
+| Soulbound by default | `controlledTransfers = true`: a member-held token **cannot move** unless governance grants a time-boxed transfer window (`approveTransfer`), which is single-use and can be cancelled (`revokeTransfer`) |
+| Supply | Minted in **Fibonacci batches** to the contract itself; distributed one-by-one to new members. The switch-over mints the next batch (21 tokens, ids 34–54) and uses seat #34 to release the V1 exit pool, so **20 seats (ids 35–54)** are left to allocate |
 | Removal | `burn(tokenId)` — **does not require the holder's consent**. Recall and lost-wallet recovery are native capabilities, held by governance |
-| Admin safety | Owner is a Gnosis Safe; ownership is 2-step and **cannot be renounced** — the lost-key failure mode is structurally impossible |
+| Admin safety | Owner is the Main Safe (a 2-of-4 Gnosis Safe); ownership is 2-step and **cannot be renounced**. No single lost key can freeze it; it would take losing 3 of the 4 Safe keys |
 
 ## 3. Role architecture: one Safe, all roles
 
@@ -41,7 +44,7 @@ Per the decision adopted with this document, **all three contract roles — `own
                     ────────────────────────────────────────────────────────
    owner:  setCoreContract · setTreasury · setBaseUri · enable/disableControlledTransfers
            · transferOwnership (2-step) · rescue helpers
-   core:   batchMintInFibonacci · transferNFTs (distribute) · approveTransfer
+   core:   batchMintInFibonacci · transferNFTs (distribute) · approveTransfer · revokeTransfer
    treasury: burn
 ```
 
@@ -68,10 +71,10 @@ New seats go through the **seat round** (§5). Every other membership decision f
 | Governance decision | Decided by | Executed on-chain as |
 |---|---|---|
 | Seat a new member | Seat round (§5) | `transferNFTs([id], member)` — one contract-held token per person |
-| Replenish the seat pool | Automatic when the pool is empty and a new member needs a seat | `batchMintInFibonacci()` — mints the next Fibonacci batch to the contract |
+| Replenish the seat pool | Automatic when the pool is empty and a new member needs a seat (one exception: the switch-over, §7) | `batchMintInFibonacci()` — mints the next Fibonacci batch to the contract |
 | Remove / recall a member | PSYC membership vote | `burn(tokenId)` |
 | Lapse for inactivity | Renewal cycle (§6, a later proposal) | `burn(tokenId)` |
-| Member wallet rotation | Request + Safe verification of both wallets | `approveTransfer(tokenId, newWallet, 259200)` (72h window), member executes the transfer |
+| Member wallet rotation | Request + Safe verification of both wallets | `approveTransfer(tokenId, newWallet, 259200)` (72h window, single-use), member executes the transfer; a mistaken approval is cancelled with `revokeTransfer(tokenId)` |
 | Lost wallet recovery | PSYC membership vote | `burn(strandedId)` + `transferNFTs([freshId], newWallet)` |
 | Attach kené to new tokens | Operational (owner) | pin superset metadata folder → `setBaseUri(newCid)` — process in [METADATA.md](METADATA.md) |
 | Change these rules / roles | PSYC vote (+ PSY ratification where the Amendment requires) | `setCoreContract` / `setTreasury` / governance-doc amendment |
@@ -81,9 +84,11 @@ Two hard rules carried from the contract design:
 1. **The migration is not a pruning.** All 33 current holders are re-minted 1:1, active or not.
    Legitimacy of the redeploy depends on perfect fidelity; lifecycle management happens *after*
    migration, through the processes below — never during it.
-2. **Burns are governance acts.** The Safe never burns without a passed membership vote (or, once
-   a later proposal adopts it, a Renewal cycle outcome, §6). The capability is unrestricted on-chain; its use is restricted by
-   this document.
+2. **Burns are governance acts.** The Safe never burns a member's seat without a passed membership
+   vote (or, once a later proposal adopts them, a Renewal cycle outcome or the member's own
+   voluntary exit, §6). The only other burn is seat #34, which the switch-over transaction uses and
+   burns before it reaches any member (§7). The capability is unrestricted on-chain; its use is
+   restricted by this document.
 
 ## 5. New seats: the one-door seat system
 
@@ -104,18 +109,24 @@ applicants per round**. An objection needs a one-line reason.
 **Not in this time.** An applicant who is not in skips one round, then can apply again.
 
 **Mint.** An applicant who is in mints their seat **within 14 days**: **0.1 ETH** for a random seat,
-or **0.2 ETH** for a chosen one.
+or **0.2 ETH** for a chosen one. The DAO assigns the seat first (at random, or the chosen one); the
+member then pays PsyDAO's published seat-payment split, which sends **half to the PsyDAO treasury**
+(the Main Safe) and **half to the artists** through a partner who pays the artist of that seat.
+Details: [SEAT_PAYMENTS.md](SEAT_PAYMENTS.md).
 
 **One seat per person.** A seat is soulbound (`controlledTransfers`), and each person holds at most
-one.
+one. This is a DAO rule; the contract does not limit seats per address.
 
-**Supply cap.** The Fibonacci batches cap supply: **21 seats now** (ids 34–54), **then 34**
-(ids 55–88). A new batch is minted only when the current one is used up (§7).
+**Seat supply.** The Fibonacci batches set the pace of new seats. The switch-over mints the next
+batch of 21 (ids 34–54) and uses seat #34 to release the V1 exit pool, so **20 seats** (ids 35–54)
+are available, **then 34** (ids 55–88). A new batch is minted only when the current one is used up
+(§7). The contract itself does not cap supply; this pace is a DAO rule.
 
 **On-chain.** The Safe hands the seat over with `transferNFTs([id], member)`; if the contract-held
 pool is empty, the same Safe session first runs `batchMintInFibonacci()`. A kené is attached to the
 token per the metadata process. PsyNFT V2 itself has no payable function, so the mint price is
-collected outside this contract.
+collected outside this contract, by the seat-payment split ([SEAT_PAYMENTS.md](SEAT_PAYMENTS.md)).
+The Safe sends the seat only after confirming the payment.
 
 The seat is personal and non-transferable. It confers: participation in PSYC votes (membership,
 review-panel duty under PDP-25 guardrail 3), steward eligibility, and the duty of care described
@@ -159,22 +170,30 @@ setBaseUri(newCid)                            # kenés for the new tokens (if ne
 All of it is publicly verifiable on-chain through the V2 events (`TokenBurnt`, `Migrated`/
 `Transfer`, `BaseUriUpdated`).
 
-**Voluntary exit** is honoured at any time without a vote: the member states the intent publicly,
-and the Safe burns the seat in the next session.
+**Voluntary exit** (part of this later proposal): the member states the intent publicly, and the
+Safe burns the seat in the next session. The member's own request takes the place of the
+membership vote that §4 rule 2 otherwise requires. No ETH is paid: this is not the V1 ego death
+(rage quit), which pays a share of the V1 exit pool and ends at the freeze before the switch-over.
 
 ## 7. Supply discipline
 
-The Fibonacci batches are the supply cap: 21 seats now (ids 34–54), then 34 (ids 55–88). To keep
-PSYC a working council rather than a diluted badge:
+The Fibonacci batches set the pace of new seats: 20 after the switch-over (ids 35–54), then 34
+(ids 55–88). To keep PSYC a working council rather than a diluted badge:
 
 - New batches are minted **only when the contract-held pool is empty** and a new member from a
   seat round needs a token — never speculatively.
+- **One exception, the switch-over.** The switch-over transaction (§4d of the
+  [runbook](DEPLOYMENT_RUNBOOK.md)) mints batch 7 (ids 34–54) with no applicant waiting, because it
+  needs seat #34 to release the V1 exit pool and burns it in the same transaction. The other 20
+  seats (ids 35–54) stay in the contract until seat rounds fill them.
 - Undistributed tokens sit in the contract (custody = the contract itself, spendable only by
   `core` = the Safe) and carry no vote: **Snapshot strategies must count only member-held
   tokens**, excluding the contract's own balance and, where feasible, seats flagged in an open
   Renewal.
-- The far-future gas ceiling on very large batches (documented in [AUDIT.md](AUDIT.md), CON-2) is
-  acknowledged and irrelevant at council scale — decades of headroom.
+- The far-future gas ceiling on very large batches (re-measured in
+  [AUDIT-2026-10.md](AUDIT-2026-10.md), CON-2: at today's 60M block gas limit the first batch that
+  no longer fits is batch 17, at about 6,765 total seats) is acknowledged and irrelevant at council
+  scale — decades of headroom.
 
 ## 8. Amendments
 
@@ -192,6 +211,7 @@ the explicit call to be named in the proposal that authorizes them.
 | Distribute seat | `transferNFTs(uint256[] _tokenIds, address _recipient)` | one recipient per call; batch per member |
 | Mint next batch | `batchMintInFibonacci()` | no args; mints to the contract |
 | Remove seat | `burn(uint256 _tokenId)` | governance-gated by §4 |
-| Wallet rotation | `approveTransfer(uint256 _tokenId, address _to, uint256 _seconds)` | use 259200 (72h); member then calls `transferFrom` |
+| Wallet rotation | `approveTransfer(uint256 _tokenId, address _to, uint256 _seconds)` | use 259200 (72h); member then calls `transferFrom`; single-use |
+| Cancel an approval | `revokeTransfer(uint256 _tokenId)` | core only; cancels a live approval (e.g. wrong wallet or window) |
 | Kené update | `setBaseUri(string _uri)` | must end with `/` — see METADATA.md |
 | Delegate ops | `setCoreContract(address)` | reversible; vote-gated |

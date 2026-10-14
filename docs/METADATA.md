@@ -12,7 +12,7 @@ PsyNFT stores **no image on-chain**. It uses the standard ERC-721 scheme:
 tokenURI(id)  ==  baseUri + id
 ```
 
-- `baseUri` is one owner-settable string ([`setBaseUri`](../src/PsyNFTV2.sol#L335), owner/Safe only).
+- `baseUri` is one owner-settable string ([`setBaseUri`](../src/PsyNFTV2.sol#L366), owner/Safe only).
 - Each id resolves to its **own** metadata file in that one folder. That file (JSON) names the id's
   unique image. So the kene lives **off-chain**, in an IPFS folder keyed by token id; the contract
   just concatenates.
@@ -28,7 +28,8 @@ tokenURI(5)  →  ipfs://<CID>/5  →  { "name": "PsyNFT #5", "image": "ipfs://.
    (⚠ next to `baseUri`, and in the Set base URI card).
 2. **There is one `baseUri` for the whole collection.** All ids — old and new — must live under the
    same folder/CID. You cannot point individual tokens at different folders (that would need a
-   per-token URI override, which we deliberately did **not** add, to stay byte-faithful to V1).
+   per-token URI override, which we deliberately did **not** add: V2 keeps V1's behaviour except
+   the documented safety changes in [CHANGES_FROM_V1.md](CHANGES_FROM_V1.md) §7–10).
 
 Because IPFS CIDs are **content-addressed**, adding files to a folder yields a **new folder CID**.
 So "add new art" always means: build a folder that contains *all* ids so far, pin it, get the new
@@ -41,10 +42,11 @@ CIDs.)
 ## A. Carrying the existing 33 kenes over during migration
 
 **You do not copy or re-upload any images.** Migration re-mints the **same token ids**, and
-`tokenURI` is purely `baseUri + id` — so if V2's `baseUri` points at the **same folder V1 used**,
-every migrated id resolves to the exact same kene automatically.
+`tokenURI` is purely `baseUri + id` — so when V2's `baseUri` points at the re-pinned folder
+(CID-v2, below), every migrated id resolves to the same kene automatically. **Never point V2 at
+V1's CID or at an https gateway URL:** V1's files link their images to a host that no longer exists.
 
-V1's live `baseUri` (block 25,472,875) is:
+V1's live `baseUri` (block 25,473,885) is:
 
 ```
 https://red-literary-tiglon-645.mypinata.cloud/ipfs/bafybeia5k2sgu3fkeyqodrmg43b7tbhd5fsmdgf7e4b34hiwrbeaybovcy/
@@ -77,7 +79,8 @@ https://red-literary-tiglon-645.mypinata.cloud/ipfs/bafybeia5k2sgu3fkeyqodrmg43b
 - **cast:** `cast call $PSYNFT_V2 "tokenURI(uint256)(string)" 5 --rpc-url $RPC` should return
   `ipfs://bafybeib2aqk…/5`.
 - **Byte-for-byte:** `node metadata/verify-pinned.mjs` checks all 34 files and their images through a
-  gateway (run it through two different gateways).
+  gateway (run it through two different gateways: the default `https://gateway.pinata.cloud/ipfs/`
+  and `https://ipfs.filebase.io/ipfs/`, see [metadata/README.md](../metadata/README.md)).
 
 ---
 
@@ -88,14 +91,16 @@ until the metadata folder contains files for those ids** and `baseUri` points at
 
 ### Option A — plain CIDs (the committed model)
 
-1. **Author metadata + images** for the new ids. Keep the *same shape* V1 used (filenames = the bare
-   id: `34`, `35`, … — check an existing file to match the exact JSON schema and whether images are
-   `image: ipfs://…` or a gateway URL).
-2. **Build one folder that contains every id so far** — the original 0–33 files **plus** the new
-   ones. (Re-pinning the old CID's contents alongside the new files keeps 0–33 byte-identical.)
+1. **Author metadata + images** for the new ids. Keep the *same shape* as the re-pinned files in
+   `metadata/v2/` (filenames = the bare id: `34`, `35`, …; same JSON schema; images as
+   `image: ipfs://…`, never a gateway URL).
+2. **Build one folder that contains every id so far** — the 0–33 files from CID-v2 (`metadata/v2/`)
+   **plus** the new ones. (Copying those files unchanged keeps 0–33 byte-identical to CID-v2. Do not
+   use V1's original files: their image links point at the dead host.)
 3. **Pin the folder**, note the **new folder CID**.
 4. **Sanity check** the new CID resolves: open `https://<gateway>/ipfs/<newCID>/34` in a browser.
-5. **`setBaseUri`** to `https://<gateway>/ipfs/<newCID>/` (owner = Safe). Mind the trailing `/`.
+5. **`setBaseUri`** to `ipfs://<newCID>/` (owner = Safe), never an https gateway URL (META-1). Mind
+   the trailing `/`.
 6. **Verify** in the UI's Art / metadata preview: old ids (`5`) still render **and** new ids (`34`)
    now render.
 
@@ -109,7 +114,8 @@ To avoid changing `baseUri` on every batch, set `baseUri` **once** to a mutable 
 
 - an **IPNS** name (`ipns://<key>/`) you republish to the latest folder CID, or
 - a **dedicated gateway path** your pinning service lets you repoint (e.g. a Pinata "gateway" that
-  always serves the latest pin).
+  always serves the latest pin). Not recommended: a dedicated Pinata gateway is exactly what broke
+  V1's art (META-1).
 
 Then adding a batch is just: pin the new superset folder and update the pointer — **no on-chain tx**.
 Trade-off: a mutable pointer is a small trust/centralization surface (whoever controls the IPNS key
@@ -123,11 +129,12 @@ controlled by the Safe/operators is usually the right balance.
 | Task | Who | How |
 |---|---|---|
 | Wire art at deploy | deployer | set `BASE_URI` in `.env` before `Deploy.s.sol` |
-| Carry V1 art to V2 | — | re-mint preserves ids; point `baseUri` at V1's CID (re-pin recommended) |
+| Carry V1 art to V2 | — | re-mint preserves ids; `BASE_URI=ipfs://<CID-v2>/` (the re-pinned folder), never V1's CID or an https gateway |
 | Change the whole folder | owner (Safe) | `setBaseUri` → new CID (trailing `/`) |
 | Add art for a new batch | operator + owner | pin superset folder → `setBaseUri` to new CID (Option A), or update IPNS (Option B) |
 | Verify a token's kene | anyone | UI **Art / metadata preview**, or `cast call … "tokenURI(uint256)(string)" <id>` |
 
 **Not supported by design:** changing one token's art independently of the rest. That needs a
-per-token `tokenURI` override, which V2 omits to stay behaviour-identical to V1. If the DAO later
+per-token `tokenURI` override, which V2 omits: V2 keeps V1's behaviour except the documented safety
+changes in [CHANGES_FROM_V1.md](CHANGES_FROM_V1.md) §7–10. If the DAO later
 wants it, it's a small additive change — but it's a V1 deviation and would need a fresh audit note.

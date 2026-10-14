@@ -42,7 +42,7 @@ done
 # --- start anvil ---------------------------------------------------------
 ANVIL_ARGS=(--chain-id "$CHAIN_ID" --silent)
 if [ "$MODE" = "migrated" ]; then
-  FORK="${MAINNET_RPC_URL:-https://ethereum-rpc.publicnode.com}"
+  FORK="${MAINNET_RPC_URL:-https://eth.drpc.org}"
   ANVIL_ARGS+=(--fork-url "$FORK")
   echo "▶ anvil: forking mainnet ($FORK) as chainId $CHAIN_ID"
 elif [ "$MODE" = "fresh" ] || [ "$MODE" = "roles" ]; then
