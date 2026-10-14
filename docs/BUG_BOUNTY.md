@@ -52,7 +52,8 @@ independent check. We want independent eyes on it before and after the switch-ov
   0.8.20 notes (SOLC-1), and token 29's wallet not accepting `safeTransfer` (HOLD-1).
 - Issues that need a compromised Safe signer, leaked keys, or social engineering; phishing; denial
   of service against RPCs, gateways or websites.
-- Third-party code: Safe, OpenZeppelin, IPFS gateways, Snapshot.org, wallets.
+- Third-party code: Safe, OpenZeppelin, IPFS gateways, Snapshot.org, wallets, and the Splits
+  contracts used as the seat-payment address ([SEAT_PAYMENTS.md](SEAT_PAYMENTS.md)).
 - Best-practice or gas suggestions without a security impact (welcome as normal GitHub issues).
 
 ## Rewards (proposal)

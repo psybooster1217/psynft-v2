@@ -92,8 +92,11 @@ One door, the same for everyone (a discussion draft; the PSYC vote decides):
   **5 PSY backers**. Anyone who objects gives a one-line reason.
 - **Backing:** each person can back up to 3 applicants per round.
 - **Not in this time?** Skip one round, then apply again.
-- **Pay within 14 days:** 0.1 ETH for a random seat, or 0.2 ETH to choose yours, paid to
-  PsyDAO (collected outside the contract); the Main Safe then sends you the seat. The contract itself does not take payment.
+- **Pay within 14 days:** 0.1 ETH for a random seat, or 0.2 ETH to choose yours. Your seat is
+  assigned first; you then pay PsyDAO's published seat-payment address, which sends **half to the
+  PsyDAO treasury and half to the artists** (through a partner who pays the artist of your seat).
+  The Main Safe sends you the seat once the payment is confirmed. The contract itself does not take
+  payment. Details: [seat payments](SEAT_PAYMENTS.md).
 - **One seat per person.** Seats are personal and not for sale: they only move to a new wallet of
   yours, with a DAO approval.
 - **Pace of new seats:** seats come in Fibonacci batches: 20 available after the switch-over

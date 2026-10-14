@@ -109,7 +109,10 @@ applicants per round**. An objection needs a one-line reason.
 **Not in this time.** An applicant who is not in skips one round, then can apply again.
 
 **Mint.** An applicant who is in mints their seat **within 14 days**: **0.1 ETH** for a random seat,
-or **0.2 ETH** for a chosen one.
+or **0.2 ETH** for a chosen one. The DAO assigns the seat first (at random, or the chosen one); the
+member then pays PsyDAO's published seat-payment split, which sends **half to the PsyDAO treasury**
+(the Main Safe) and **half to the artists** through a partner who pays the artist of that seat.
+Details: [SEAT_PAYMENTS.md](SEAT_PAYMENTS.md).
 
 **One seat per person.** A seat is soulbound (`controlledTransfers`), and each person holds at most
 one. This is a DAO rule; the contract does not limit seats per address.
@@ -122,7 +125,8 @@ are available, **then 34** (ids 55–88). A new batch is minted only when the cu
 **On-chain.** The Safe hands the seat over with `transferNFTs([id], member)`; if the contract-held
 pool is empty, the same Safe session first runs `batchMintInFibonacci()`. A kené is attached to the
 token per the metadata process. PsyNFT V2 itself has no payable function, so the mint price is
-collected outside this contract.
+collected outside this contract, by the seat-payment split ([SEAT_PAYMENTS.md](SEAT_PAYMENTS.md)).
+The Safe sends the seat only after confirming the payment.
 
 The seat is personal and non-transferable. It confers: participation in PSYC votes (membership,
 review-panel duty under PDP-25 guardrail 3), steward eligibility, and the duty of care described

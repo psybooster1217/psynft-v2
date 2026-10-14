@@ -50,6 +50,7 @@ Fibonacci mint schedule where V1 stopped.
 | [`docs/HOLDER_BRIEF.md`](docs/HOLDER_BRIEF.md) | **Plain-language brief for PSYC holders** |
 | [`docs/AUDIT-2026-10.md`](docs/AUDIT-2026-10.md) | **Latest audit report** (internal and AI-assisted; plan: [AUDIT_PLAN_2026-10.md](docs/AUDIT_PLAN_2026-10.md)) |
 | [`docs/TESTING_HANDBOOK.md`](docs/TESTING_HANDBOOK.md) | Step‑by‑step manual test of every function in the sandbox UI |
+| [`docs/SEAT_PAYMENTS.md`](docs/SEAT_PAYMENTS.md) | How new-seat payments are split: half to the PsyDAO treasury, half to the artists |
 | [`docs/BUG_BOUNTY.md`](docs/BUG_BOUNTY.md) · [`SECURITY.md`](SECURITY.md) | Bug bounty program (proposed, pending approval) and reporting |
 | [`docs/`](docs/) | Design, [V1→V2 diff](docs/CHANGES_FROM_V1.md), [runbook](docs/DEPLOYMENT_RUNBOOK.md), [metadata/art ops](docs/METADATA.md), [governance](docs/GOVERNANCE.md), earlier audits |
 
