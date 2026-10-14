@@ -127,8 +127,8 @@ below). Not deployed. The bug bounty and the PSYC vote have not started.**
 Done:
 - The reviewed code is merged (PR #1, `c611ac9`, tag `v2.0.0-review`, code-identical to the
   audited commit `1c0ab58`). Later changes touch the cutover scripts and tests, two contract
-  comments (no logic change) and docs; a new tag `v2.0.1-review` is proposed as the bounty target
-  (created on merge).
+  comments (no logic change) and docs; the bounty target is tag `v2.0.1-review`
+  (`ddd30cb`, PR #2).
 - The repo is public, and GitHub private vulnerability reporting is on ([SECURITY.md](SECURITY.md)).
 
 Still open:

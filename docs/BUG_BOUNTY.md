@@ -6,8 +6,8 @@ bounty is announced, so the Safe signers approve the rewards. The approval will 
 file under [Approval](#approval) (date, plus a link to the Safe message, transaction or signed note)
 before the bounty is announced. Until then, no reward is promised.
 
-**In-scope commit:** tag `v2.0.1-review` (proposed; created when the current fix lands, and its full
-commit hash is added here then). Its contract, `src/PsyNFTV2.sol`, has the same logic as the earlier
+**In-scope commit:** [`ddd30cba2ec063e07fa6b4e939ecbbbbeef64782`](https://github.com/psybooster1217/psynft-v2/commit/ddd30cba2ec063e07fa6b4e939ecbbbbeef64782)
+(tag [`v2.0.1-review`](https://github.com/psybooster1217/psynft-v2/tree/v2.0.1-review), 2026-10-14). Its contract, `src/PsyNFTV2.sol`, has the same logic as the earlier
 reviewed commit
 [`c611ac9c58eab92d146822fd8520275ef5ed5d22`](https://github.com/psybooster1217/psynft-v2/commit/c611ac9c58eab92d146822fd8520275ef5ed5d22)
 (tag [`v2.0.0-review`](https://github.com/psybooster1217/psynft-v2/tree/v2.0.0-review)); only two NatSpec comments were
@@ -172,8 +172,8 @@ Safe message, transaction or signed note.
 
 ## Before launch (checklist for PsyDAO)
 - [ ] Step 0 and §0a/§0b executed: V1 PsyNFT, CoreLogic and PsycSale owned by the Main Safe.
-- [ ] Tag `v2.0.1-review` created when the fix lands, and its full commit hash added at the top of
-      this page.
+- [x] Tag `v2.0.1-review` created (`ddd30cb`, 2026-10-14) and its full commit hash added at the top
+      of this page.
 - [ ] 2 Main Safe signers approve the reward table, the budget and the rules marked *(proposal)*;
       record it under [Approval](#approval), then remove "(proposal)" and "Proposed" from this page.
 - [ ] Legal check of the eligibility and safe-harbor terms.
