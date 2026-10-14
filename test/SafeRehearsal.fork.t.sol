@@ -52,6 +52,14 @@ interface IV1Treasury {
     function psyNFT() external view returns (address);
 }
 
+interface IOwnable {
+    function owner() external view returns (address);
+}
+
+interface IV1Admin {
+    function setCoreContract(address) external;
+}
+
 interface IV1Core {
     function owner() external view returns (address);
     function rageQuitAllowed() external view returns (bool);
@@ -113,10 +121,17 @@ contract SafeRehearsalForkTest is Test {
         if (_skipIfNoFork()) return;
         _preconditions();
 
-        // §0b — EOA hands CoreLogic to the Safe; the Safe accepts and installs the fallback handler.
-        _coreLogicHandover();
-        _execSafe(CutoverCalls.setupBatch(), "0b setup");
+        // Step 0 — both individual wallets start their handovers; §0a/§0b — the Safe accepts all three
+        // V1 contracts and installs the fallback handler.
+        _eoaHandovers();
+        _acceptHandovers();
         assertEq(core.owner(), CutoverCalls.MAIN_SAFE, "CoreLogic owned by Safe");
+        assertEq(IOwnable(CutoverCalls.PSYC_SALE).owner(), CutoverCalls.MAIN_SAFE, "PsycSale owned by Safe");
+        assertEq(IOwnable(V1_NFT).owner(), CutoverCalls.MAIN_SAFE, "V1 PsyNFT owned by Safe");
+        // the former V1 owner wallet keeps no admin power over V1
+        vm.prank(CutoverCalls.V1_NFT_OWNER);
+        vm.expectRevert();
+        IV1Admin(V1_NFT).setCoreContract(address(0xBEEF));
         assertEq(
             address(uint160(uint256(vm.load(CutoverCalls.MAIN_SAFE, FALLBACK_HANDLER_SLOT)))),
             CutoverCalls.SAFE_FALLBACK_HANDLER,
@@ -124,7 +139,7 @@ contract SafeRehearsalForkTest is Test {
         );
 
         // §1 — close the exit window.
-        _execSafe(CutoverCalls.freezeBatch(), "1 freeze");
+        if (core.rageQuitAllowed()) _execSafe(CutoverCalls.freezeBatch(), "1 freeze"); // toggle: only if still on
         assertFalse(core.rageQuitAllowed(), "V1 ego death off");
 
         // §4a/4b — deploy + migrate + start handoff (deployer EOA), §4c — Safe accepts.
@@ -184,11 +199,11 @@ contract SafeRehearsalForkTest is Test {
     /// If the fallback handler is missing, the whole §4d batch reverts and NOTHING changes.
     function test_SweepBatchIsAtomic() public {
         if (_skipIfNoFork()) return;
-        _coreLogicHandover();
+        _eoaHandovers();
         CutoverCalls.Call[] memory acceptOnly = new CutoverCalls.Call[](1);
         acceptOnly[0] = CutoverCalls.setupBatch()[0]; // accept CoreLogic, but NO fallback handler
-        _execSafe(acceptOnly, "0b without handler");
-        _execSafe(CutoverCalls.freezeBatch(), "1 freeze");
+        if (core.owner() != CutoverCalls.MAIN_SAFE) _execSafe(acceptOnly, "0b without handler");
+        if (core.rageQuitAllowed()) _execSafe(CutoverCalls.freezeBatch(), "1 freeze");
         _deployAndMigrate();
         _execSafe(CutoverCalls.acceptV2Batch(address(v2)), "4c");
 
@@ -206,8 +221,8 @@ contract SafeRehearsalForkTest is Test {
     /// `switchRageQuit` is a toggle: signing the freeze batch twice re-opens ego death.
     function test_FreezeBatchIsAToggle() public {
         if (_skipIfNoFork()) return;
-        _coreLogicHandover();
-        _execSafe(CutoverCalls.setupBatch(), "0b");
+        _eoaHandovers();
+        _acceptHandovers();
         bool before = core.rageQuitAllowed();
         _execSafe(CutoverCalls.freezeBatch(), "freeze #1");
         _execSafe(CutoverCalls.freezeBatch(), "freeze #2");
@@ -218,7 +233,8 @@ contract SafeRehearsalForkTest is Test {
     function test_OffchainSafeTxHashMatches() public {
         if (_skipIfNoFork()) return;
         address fakeV2 = address(0x1234);
-        CutoverCalls.Call[][4] memory batches = [
+        CutoverCalls.Call[][5] memory batches = [
+            CutoverCalls.v1NftOwnerBatch(),
             CutoverCalls.setupBatch(),
             CutoverCalls.freezeBatch(),
             CutoverCalls.acceptV2Batch(fakeV2),
@@ -245,16 +261,29 @@ contract SafeRehearsalForkTest is Test {
         assertEq(safe.getOwners().length, 4, "Main Safe owners");
         assertEq(treasury.owner(), CutoverCalls.MAIN_SAFE, "V1 Treasury owned by Safe");
         assertEq(treasury.core(), CutoverCalls.V1_CORE);
-        assertTrue(core.rageQuitAllowed(), "exit window open (as of the audit)");
+        // Before Step 0 the V1 contracts sit on the documented wallets; once handed over, on the Safe.
+        address v1Owner = IOwnable(V1_NFT).owner();
+        assertTrue(v1Owner == CutoverCalls.V1_NFT_OWNER || v1Owner == CutoverCalls.MAIN_SAFE, "V1 PsyNFT owner");
+        address saleOwner = IOwnable(CutoverCalls.PSYC_SALE).owner();
+        assertTrue(saleOwner == CutoverCalls.V1_CORE_OWNER || saleOwner == CutoverCalls.MAIN_SAFE, "PsycSale owner");
     }
 
-    function _coreLogicHandover() internal {
-        address current = core.owner();
-        if (current == CutoverCalls.MAIN_SAFE) return;
-        assertEq(current, CutoverCalls.V1_CORE_OWNER, "CoreLogic still on the documented EOA");
-        vm.prank(current);
-        (bool ok,) = CutoverCalls.V1_CORE.call(CutoverCalls.coreLogicHandoverCalldata());
-        assertTrue(ok, "EOA transferOwnership");
+    /// §0a + §0b, skipping any part the Safe has already accepted (lets the suite run at any later block).
+    function _acceptHandovers() internal {
+        if (IOwnable(V1_NFT).owner() != CutoverCalls.MAIN_SAFE) _execSafe(CutoverCalls.v1NftOwnerBatch(), "0a accept V1 PsyNFT");
+        if (core.owner() != CutoverCalls.MAIN_SAFE) _execSafe(CutoverCalls.setupBatch(), "0b setup");
+    }
+
+    /// Step 0: each individual wallet starts its two-step handover (exact calldata from CutoverCalls).
+    function _eoaHandovers() internal {
+        CutoverCalls.Handover[] memory h = CutoverCalls.eoaHandovers();
+        for (uint256 i; i < h.length; i++) {
+            if (IOwnable(h[i].to).owner() == CutoverCalls.MAIN_SAFE) continue;
+            assertEq(IOwnable(h[i].to).owner(), h[i].from, h[i].label);
+            vm.prank(h[i].from);
+            (bool ok,) = h[i].to.call(h[i].data);
+            assertTrue(ok, h[i].label);
+        }
     }
 
     function _deployAndMigrate() internal {
