@@ -51,8 +51,8 @@ export function ActionCard({def, pub, wallet, account, address, myRoles, explore
     setValues((s) => ({...s, [name]: v}));
   }
 
-  // The frozen V1 contract. Snapshot entries still owned by V1 (undistributed tokens) must be
-  // re-pointed to the NEW contract — minting them to the dead V1 address would strand them
+  // The V1 contract. Snapshot entries still owned by V1 (undistributed tokens) must be
+  // re-pointed to the NEW contract — minting them to the V1 contract address would strand them
   // forever. This mirrors the repoint logic in script/Migrate.s.sol.
   const V1_ADDRESS = "0x6c6ab7b3215374de4a65de63eac9bc7a0c7f402d";
 

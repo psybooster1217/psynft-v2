@@ -2,13 +2,14 @@
 pragma solidity 0.8.20;
 
 // Bug bounty proof-of-concept template (docs/BUG_BOUNTY.md).
-// 1. Copy to test/BountyPoC.t.sol
-// 2. Fill in `test_Exploit`, then run:
-//      forge test --match-path test/BountyPoC.t.sol -vvvv
+// 1. Copy to test/external/BountyPoC.t.sol (keep it LOCAL: never push it or open a PR/issue with it;
+//    report through GitHub -> Security -> "Report a vulnerability", see SECURITY.md)
+// 2. Replace the TODO in `test_Exploit` with your exploit and assertions, then run:
+//      forge test --match-path test/external/BountyPoC.t.sol -vvvv
 //    For issues that need live mainnet state, set MAINNET_RPC_URL and use the fork setup below.
 
 import "forge-std/Test.sol";
-import {PsyNFTV2} from "../src/PsyNFTV2.sol";
+import {PsyNFTV2} from "src/PsyNFTV2.sol";
 
 contract BountyPoC is Test {
     PsyNFTV2 internal nft;
@@ -44,5 +45,7 @@ contract BountyPoC is Test {
 
         // Assert the impact, e.g.:
         // assertEq(nft.ownerOf(1), attacker, "attacker took alice's seat");
+
+        revert("TODO: replace with your exploit and assertions"); // the template fails until filled in
     }
 }
